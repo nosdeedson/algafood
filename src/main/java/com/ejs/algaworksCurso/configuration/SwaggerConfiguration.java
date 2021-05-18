@@ -20,12 +20,12 @@ public class SwaggerConfiguration {
 	public Docket api() {
 		return new Docket(DocumentationType.SWAGGER_2)
 				.select()
-				.apis(RequestHandlerSelectors.basePackage("ejs.com.spring.swagger.resources"))
+				.apis(RequestHandlerSelectors.basePackage("com.ejs.algaworksCurso.api.controller"))
 				.paths(PathSelectors.any())
 				.build()
 				.apiInfo(this.apiInfo());
 	}
-
+	
 	private ApiInfo apiInfo() {
 		return new ApiInfo("API do curso Realizado na AlgaWorks",
 				"Esta API é utilizada", "Versão 1.0",

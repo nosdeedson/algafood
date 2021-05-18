@@ -26,7 +26,6 @@ insert into restaurante_formas_pagamento(restaurante_id, formas_pagamento_id) va
 insert into restaurante_formas_pagamento(restaurante_id, formas_pagamento_id) values(3, 1);
 insert into restaurante_formas_pagamento(restaurante_id, formas_pagamento_id) values(3, 2);
 insert into restaurante_formas_pagamento(restaurante_id, formas_pagamento_id) values(3, 3);
-insert into restaurante_formas_pagamento(restaurante_id, formas_pagamento_id) values(3, 3);
 
 /* inseri permissao*/
 insert into permissao (nome, descricao) values('editar', 'Permite editar objetos');

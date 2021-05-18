@@ -8,6 +8,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import com.fasterxml.jackson.annotation.JsonRootName;
+
+@JsonRootName(value = "cozinha")
 @Entity
 public class Cozinha implements Serializable  {
 	
@@ -17,6 +20,7 @@ public class Cozinha implements Serializable  {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
+//	@JsonProperty(value = "titulo")
 	@Column(nullable = false)
 	private String nome;
 	

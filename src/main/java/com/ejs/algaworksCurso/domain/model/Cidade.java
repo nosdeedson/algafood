@@ -2,11 +2,13 @@ package com.ejs.algaworksCurso.domain.model;
 
 import java.io.Serializable;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 @Entity
 public class Cidade implements Serializable {
@@ -16,8 +18,11 @@ public class Cidade implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@OneToOne
+	@ManyToOne
+	@JoinColumn(nullable =  false)
 	private Estado estado;
+	
+	@Column(nullable =  false)
 	private String nome;
 	
 	public Cidade() {}
