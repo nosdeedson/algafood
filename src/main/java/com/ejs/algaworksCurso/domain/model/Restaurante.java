@@ -7,13 +7,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class Restaurante implements Serializable  {
@@ -41,8 +46,18 @@ public class Restaurante implements Serializable  {
 	@JoinColumn(nullable = false)
 	private Cozinha cozinha;
 	
+	@JsonIgnore
 	@ManyToMany(targetEntity = FormaPagamento.class)
+	@JoinTable(name = "restaurante_forma_pagamento", 
+		joinColumns = @JoinColumn(name = "restaurante_id"), 
+		foreignKey = @ForeignKey(name = "fK_restaurante_id"),
+			inverseJoinColumns = @JoinColumn(name = "forma_pagamento_id")
+			, inverseForeignKey = @ForeignKey(name = "fk_forma_pagamento_id"))
 	private List<FormaPagamento> formasPagamento = new ArrayList<FormaPagamento>();
+	
+	@JsonIgnore
+	@Embedded
+	private Endereco endereco;
 
 	public Restaurante() {}
 	
@@ -128,6 +143,14 @@ public class Restaurante implements Serializable  {
 
 	public void setFormasPagamento(List<FormaPagamento> formasPagamento) {
 		this.formasPagamento = formasPagamento;
+	}
+
+	public Endereco getEndereco() {
+		return endereco;
+	}
+
+	public void setEndereco(Endereco endereco) {
+		this.endereco = endereco;
 	}
 
 	@Override

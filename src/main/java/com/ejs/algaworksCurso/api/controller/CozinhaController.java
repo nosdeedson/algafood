@@ -48,6 +48,11 @@ public class CozinhaController {
 		}
 		
 	}
+	
+	@GetMapping("buscar-primeira")
+	public ResponseEntity<?> buscarPrimeira(){
+		return ResponseEntity.ok(this.cozinhaService.buscarPrimeira());
+	}
 
 	@GetMapping
 	public ResponseEntity<?> listar() {

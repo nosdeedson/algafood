@@ -69,6 +69,21 @@ public class RestauranteController {
 		}
 	}
 	
+	@GetMapping("com-frete-gratis")
+	public ResponseEntity<?> encontrarComFreteGratis(@RequestParam(name = "nome", required = true) String nome){
+		/* Exemplo com classes*/
+		//return ResponseEntity.ok(this.restauranteService.encontrarComFreteGratis(nome));
+		/*Exemplo com a fábrica de specs*/
+		
+		return ResponseEntity.ok(this.restauranteService.encontrarComFreteGratis(nome));
+	}
+	
+	@GetMapping("encocntrar-primeiro")
+	public ResponseEntity<?> encontrarPrimeiro(){
+		return ResponseEntity.ok(this.restauranteService.encontrarPrimeiro());
+	}
+	
+	
 	@GetMapping
 	public ResponseEntity<?> listar(){
 		return ResponseEntity.ok(this.restauranteService.listar());
@@ -79,15 +94,6 @@ public class RestauranteController {
 			@RequestParam(required = false) BigDecimal taxaFreteInicial,
 			@RequestParam(required = false) BigDecimal taxaFreteFinal){
 		return ResponseEntity.ok(this.restauranteService.find(nome, taxaFreteInicial, taxaFreteFinal));
-	}
-	
-	@GetMapping("com-frete-gratis")
-	public ResponseEntity<?> encontrarComFreteGratis(@RequestParam(name = "nome", required = true) String nome){
-		/* Exemplo com classes*/
-		//return ResponseEntity.ok(this.restauranteService.encontrarComFreteGratis(nome));
-		/*Exemplo com a fábrica de specs*/
-		
-		return ResponseEntity.ok(this.restauranteService.encontrarComFreteGratis(nome));
 	}
 
 }

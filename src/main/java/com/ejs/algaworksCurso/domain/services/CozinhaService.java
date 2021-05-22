@@ -31,6 +31,11 @@ public class CozinhaService {
 		return this.cozinhaRepository.save(cozinhaAtual);
 	}
 	
+	public Cozinha buscarPrimeira() {
+		return this.cozinhaRepository.buscarPrimeiro()
+				.orElseThrow(() -> new EntidadeNaoEncontradaException("Nenhum dado encontrado."));
+	}
+	
 	public List<Cozinha> listar(){
 		Sort sort = Sort.by("nome");
 		return this.cozinhaRepository.findAll(sort);

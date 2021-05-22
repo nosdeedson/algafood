@@ -25,9 +25,6 @@ import com.ejs.algaworksCurso.domain.repository.CozinhaRepository;
 import com.ejs.algaworksCurso.domain.repository.FormaPagamentoRepository;
 import com.ejs.algaworksCurso.domain.repository.RestauranteRepository;
 import com.ejs.algaworksCurso.infrastructure.repository.RestauranteRepositoryCustom;
-import com.ejs.algaworksCurso.infrastructure.repository.spec.RestauranteComFreteGratisSpec;
-import com.ejs.algaworksCurso.infrastructure.repository.spec.RestauranteComNomeSemelhanteSpec;
-import com.ejs.algaworksCurso.infrastructure.repository.spec.RestauranteSpecs;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service
@@ -78,7 +75,8 @@ public class RestauranteService {
 		
 		this.validarFormasPagamento(restaurante.getFormasPagamento());
 		
-		BeanUtils.copyProperties(restaurante, restauranteAtual, "id", "dataCadastro");
+		BeanUtils.copyProperties(restaurante, restauranteAtual, "id", "dataCadastro", "formasPagamento", 
+				"endereco");
 		
 		restauranteAtual.setDataAtualizacao(LocalDateTime.now());
 		restauranteAtual.setCozinha(cozinhaAtual);
@@ -104,6 +102,25 @@ public class RestauranteService {
 		 return this.atualizar(restauranteDestino, id);
 	}
 	
+
+	
+	public List<Restaurante> encontrarComFreteGratis(String nome){
+		/*Exemple com classe*/
+//		RestauranteComFreteGratisSpec freteGratis = new RestauranteComFreteGratisSpec();
+//		RestauranteComNomeSemelhanteSpec nomeSemelhante = new RestauranteComNomeSemelhanteSpec(nome);
+//		
+//		return this.restauranteRepository.findAll(nomeSemelhante.and(freteGratis));
+		
+		/*Exemplo com fabrica de specificatio*/
+		
+		return this.restauranteRepository.findAll(comFreteGratis().and(comNomeSemelhante(nome)));
+	}
+	
+	public Restaurante encontrarPrimeiro() {
+		return this.restauranteRepository.buscarPrimeiro()
+		.orElseThrow(() -> new EntidadeNaoEncontradaException("Nenhum dado encontrado."));
+	}
+	
 	public Restaurante buscar(Long restauranteId) {	
 			Restaurante retorno = this.restauranteRepository.findById(restauranteId)
 					.orElseThrow( () -> new EntidadeNaoEncontradaException(
@@ -119,20 +136,6 @@ public class RestauranteService {
 		return restauranteRepoCustom.find(nome, taxaFreteInicial, taxaFreteFinal);
 	}
 	
-	public List<Restaurante> encontrarComFreteGratis(String nome){
-		/*Exemple com classe*/
-//		RestauranteComFreteGratisSpec freteGratis = new RestauranteComFreteGratisSpec();
-//		RestauranteComNomeSemelhanteSpec nomeSemelhante = new RestauranteComNomeSemelhanteSpec(nome);
-//		
-//		return this.restauranteRepository.findAll(nomeSemelhante.and(freteGratis));
-		
-		/*Exemplo com fabrica de specificatio*/
-		
-		return this.restauranteRepository.findAll(comFreteGratis().and(comNomeSemelhante(nome)));
-	}
-	
-	
-	
 	/**
 	 * Metodos auxiliares
 	 */
@@ -142,6 +145,7 @@ public class RestauranteService {
 	 * @param formasPagamento
 	 */
 	public void validarFormasPagamento( List<FormaPagamento> formasPagamento) {
+		
 		for (FormaPagamento formaPagamento : formasPagamento) {
 			FormaPagamento fp = this.formaPagamentoRepository.findById(formaPagamento.getId())
 					.orElseThrow( () -> new EntidadeNaoEncontradaException(
