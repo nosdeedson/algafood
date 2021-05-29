@@ -5,7 +5,6 @@ import static com.ejs.algaworksCurso.infrastructure.repository.spec.RestauranteS
 
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -53,8 +52,6 @@ public class RestauranteService {
 		
 		this.validarFormasPagamento(restaurante.getFormasPagamento());	
 		restaurante.setCozinha(cozinha);
-		restaurante.setDataAtualizacao(LocalDateTime.now());
-		restaurante.setDataCadastro(LocalDateTime.now());
 		
 		return this.restauranteRepository.save(restaurante);
 		
@@ -78,7 +75,6 @@ public class RestauranteService {
 		BeanUtils.copyProperties(restaurante, restauranteAtual, "id", "dataCadastro", "formasPagamento", 
 				"endereco");
 		
-		restauranteAtual.setDataAtualizacao(LocalDateTime.now());
 		restauranteAtual.setCozinha(cozinhaAtual);
 		return this.restauranteRepository.save(restauranteAtual);
 	}
@@ -129,7 +125,7 @@ public class RestauranteService {
 	}	
 	
 	public List<Restaurante> listar(){
-		return this.restauranteRepository.findAll(Sort.by("nome"));
+		return this.restauranteRepository.todas(Sort.by("nome"));
 	}
 	
 	public List<Restaurante> find(String nome, BigDecimal taxaFreteInicial, BigDecimal taxaFreteFinal){

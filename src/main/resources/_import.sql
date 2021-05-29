@@ -8,11 +8,16 @@ insert into forma_pagamento(id, descricao) values(2, 'cartao de debito');
 insert into forma_pagamento(id, descricao) values(3, 'cartao de credito');
 
 /*inseri restaurante*/
-insert into restaurante(id, aberto, ativo, data_atualizacao, data_cadastro, nome, taxa_frete, cozinha_id) values(1, 1, 1, '2021-01-01 00:00:00', '2018-02-23T08:30', 'Tailandes', 10.5, 1);
+insert into restaurante(id, aberto, ativo, data_atualizacao, data_cadastro, nome, taxa_frete, cozinha_id) values(1, 1, 1, utc_timestamp, utc_timestamp, 'Tailandes', 10.5, 1);
 
-insert into restaurante(id, aberto, ativo, data_atualizacao, data_cadastro, nome, taxa_frete, cozinha_id) values(2, 1, 1, '2018-02-23T08:30', '2018-02-23T08:30', 'Tailandes Gourmet', 15.5, 1);
+insert into restaurante(id, aberto, ativo, data_atualizacao, data_cadastro, nome, taxa_frete, cozinha_id) values(2, 1, 1, utc_timestamp, utc_timestamp, 'Tailandes Gourmet', 15.5, 1);
 
-insert into restaurante(id, aberto, ativo, data_atualizacao, data_cadastro, nome, taxa_frete, cozinha_id) values(3, 1, 1, '2018-02-23T08:30', '2018-02-23T08:30', 'Mexicana', 15.5, 2);
+insert into restaurante(id, aberto, ativo, data_atualizacao, data_cadastro, nome, taxa_frete, cozinha_id) values(3, 1, 1, utc_timestamp, utc_timestamp, 'Mexicana', 15.5, 2);
+
+insert into produto(ativo, descricao, nome, preco, restaurante_id) values(1, "arroz integral", "arroz", 26.8, 1);
+insert into produto(ativo, descricao, nome, preco, restaurante_id) values(1, "feijão preto", "feijão", 6.8, 1);
+insert into produto(ativo, descricao, nome, preco, restaurante_id) values(1, "arroz integral", "arroz", 26.8, 2);
+insert into produto(ativo, descricao, nome, preco, restaurante_id) values(1, "arroz integral", "arroz", 26.8, 3);
 
 /*inseri forma de pagamento restaurante*/
 insert into restaurante_forma_pagamento(restaurante_id, forma_pagamento_id) values(1, 1);

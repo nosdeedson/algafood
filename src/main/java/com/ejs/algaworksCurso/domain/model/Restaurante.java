@@ -17,6 +17,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -35,18 +39,23 @@ public class Restaurante implements Serializable  {
 	Boolean ativo;
 	
 	Boolean aberto;
-	
-	@Column(name = "data_cadastro")
+
+	@JsonIgnore
+	@CreationTimestamp
+	@Column(nullable = false, columnDefinition = "datetime")
 	LocalDateTime dataCadastro;
 	
-	@Column(name = "data_atualizacao")
+	@JsonIgnore
+	@UpdateTimestamp
+	@Column(nullable = false, columnDefinition = "datetime")
 	LocalDateTime dataAtualizacao;
 	
-	@ManyToOne
+//	@JsonIgnoreProperties("hibernateLazyInitializer") esta propriedade é criada pelo JPA quando se usa o FetchType.LAZY
+	@ManyToOne //(fetch = FetchType.LAZY) como o LAZY busca quando necessário
 	@JoinColumn(nullable = false)
 	private Cozinha cozinha;
 	
-	@JsonIgnore
+//	@JsonIgnore
 	@ManyToMany(targetEntity = FormaPagamento.class)
 	@JoinTable(name = "restaurante_forma_pagamento", 
 		joinColumns = @JoinColumn(name = "restaurante_id"), 
@@ -58,6 +67,10 @@ public class Restaurante implements Serializable  {
 	@JsonIgnore
 	@Embedded
 	private Endereco endereco;
+	
+	@JsonIgnore
+	@OneToMany(mappedBy = "restaurante")
+	private List<Produto> produtos = new ArrayList<Produto>();
 
 	public Restaurante() {}
 	
@@ -151,6 +164,14 @@ public class Restaurante implements Serializable  {
 
 	public void setEndereco(Endereco endereco) {
 		this.endereco = endereco;
+	}
+
+	public List<Produto> getProdutos() {
+		return produtos;
+	}
+
+	public void setProdutos(List<Produto> produtos) {
+		this.produtos = produtos;
 	}
 
 	@Override
