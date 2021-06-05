@@ -1,5 +1,6 @@
 package com.ejs.algaworksCurso.api.controller;
 
+import java.net.URI;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,9 +14,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.ejs.algaworksCurso.domain.exception.EntidadeEmUsoException;
-import com.ejs.algaworksCurso.domain.exception.EntidadeNaoEncontradaException;
 import com.ejs.algaworksCurso.domain.model.Estado;
 import com.ejs.algaworksCurso.domain.services.EstadoService;
 
@@ -29,22 +29,15 @@ public class EstadoController {
 	@PutMapping("{id}")
 	public ResponseEntity<?> atualizar(@PathVariable Long id,
 			@RequestBody Estado estado){
-		try {
-			estado = this.estadoService.atualizar(estado, id);
-			return ResponseEntity.ok(estado);
-		} catch (EntidadeNaoEncontradaException e) {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-		} 
+			this.estadoService.atualizar(estado, id);
+			URI uri = ServletUriComponentsBuilder.fromCurrentRequest().buildAndExpand().toUri();
+			return ResponseEntity.ok(uri);
 	}
 	
 	@GetMapping("{id}")
 	public ResponseEntity<?> buscar(@PathVariable Long id){
-		try {
-			Estado estado = this.estadoService.buscar(id);
-			return ResponseEntity.ok(estado);
-		} catch (EntidadeNaoEncontradaException e) {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-		}
+		Estado estado = this.estadoService.buscar(id);
+		return ResponseEntity.ok(estado);
 	}
 	
 	@GetMapping
@@ -55,24 +48,17 @@ public class EstadoController {
 	
 	@DeleteMapping("{id}")
 	public ResponseEntity<?> remover(@PathVariable Long id){
-		try {
 			this.estadoService.remover(id);
 			return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Deletado com sucesso!");
-		} catch (EntidadeEmUsoException e) {
-			return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
-		} catch (EntidadeNaoEncontradaException e) {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-		}
 	}
 	
 	@PostMapping
 	public ResponseEntity<?> salvar(@RequestBody Estado estado){
-		try {			
-			estado = this.estadoService.salvar(estado);
-			return ResponseEntity.status(HttpStatus.CREATED).body(estado);
-		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body("Falha ao salvar o Estado.");
-		}
+		estado = this.estadoService.salvar(estado);
+		URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
+				.path("/{id}").buildAndExpand(estado.getId())
+				.toUri();
+		return ResponseEntity.status(HttpStatus.CREATED).body(uri);
 	}
 
 }

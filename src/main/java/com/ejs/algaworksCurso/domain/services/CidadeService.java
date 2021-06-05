@@ -4,10 +4,14 @@ import java.util.List;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import com.ejs.algaworksCurso.domain.exception.EntidadeNaoEncontradaException;
+import com.ejs.algaworksCurso.domain.exception.CidadeNaoEncontradaException;
+import com.ejs.algaworksCurso.domain.exception.EntidadeEmUsoException;
+import com.ejs.algaworksCurso.domain.exception.EstadoNaoEncontradoException;
+import com.ejs.algaworksCurso.domain.exception.NegocioException;
 import com.ejs.algaworksCurso.domain.model.Cidade;
 import com.ejs.algaworksCurso.domain.model.Estado;
 import com.ejs.algaworksCurso.domain.repository.CidadeRepository;
@@ -23,14 +27,13 @@ public class CidadeService {
 	private EstadoRepository estadoRepository;
 	
 	public Cidade atualizar(Cidade cidade, Long id) {
-		Cidade cidadeAtual = this.cidadeRepository.findById(id)
-				.orElseThrow( () -> new EntidadeNaoEncontradaException(
-						String.format("Cidade de código %d não encontrada", id)));
 		
 		Estado estado = this.estadoRepository.findById(cidade.getEstado().getId())
-				.orElseThrow( () -> new EntidadeNaoEncontradaException(
-						String.format("Estado de código %d não encontrado.", cidade.getEstado().getId())));
+				.orElseThrow( () -> new NegocioException(
+						String.format("Estado de código %d não existe.", cidade.getEstado().getId())));
 
+		Cidade cidadeAtual = this.buscar(id);
+		
 		cidade.setEstado(estado);
 		
 		BeanUtils.copyProperties(cidade, cidadeAtual, "id");
@@ -40,8 +43,7 @@ public class CidadeService {
 	
 	public Cidade buscar( Long id) {
 		Cidade cidade = this.cidadeRepository.findById(id)
-				.orElseThrow( () -> new EntidadeNaoEncontradaException(
-						String.format("Cidade de código %d não encontrada", id)) );
+				.orElseThrow( () -> new CidadeNaoEncontradaException(id) );
 		return cidade;
 	}
 	
@@ -51,16 +53,18 @@ public class CidadeService {
 	}
 	
 	public void remover( Long id) {
-		Cidade cidade = this.cidadeRepository.findById(id)
-				.orElseThrow( () -> new EntidadeNaoEncontradaException(
-						String.format("Cidade de código %d não encontrada", id)) );
-		this.cidadeRepository.delete(cidade);			
+		try {			
+			this.cidadeRepository.deleteById(id);			
+		} catch (EntidadeEmUsoException e) {
+			throw new EntidadeEmUsoException(String.format("Cidade de código %d não pode ser deletada, pois está em uso", id));
+		} catch (EmptyResultDataAccessException e) {
+			throw new CidadeNaoEncontradaException(id);
+		}
 	}
 	
 	public Cidade salvar( Cidade cidade) {
 		Estado estado = this.estadoRepository.findById(cidade.getEstado().getId())
-				.orElseThrow( () -> new EntidadeNaoEncontradaException(
-						String.format("Estado de código %d não encontrado.", cidade.getEstado().getId())));
+				.orElseThrow( () -> new EstadoNaoEncontradoException(cidade.getEstado().getId()));
 		cidade.setEstado(estado);
 		return this.cidadeRepository.save(cidade);
 	}

@@ -72,15 +72,17 @@
 			<artifactId>jackson-dataformat-xml</artifactId>
 		</dependency>
 
-<!-- 		<dependency> -->
-<!-- 			<groupId>org.flywaydb</groupId> -->
-<!-- 			<artifactId>flyway-core</artifactId> -->
-<!-- 		</dependency> -->
+		<dependency>
+			<groupId>org.flywaydb</groupId>
+			<artifactId>flyway-core</artifactId>
+		</dependency>
+		
 		<dependency>
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>
 			<scope>runtime</scope>
 		</dependency>
+	
 	</dependencies>
 
 	<build>

@@ -41,7 +41,7 @@ public class Usuario implements Serializable {
 	public Usuario() {}
 	
 	public Usuario(Long id, LocalDateTime dataCadastro, String email, String nome, String senha) {
-		super();
+		
 		this.id = id;
 		this.dataCadastro = dataCadastro;
 		this.email = email;

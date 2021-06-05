@@ -1,7 +1,8 @@
 package com.ejs.algaworksCurso.api.controller;
 
+import java.net.URI;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -12,9 +13,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.ejs.algaworksCurso.domain.exception.EntidadeEmUsoException;
-import com.ejs.algaworksCurso.domain.exception.EntidadeNaoEncontradaException;
 import com.ejs.algaworksCurso.domain.model.Cidade;
 import com.ejs.algaworksCurso.domain.services.CidadeService;
 
@@ -28,22 +28,15 @@ public class CidadeController {
 	@PutMapping("{id}")
 	public ResponseEntity<?> atualizar(@PathVariable Long id, 
 			@RequestBody Cidade cidade){
-		try {
-			cidade = this.cidadeService.atualizar(cidade, id);
-			return ResponseEntity.status(HttpStatus.OK).body(cidade);
-		} catch (EntidadeNaoEncontradaException e) {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-		}
+		cidade = this.cidadeService.atualizar(cidade, id);
+		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().buildAndExpand().toUri();
+		return ResponseEntity.ok(uri);
 	}
 	
 	@GetMapping("{id}")
 	public ResponseEntity<?> buscar(@PathVariable Long id){
-		try {
-			Cidade cidade = this.cidadeService.buscar(id);
-			return ResponseEntity.ok(cidade);
-		} catch (EntidadeNaoEncontradaException e) {
-			return ResponseEntity.badRequest().body(e.getMessage());
-		}
+		Cidade cidade = this.cidadeService.buscar(id);
+		return ResponseEntity.ok(cidade);
 	}
 	
 	@GetMapping()
@@ -53,26 +46,16 @@ public class CidadeController {
 	
 	@DeleteMapping("{id}")
 	public ResponseEntity<?> remover(@PathVariable Long id){
-		try {
-			try {
-				this.cidadeService.remover(id);						
-			} catch (DataIntegrityViolationException e) {
-				throw new EntidadeEmUsoException(
-						String.format("Cidade de código %d não pode ser removida, pois está em uso.", id));
-			}
-			return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Deletado com sucesso.");
-		} catch (EntidadeNaoEncontradaException e) {
-			return ResponseEntity.badRequest().body(e.getMessage());
-		}
+		this.cidadeService.remover(id);	
+		return ResponseEntity.noContent().build();
 	}
 	
 	@PostMapping
 	public ResponseEntity<?> salvar( @RequestBody Cidade cidade){
-		try {
 			cidade = this.cidadeService.salvar(cidade);
-			return ResponseEntity.status(HttpStatus.CREATED).body(cidade);
-		} catch (EntidadeNaoEncontradaException e) {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-		}
+			URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
+					.path("/{id}").buildAndExpand(cidade.getId())
+					.toUri();
+			return ResponseEntity.status(HttpStatus.CREATED).body(uri);
 	}
 }

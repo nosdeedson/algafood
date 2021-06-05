@@ -3,7 +3,6 @@ package com.ejs.algaworksCurso.api.controller;
 import java.net.URI;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,8 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.ejs.algaworksCurso.domain.exception.EntidadeEmUsoException;
-import com.ejs.algaworksCurso.domain.exception.EntidadeNaoEncontradaException;
 import com.ejs.algaworksCurso.domain.model.Cozinha;
 import com.ejs.algaworksCurso.domain.services.CozinhaService;
 
@@ -30,23 +27,14 @@ public class CozinhaController {
 	@PutMapping("{cozinhaId}")
 	public ResponseEntity<?> atualizar(@RequestBody Cozinha cozinha, @PathVariable("cozinhaId") Long cozinhaId) {
 		cozinha = this.cozinhaService.atualizar(cozinha, cozinhaId);
-		if (cozinha != null) {
-			URI uri = ServletUriComponentsBuilder.fromCurrentRequest().buildAndExpand().toUri();
-			return ResponseEntity.ok(uri);
-		}
-		return ResponseEntity.notFound().build();
+		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().buildAndExpand().toUri();
+		return ResponseEntity.ok(uri);
 	}
 
 	@GetMapping("{id}")
 	public ResponseEntity<?> buscar(@PathVariable("id") Long id) {
-		
-		try {
-			Cozinha cozinha = this.cozinhaService.buscar(id);
-			return ResponseEntity.ok(cozinha);			
-		} catch (EntidadeNaoEncontradaException e) {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-		}
-		
+		Cozinha cozinha = this.cozinhaService.buscar(id);
+		return ResponseEntity.ok(cozinha);					
 	}
 	
 	@GetMapping("buscar-primeira")
@@ -70,15 +58,8 @@ public class CozinhaController {
 	
 	@DeleteMapping("{cozinhaId}")
 	public ResponseEntity<?> remover(@PathVariable Long cozinhaId){
-		try {
 			this.cozinhaService.remover(cozinhaId);
 			return ResponseEntity.noContent().build();
-		} catch (EntidadeEmUsoException e) {
-			return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
-		} catch (EntidadeNaoEncontradaException e) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-		}
 	}
-	
 	
 }

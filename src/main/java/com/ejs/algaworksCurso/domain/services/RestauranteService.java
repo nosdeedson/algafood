@@ -16,7 +16,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ReflectionUtils;
 
-import com.ejs.algaworksCurso.domain.exception.EntidadeNaoEncontradaException;
+import com.ejs.algaworksCurso.domain.exception.NegocioException;
+import com.ejs.algaworksCurso.domain.exception.RestauranteNaoEncontradoException;
 import com.ejs.algaworksCurso.domain.model.Cozinha;
 import com.ejs.algaworksCurso.domain.model.FormaPagamento;
 import com.ejs.algaworksCurso.domain.model.Restaurante;
@@ -29,6 +30,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @Service
 public class RestauranteService {
 	
+	private static final String COZINHA_NAO_EXISTE = "Não existe cozinha de código %d.";
+
 	@Autowired
 	private RestauranteRepository restauranteRepository;
 	
@@ -41,34 +44,17 @@ public class RestauranteService {
 	@Autowired
 	private RestauranteRepositoryCustom restauranteRepoCustom;
 	
-	@Transactional
-	public Restaurante adicionar(Restaurante restaurante) {
-		
-		Long cozinhaId = restaurante.getCozinha().getId();
-		
-		Cozinha cozinha = this.cozinhaRepository.findById(cozinhaId)
-				.orElseThrow( () -> new EntidadeNaoEncontradaException(
-					String.format("Não existe cozinha de código %d", cozinhaId)));
-		
-		this.validarFormasPagamento(restaurante.getFormasPagamento());	
-		restaurante.setCozinha(cozinha);
-		
-		return this.restauranteRepository.save(restaurante);
-		
-	}
 	
 	@Transactional
 	public Restaurante atualizar(Restaurante restaurante, Long restauranteId) {
 		
-		Restaurante restauranteAtual = this.restauranteRepository.findById(restauranteId)
-				.orElseThrow( () -> new EntidadeNaoEncontradaException(
-					String.format("Restaurante de código %d não existe.", restauranteId)));
+		Restaurante restauranteAtual = this.buscar(restauranteId);
 		
 		Long cozinhaId = restaurante.getCozinha().getId();
 		
 		Cozinha cozinhaAtual =  this.cozinhaRepository.findById(cozinhaId)
-				.orElseThrow( () -> new EntidadeNaoEncontradaException(
-					String.format("Cozinha de código %d não existe", cozinhaId)));
+				.orElseThrow( () -> new NegocioException(
+					String.format(COZINHA_NAO_EXISTE, cozinhaId)));
 		
 		this.validarFormasPagamento(restaurante.getFormasPagamento());
 		
@@ -81,9 +67,14 @@ public class RestauranteService {
 	
 	public Restaurante atualizarParcial( Map<String, Object> dados, Long id) {
 		
-		final Restaurante restauranteDestino = this.restauranteRepository.findById(id)
-				.orElseThrow( () ->  new EntidadeNaoEncontradaException(
-					String.format("Restaurante de código %d não encontrado.", id)));
+		final Restaurante restauranteDestino = this.buscar(id);
+		
+		if (dados.containsKey("cozinha")) {
+			Long cozinhaId = Long.parseLong( dados.get("cozinha").toString());
+			this.cozinhaRepository.findById(cozinhaId)
+				.orElseThrow( () -> new NegocioException(
+						String.format(COZINHA_NAO_EXISTE, cozinhaId)));
+		}
 		
 		ObjectMapper objectMapper = new ObjectMapper();
 		Restaurante restauranteOrigem = objectMapper.convertValue(dados, Restaurante.class);
@@ -98,7 +89,11 @@ public class RestauranteService {
 		 return this.atualizar(restauranteDestino, id);
 	}
 	
-
+	public Restaurante buscar(Long restauranteId) {	
+		Restaurante retorno = this.restauranteRepository.findById(restauranteId)
+				.orElseThrow( () -> new RestauranteNaoEncontradoException(restauranteId));
+		return retorno;
+	}		
 	
 	public List<Restaurante> encontrarComFreteGratis(String nome){
 		/*Exemple com classe*/
@@ -114,22 +109,34 @@ public class RestauranteService {
 	
 	public Restaurante encontrarPrimeiro() {
 		return this.restauranteRepository.buscarPrimeiro()
-		.orElseThrow(() -> new EntidadeNaoEncontradaException("Nenhum dado encontrado."));
+		.orElseThrow(() -> new RestauranteNaoEncontradoException("Nenhum restaurante encontrado."));
 	}
 	
-	public Restaurante buscar(Long restauranteId) {	
-			Restaurante retorno = this.restauranteRepository.findById(restauranteId)
-					.orElseThrow( () -> new EntidadeNaoEncontradaException(
-					String.format("Restaurante de código %d não encotrado", restauranteId)));
-			return retorno;
-	}	
+	
+	public List<Restaurante> find(String nome, BigDecimal taxaFreteInicial, BigDecimal taxaFreteFinal){
+		return restauranteRepoCustom.find(nome, taxaFreteInicial, taxaFreteFinal);
+	}
+	
 	
 	public List<Restaurante> listar(){
 		return this.restauranteRepository.todas(Sort.by("nome"));
 	}
+
 	
-	public List<Restaurante> find(String nome, BigDecimal taxaFreteInicial, BigDecimal taxaFreteFinal){
-		return restauranteRepoCustom.find(nome, taxaFreteInicial, taxaFreteFinal);
+	@Transactional
+	public Restaurante salvar(Restaurante restaurante) {
+		
+		Long cozinhaId = restaurante.getCozinha().getId();
+		
+		Cozinha cozinha = this.cozinhaRepository.findById(cozinhaId)
+				.orElseThrow( () -> new NegocioException(
+					String.format(COZINHA_NAO_EXISTE, cozinhaId)));
+		
+		this.validarFormasPagamento(restaurante.getFormasPagamento());	
+		restaurante.setCozinha(cozinha);
+		
+		return this.restauranteRepository.save(restaurante);
+		
 	}
 	
 	/**
@@ -143,8 +150,8 @@ public class RestauranteService {
 	public void validarFormasPagamento( List<FormaPagamento> formasPagamento) {
 		
 		for (FormaPagamento formaPagamento : formasPagamento) {
-			FormaPagamento fp = this.formaPagamentoRepository.findById(formaPagamento.getId())
-					.orElseThrow( () -> new EntidadeNaoEncontradaException(
+			this.formaPagamentoRepository.findById(formaPagamento.getId())
+					.orElseThrow( () -> new NegocioException(
 						String.format("Forma pagamento de código %d não existe.", formaPagamento.getId())));
 		}
 	}
