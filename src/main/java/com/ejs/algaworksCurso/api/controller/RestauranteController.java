@@ -4,6 +4,9 @@ import java.math.BigDecimal;
 import java.net.URI;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,7 +33,7 @@ public class RestauranteController {
 	
 	@PutMapping("{restauranteId}")
 	public ResponseEntity<?> atualizar(@PathVariable Long restauranteId,
-			@RequestBody Restaurante restaurante){
+			@RequestBody @Valid Restaurante restaurante){
 		this.restauranteService.atualizar(restaurante, restauranteId);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().buildAndExpand().toUri();
 		return ResponseEntity.ok(uri);
@@ -38,8 +41,8 @@ public class RestauranteController {
 	
 	@PatchMapping("{id}")
 	public ResponseEntity<?> atualizarParcial(@PathVariable Long id,
-			@RequestBody Map<String, Object>  dadosAtualizar){
-		this.restauranteService.atualizarParcial(dadosAtualizar, id);
+			@RequestBody Map<String, Object>  dadosAtualizar, HttpServletRequest request){
+		this.restauranteService.atualizarParcial(dadosAtualizar, id, request);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().buildAndExpand().toUri();
 		return ResponseEntity.ok(uri);
 	}
@@ -77,7 +80,7 @@ public class RestauranteController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<?> salvar(@RequestBody Restaurante restaurante){
+	public ResponseEntity<?> salvar(@RequestBody @Valid Restaurante restaurante){
 		restaurante = this.restauranteService.salvar(restaurante);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
 				.path("/{id}").buildAndExpand(restaurante.getId())

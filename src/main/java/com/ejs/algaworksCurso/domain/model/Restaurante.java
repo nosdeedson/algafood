@@ -18,10 +18,18 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PositiveOrZero;
+import javax.validation.groups.ConvertGroup;
+import javax.validation.groups.Default;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import com.ejs.algaworksCurso.Groups.CozinhaId;
+import com.ejs.algaworksCurso.Groups.FormasPagamentoId;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
@@ -32,12 +40,17 @@ public class Restaurante implements Serializable  {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
+	@NotBlank(message = "O nome não pode estar vazio.")
+	@Column(nullable = false)
 	private String nome;
 	
+	@PositiveOrZero
 	private BigDecimal taxaFrete;
 	
+	@NotNull
 	Boolean ativo;
 	
+	@NotNull
 	Boolean aberto;
 
 	@JsonIgnore
@@ -51,18 +64,24 @@ public class Restaurante implements Serializable  {
 	LocalDateTime dataAtualizacao;
 	
 //	@JsonIgnoreProperties("hibernateLazyInitializer") esta propriedade é criada pelo JPA quando se usa o FetchType.LAZY
+	@Valid
+	@ConvertGroup(from = Default.class, to = CozinhaId.class)
+	@NotNull
 	@ManyToOne //(fetch = FetchType.LAZY) como o LAZY busca quando necessário
 	@JoinColumn(nullable = false)
 	private Cozinha cozinha;
 	
 //	@JsonIgnore
+	@Valid
+	@ConvertGroup(from = Default.class, to = FormasPagamentoId.class)
+	@NotNull
 	@ManyToMany(targetEntity = FormaPagamento.class)
 	@JoinTable(name = "restaurante_forma_pagamento", 
 		joinColumns = @JoinColumn(name = "restaurante_id"), 
 		foreignKey = @ForeignKey(name = "fK_restaurante_id"),
 			inverseJoinColumns = @JoinColumn(name = "forma_pagamento_id")
 			, inverseForeignKey = @ForeignKey(name = "fk_forma_pagamento_id"))
-	private List<FormaPagamento> formasPagamento = new ArrayList<FormaPagamento>();
+	private List<FormaPagamento> formasPagamento;
 	
 	@JsonIgnore
 	@Embedded

@@ -3,6 +3,8 @@ package com.ejs.algaworksCurso.api.controller;
 import java.net.URI;
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,7 +30,7 @@ public class EstadoController {
 	
 	@PutMapping("{id}")
 	public ResponseEntity<?> atualizar(@PathVariable Long id,
-			@RequestBody Estado estado){
+			@RequestBody @Valid Estado estado){
 			this.estadoService.atualizar(estado, id);
 			URI uri = ServletUriComponentsBuilder.fromCurrentRequest().buildAndExpand().toUri();
 			return ResponseEntity.ok(uri);
@@ -53,7 +55,7 @@ public class EstadoController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<?> salvar(@RequestBody Estado estado){
+	public ResponseEntity<?> salvar(@RequestBody @Valid Estado estado){
 		estado = this.estadoService.salvar(estado);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
 				.path("/{id}").buildAndExpand(estado.getId())

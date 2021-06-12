@@ -7,15 +7,21 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
+import com.ejs.algaworksCurso.Groups.EstadoId;
 
 @Entity
 public class Estado implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
+	@NotNull(groups = EstadoId.class)
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
+	@NotBlank
 	@Column(nullable = false)
 	private String nome;
 	

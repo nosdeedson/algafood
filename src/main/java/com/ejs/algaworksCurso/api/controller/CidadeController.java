@@ -2,6 +2,8 @@ package com.ejs.algaworksCurso.api.controller;
 
 import java.net.URI;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,7 +29,7 @@ public class CidadeController {
 	
 	@PutMapping("{id}")
 	public ResponseEntity<?> atualizar(@PathVariable Long id, 
-			@RequestBody Cidade cidade){
+			@RequestBody @Valid Cidade cidade){
 		cidade = this.cidadeService.atualizar(cidade, id);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().buildAndExpand().toUri();
 		return ResponseEntity.ok(uri);
@@ -51,7 +53,7 @@ public class CidadeController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<?> salvar( @RequestBody Cidade cidade){
+	public ResponseEntity<?> salvar( @RequestBody @Valid Cidade cidade){
 			cidade = this.cidadeService.salvar(cidade);
 			URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
 					.path("/{id}").buildAndExpand(cidade.getId())

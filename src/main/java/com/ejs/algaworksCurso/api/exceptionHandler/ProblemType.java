@@ -2,7 +2,11 @@ package com.ejs.algaworksCurso.api.exceptionHandler;
 
 public enum ProblemType {
 	
-	ENTIDADE_NAO_ENCONTRADA("Entidade não encontrada", "/entidade-nao-encontrada"),
+	DADOS_INVALIDOS("Dados inválidos", "/dados-ivaliddos"),
+	ERRO_DE_SISTEMA("Erro interno no sistema", "/erro-sistema"),
+	PARAMETRO_INVALIDO("Parâmetro inválido", "/parametro-invalido"),
+	REQUISICAO_MAL_FORMADA("Requisição mal formada", "/requisicao-mal-formada"),
+	RECURSO_NAO_ENCONTRADO("Recurso não encontrado", "/recurso-nao-encontrado"),
 	ENTIDADE_EM_USO("Entidade em uso", "/entidade-em-uso"),
 	ERRO_NEGOCIO("violação de regra de negócio", "/erro-negocio");
 	

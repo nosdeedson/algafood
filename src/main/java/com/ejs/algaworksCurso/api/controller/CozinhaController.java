@@ -2,6 +2,8 @@ package com.ejs.algaworksCurso.api.controller;
 
 import java.net.URI;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -25,7 +27,8 @@ public class CozinhaController {
 	private CozinhaService cozinhaService;
 
 	@PutMapping("{cozinhaId}")
-	public ResponseEntity<?> atualizar(@RequestBody Cozinha cozinha, @PathVariable("cozinhaId") Long cozinhaId) {
+	public ResponseEntity<?> atualizar(@RequestBody
+			@Valid Cozinha cozinha, @PathVariable("cozinhaId") Long cozinhaId) {
 		cozinha = this.cozinhaService.atualizar(cozinha, cozinhaId);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().buildAndExpand().toUri();
 		return ResponseEntity.ok(uri);
@@ -48,7 +51,7 @@ public class CozinhaController {
 	}
 
 	@PostMapping
-	public ResponseEntity<?> salvar(@RequestBody Cozinha cozinha) {
+	public ResponseEntity<?> salvar(@RequestBody @Valid Cozinha cozinha) {
 		cozinha = this.cozinhaService.salvar(cozinha);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
 				.path("/{id}").buildAndExpand(cozinha.getId())

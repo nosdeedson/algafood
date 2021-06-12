@@ -8,11 +8,15 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.http.server.ServletServerHttpRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ReflectionUtils;
 
@@ -25,6 +29,7 @@ import com.ejs.algaworksCurso.domain.repository.CozinhaRepository;
 import com.ejs.algaworksCurso.domain.repository.FormaPagamentoRepository;
 import com.ejs.algaworksCurso.domain.repository.RestauranteRepository;
 import com.ejs.algaworksCurso.infrastructure.repository.RestauranteRepositoryCustom;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service
@@ -65,8 +70,8 @@ public class RestauranteService {
 		return this.restauranteRepository.save(restauranteAtual);
 	}
 	
-	public Restaurante atualizarParcial( Map<String, Object> dados, Long id) {
-		
+	public Restaurante atualizarParcial( Map<String, Object> dados, Long id, HttpServletRequest  request) {
+		ServletServerHttpRequest  sshr = new ServletServerHttpRequest(request);
 		final Restaurante restauranteDestino = this.buscar(id);
 		
 		if (dados.containsKey("cozinha")) {
@@ -77,16 +82,23 @@ public class RestauranteService {
 		}
 		
 		ObjectMapper objectMapper = new ObjectMapper();
-		Restaurante restauranteOrigem = objectMapper.convertValue(dados, Restaurante.class);
+		objectMapper.configure(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES, true);
+		objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, true);
+		try {
+			Restaurante restauranteOrigem = objectMapper.convertValue(dados, Restaurante.class);			
+			dados.forEach((nomeCampo, valorCampo) ->{
+				Field field = ReflectionUtils.findField(Restaurante.class, nomeCampo);
+				field.setAccessible(true);
+				Object nonoValor = ReflectionUtils.getField(field, restauranteOrigem);
+				ReflectionUtils.setField(field, restauranteDestino, nonoValor);
+			});
+			
+			return this.atualizar(restauranteDestino, id);
+		} catch (IllegalArgumentException e) {
+			Throwable rootCause = ExceptionUtils.getRootCause(e);
+			throw new HttpMessageNotReadableException("teste", rootCause, sshr);
+		}
 		
-		dados.forEach((nomeCampo, valorCampo) ->{
-			Field field = ReflectionUtils.findField(Restaurante.class, nomeCampo);
-			field.setAccessible(true);
-			Object nonoValor = ReflectionUtils.getField(field, restauranteOrigem);
-			ReflectionUtils.setField(field, restauranteDestino, nonoValor);
-		});
-		
-		 return this.atualizar(restauranteDestino, id);
 	}
 	
 	public Restaurante buscar(Long restauranteId) {	
