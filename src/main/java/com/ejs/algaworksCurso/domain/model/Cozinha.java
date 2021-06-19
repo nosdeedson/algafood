@@ -10,7 +10,7 @@ import javax.persistence.Id;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-import com.ejs.algaworksCurso.Groups.CozinhaId;
+import com.ejs.algaworksCurso.core.validation.Groups.CozinhaId;
 import com.fasterxml.jackson.annotation.JsonRootName;
 
 @JsonRootName(value = "cozinha")

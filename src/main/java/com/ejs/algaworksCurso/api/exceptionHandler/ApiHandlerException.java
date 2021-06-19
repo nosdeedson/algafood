@@ -1,7 +1,6 @@
 package com.ejs.algaworksCurso.api.exceptionHandler;
 
 import java.util.List;
-import java.util.Locale;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
@@ -26,6 +25,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import com.ejs.algaworksCurso.domain.exception.EntidadeEmUsoException;
 import com.ejs.algaworksCurso.domain.exception.EntidadeNaoEncontradaException;
 import com.ejs.algaworksCurso.domain.exception.NegocioException;
+import com.ejs.algaworksCurso.domain.exception.ValidacaoException;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.fasterxml.jackson.databind.exc.PropertyBindingException;
 
@@ -78,6 +78,17 @@ public class ApiHandlerException extends ResponseEntityExceptionHandler {
 				.userMessage(ex.getMessage())
 				.build();
 		return this.handleExceptionInternal(ex, problem, new HttpHeaders(), HttpStatus.BAD_REQUEST, resquest);
+	}
+	
+	@ExceptionHandler(ValidacaoException.class)
+	public ResponseEntity<?> tratarValidaException(ValidacaoException ex, WebRequest request){
+		HttpStatus status = HttpStatus.BAD_REQUEST;
+		List<CampoComErro> erros = this.adicionaErros(ex.getBindingResult());
+		Problem problem =  this.createProblem(status, "Existe campos que não atendem as regras de negócio.", ProblemType.DADOS_INVALIDOS)
+			.timeStamp()
+			.camposComErro(erros)
+			.userMessage(ex.getMessage()).build();
+		return this.handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);
 	}
 	
 	@Override
@@ -150,13 +161,7 @@ public class ApiHandlerException extends ResponseEntityExceptionHandler {
 		String detail = "Um ou mais campos estão inválidos, corrija, e tente novamente.";
 		BindingResult bindingResults = ex.getBindingResult();
 	
-		List<CampoComErro> camposComErro = bindingResults.getFieldErrors().stream()
-				.map(erro -> {
-					String message = messageSource.getMessage(erro, LocaleContextHolder.getLocale());
-					return  new CampoComErro.Builder()
-						.nome(erro.getField()).menssagem(message).build();
-				})
-				.collect(Collectors.toList());
+		List<CampoComErro> camposComErro = this.adicionaErros(bindingResults);
 				
 		Problem problem = this.createProblem(status, detail, ProblemType.DADOS_INVALIDOS)
 				.timeStamp()
@@ -170,6 +175,15 @@ public class ApiHandlerException extends ResponseEntityExceptionHandler {
 		return new  Problem.Builder().detail(detail).status(status.value()).title(problemType.getTitle()).type(problemType.getUri());
 	}
 
+	private List<CampoComErro> adicionaErros(BindingResult bindingResult){
+		List<CampoComErro> erros = bindingResult.getFieldErrors().stream()
+												.map( erro -> {
+													String message = messageSource.getMessage(erro, LocaleContextHolder.getLocale());
+													return new CampoComErro.Builder().nome(erro.getField()).menssagem(message).build();
+												})
+												.collect(Collectors.toList());
+		return erros;
+	}
 	
 	private ResponseEntity<Object> handlePropertyBindingException( PropertyBindingException ex,
 			HttpHeaders headers, HttpStatus status, WebRequest request){
@@ -177,7 +191,7 @@ public class ApiHandlerException extends ResponseEntityExceptionHandler {
 		String path = ex.getPath().stream().map(ref -> ref.getFieldName())
 				.collect(Collectors.joining("."));
 		
-		String detail = String.format("A propriedade '%s' não está sendo mapeada, por este objeto.", path);
+		String detail = String.format("A propriedade '%s' não deve ser informada nesta requisição.", path);
 		
 		Problem problem = this.createProblem(status, detail, ProblemType.REQUISICAO_MAL_FORMADA)
 				.timeStamp()

@@ -19,9 +19,12 @@ import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.server.ServletServerHttpRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ReflectionUtils;
+import org.springframework.validation.BeanPropertyBindingResult;
+import org.springframework.validation.SmartValidator;
 
 import com.ejs.algaworksCurso.domain.exception.NegocioException;
 import com.ejs.algaworksCurso.domain.exception.RestauranteNaoEncontradoException;
+import com.ejs.algaworksCurso.domain.exception.ValidacaoException;
 import com.ejs.algaworksCurso.domain.model.Cozinha;
 import com.ejs.algaworksCurso.domain.model.FormaPagamento;
 import com.ejs.algaworksCurso.domain.model.Restaurante;
@@ -49,6 +52,8 @@ public class RestauranteService {
 	@Autowired
 	private RestauranteRepositoryCustom restauranteRepoCustom;
 	
+	@Autowired
+	private SmartValidator smartValidator;
 	
 	@Transactional
 	public Restaurante atualizar(Restaurante restaurante, Long restauranteId) {
@@ -92,7 +97,7 @@ public class RestauranteService {
 				Object nonoValor = ReflectionUtils.getField(field, restauranteOrigem);
 				ReflectionUtils.setField(field, restauranteDestino, nonoValor);
 			});
-			
+			this.validarRestaurante(restauranteDestino);
 			return this.atualizar(restauranteDestino, id);
 		} catch (IllegalArgumentException e) {
 			Throwable rootCause = ExceptionUtils.getRootCause(e);
@@ -101,6 +106,14 @@ public class RestauranteService {
 		
 	}
 	
+	private void validarRestaurante(Restaurante restauranteDestino) {
+		BeanPropertyBindingResult bindingResults = new BeanPropertyBindingResult(restauranteDestino, "restaurante");
+		smartValidator.validate(restauranteDestino, bindingResults);
+		if( bindingResults.hasErrors()) {
+			throw new ValidacaoException(bindingResults);
+		}
+	}
+
 	public Restaurante buscar(Long restauranteId) {	
 		Restaurante retorno = this.restauranteRepository.findById(restauranteId)
 				.orElseThrow( () -> new RestauranteNaoEncontradoException(restauranteId));

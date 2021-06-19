@@ -1,4 +1,4 @@
-package com.ejs.algaworksCurso;
+package com.ejs.algaworksCurso.core.validation;
 
 public interface Groups {
 	

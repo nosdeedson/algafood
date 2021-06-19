@@ -2,7 +2,7 @@ package com.ejs.algaworksCurso.api.exceptionHandler;
 
 public enum ProblemType {
 	
-	DADOS_INVALIDOS("Dados inválidos", "/dados-ivaliddos"),
+	DADOS_INVALIDOS("Dados inválidos", "/dados-invalidos"),
 	ERRO_DE_SISTEMA("Erro interno no sistema", "/erro-sistema"),
 	PARAMETRO_INVALIDO("Parâmetro inválido", "/parametro-invalido"),
 	REQUISICAO_MAL_FORMADA("Requisição mal formada", "/requisicao-mal-formada"),

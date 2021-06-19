@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.ejs.algaworksCurso.domain.exception.CidadeNaoEncontradaException;
 import com.ejs.algaworksCurso.domain.exception.EntidadeEmUsoException;
@@ -26,6 +27,7 @@ public class CidadeService {
 	@Autowired
 	private EstadoRepository estadoRepository;
 	
+	@Transactional(rollbackFor = {NegocioException.class, Exception.class})
 	public Cidade atualizar(Cidade cidade, Long id) {
 		
 		Estado estado = this.estadoRepository.findById(cidade.getEstado().getId())
@@ -52,6 +54,7 @@ public class CidadeService {
 		return this.cidadeRepository.findAll(sort);
 	}
 	
+	@Transactional(rollbackFor = {NegocioException.class, EmptyResultDataAccessException.class})
 	public void remover( Long id) {
 		try {			
 			this.cidadeRepository.deleteById(id);			
@@ -62,6 +65,7 @@ public class CidadeService {
 		}
 	}
 	
+	@Transactional(rollbackFor = {Exception.class})
 	public Cidade salvar( Cidade cidade) {
 		Estado estado = this.estadoRepository.findById(cidade.getEstado().getId())
 				.orElseThrow( () -> new EstadoNaoEncontradoException(cidade.getEstado().getId()));

@@ -10,13 +10,13 @@ insert into forma_pagamento(descricao) values('cartao de credito') ON CONFLICT D
 
 /*inseri restaurante*/
 insert into restaurante(aberto, ativo, data_atualizacao, data_cadastro, nome, taxa_frete, cozinha_id) 
-values(true, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'Tailandes', 10.5, 1) ON CONFLICT DO NOTHING;
+values(true, true, (now() at time zone 'utc'), (now() at time zone 'utc'), 'Tailandes', 10.5, 1) ON CONFLICT DO NOTHING;
 
 insert into restaurante(aberto, ativo, data_atualizacao, data_cadastro, nome, taxa_frete, cozinha_id)
-values(true, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'Tailandes Gourmet', 15.5, 1) ON CONFLICT DO NOTHING;
+values(true, true, (now() at time zone 'utc'), (now() at time zone 'utc'), 'Tailandes Gourmet', 15.5, 1) ON CONFLICT DO NOTHING;
 
 insert into restaurante(aberto, ativo, data_atualizacao, data_cadastro, nome, taxa_frete, cozinha_id)
-values(true, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'Mexicana', 15.5, 2) ON CONFLICT DO NOTHING;
+values(true, true, (now() at time zone 'utc'), (now() at time zone 'utc'), 'Mexicana', 15.5, 2) ON CONFLICT DO NOTHING;
 
 insert into produto(ativo, descricao, nome, preco, restaurante_id)
 values(true, 'arroz integral', 'arroz', 26.8, 1) ON CONFLICT DO NOTHING;

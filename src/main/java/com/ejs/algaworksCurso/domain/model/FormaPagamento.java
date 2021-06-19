@@ -8,7 +8,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
 
-import com.ejs.algaworksCurso.Groups.FormasPagamentoId;
+import com.ejs.algaworksCurso.core.validation.Groups.FormasPagamentoId;
 
 @Entity
 public class FormaPagamento implements Serializable  {

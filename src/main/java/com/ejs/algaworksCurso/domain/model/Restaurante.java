@@ -2,7 +2,7 @@ package com.ejs.algaworksCurso.domain.model;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,9 +28,8 @@ import javax.validation.groups.Default;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import com.ejs.algaworksCurso.Groups.CozinhaId;
-import com.ejs.algaworksCurso.Groups.FormasPagamentoId;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.ejs.algaworksCurso.core.validation.Groups.CozinhaId;
+import com.ejs.algaworksCurso.core.validation.Groups.FormasPagamentoId;
 
 @Entity
 public class Restaurante implements Serializable  {
@@ -44,7 +43,8 @@ public class Restaurante implements Serializable  {
 	@Column(nullable = false)
 	private String nome;
 	
-	@PositiveOrZero
+	@NotNull
+	@PositiveOrZero(message = "{TaxaFrete.invalida}")
 	private BigDecimal taxaFrete;
 	
 	@NotNull
@@ -53,17 +53,14 @@ public class Restaurante implements Serializable  {
 	@NotNull
 	Boolean aberto;
 
-	@JsonIgnore
 	@CreationTimestamp
 	@Column(nullable = false, columnDefinition = "datetime")
-	LocalDateTime dataCadastro;
+	OffsetDateTime dataCadastro;
 	
-	@JsonIgnore
 	@UpdateTimestamp
 	@Column(nullable = false, columnDefinition = "datetime")
-	LocalDateTime dataAtualizacao;
+	OffsetDateTime dataAtualizacao;
 	
-//	@JsonIgnoreProperties("hibernateLazyInitializer") esta propriedade é criada pelo JPA quando se usa o FetchType.LAZY
 	@Valid
 	@ConvertGroup(from = Default.class, to = CozinhaId.class)
 	@NotNull
@@ -71,7 +68,6 @@ public class Restaurante implements Serializable  {
 	@JoinColumn(nullable = false)
 	private Cozinha cozinha;
 	
-//	@JsonIgnore
 	@Valid
 	@ConvertGroup(from = Default.class, to = FormasPagamentoId.class)
 	@NotNull
@@ -83,18 +79,16 @@ public class Restaurante implements Serializable  {
 			, inverseForeignKey = @ForeignKey(name = "fk_forma_pagamento_id"))
 	private List<FormaPagamento> formasPagamento;
 	
-	@JsonIgnore
 	@Embedded
 	private Endereco endereco;
 	
-	@JsonIgnore
 	@OneToMany(mappedBy = "restaurante")
 	private List<Produto> produtos = new ArrayList<Produto>();
 
 	public Restaurante() {}
 	
 	public Restaurante(Long id, String nome, BigDecimal taxaFrete, Boolean ativo, Boolean aberto,
-			LocalDateTime dataCadastro, LocalDateTime dataAtualizacao, Cozinha cozinha) {
+			OffsetDateTime dataCadastro, OffsetDateTime dataAtualizacao, Cozinha cozinha) {
 		this.id = id;
 		this.nome = nome;
 		this.taxaFrete = taxaFrete;
@@ -145,19 +139,19 @@ public class Restaurante implements Serializable  {
 		this.aberto = aberto;
 	}
 
-	public LocalDateTime getDataCadastro() {
+	public OffsetDateTime getDataCadastro() {
 		return dataCadastro;
 	}
 
-	public void setDataCadastro(LocalDateTime dataCadastro) {
+	public void setDataCadastro(OffsetDateTime dataCadastro) {
 		this.dataCadastro = dataCadastro;
 	}
 
-	public LocalDateTime getDataAtualizacao() {
+	public OffsetDateTime getDataAtualizacao() {
 		return dataAtualizacao;
 	}
 
-	public void setDataAtualizacao(LocalDateTime dataAtualizacao) {
+	public void setDataAtualizacao(OffsetDateTime dataAtualizacao) {
 		this.dataAtualizacao = dataAtualizacao;
 	}
 

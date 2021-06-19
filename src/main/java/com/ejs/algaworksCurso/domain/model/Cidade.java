@@ -15,7 +15,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.groups.ConvertGroup;
 import javax.validation.groups.Default;
 
-import com.ejs.algaworksCurso.Groups.EstadoId;
+import com.ejs.algaworksCurso.core.validation.Groups.EstadoId;
 
 @Entity
 public class Cidade implements Serializable {

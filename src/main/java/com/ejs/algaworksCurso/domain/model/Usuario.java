@@ -1,7 +1,7 @@
 package com.ejs.algaworksCurso.domain.model;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,7 +26,7 @@ public class Usuario implements Serializable {
 	private Long id;
 	
 	@CreationTimestamp
-	private LocalDateTime dataCadastro;
+	private OffsetDateTime dataCadastro;
 	
 	private String email;
 	private String nome;
@@ -40,7 +40,7 @@ public class Usuario implements Serializable {
 	
 	public Usuario() {}
 	
-	public Usuario(Long id, LocalDateTime dataCadastro, String email, String nome, String senha) {
+	public Usuario(Long id, OffsetDateTime dataCadastro, String email, String nome, String senha) {
 		
 		this.id = id;
 		this.dataCadastro = dataCadastro;
@@ -57,11 +57,11 @@ public class Usuario implements Serializable {
 		this.id = id;
 	}
 
-	public LocalDateTime getDataCadastro() {
+	public OffsetDateTime getDataCadastro() {
 		return dataCadastro;
 	}
 
-	public void setDataCadastro(LocalDateTime dataCadastro) {
+	public void setDataCadastro(OffsetDateTime dataCadastro) {
 		this.dataCadastro = dataCadastro;
 	}
 

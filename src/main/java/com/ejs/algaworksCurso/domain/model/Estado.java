@@ -10,7 +10,7 @@ import javax.persistence.Id;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-import com.ejs.algaworksCurso.Groups.EstadoId;
+import com.ejs.algaworksCurso.core.validation.Groups.EstadoId;
 
 @Entity
 public class Estado implements Serializable {
