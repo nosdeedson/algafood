@@ -1,18 +1,23 @@
 package com.ejs.algaworksCurso.domain.services;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.ejs.algaworksCurso.api.model.dto.in.CozinhaIn;
+import com.ejs.algaworksCurso.api.model.dto.out.CozinhaOut;
 import com.ejs.algaworksCurso.domain.exception.CozinhaNaoEncontradaException;
 import com.ejs.algaworksCurso.domain.exception.EntidadeEmUsoException;
 import com.ejs.algaworksCurso.domain.model.Cozinha;
 import com.ejs.algaworksCurso.domain.repository.CozinhaRepository;
+import com.ejs.algaworksCurso.helper.cozinha.CozinhaAssembler;
+import com.ejs.algaworksCurso.helper.cozinha.CozinhaDisAssembler;
 
 @Service
 public class CozinhaService {
@@ -20,36 +25,46 @@ public class CozinhaService {
 	@Autowired
 	private CozinhaRepository cozinhaRepository;
 	
-	public Cozinha atualizar(Cozinha cozinha, Long cozinhaId) {
-		Cozinha cozinhaAtual = this.buscar(cozinhaId);
+	@Autowired
+	private CozinhaAssembler cozinhaAssembler;
+	
+	@Autowired
+	private CozinhaDisAssembler cozinhaDisAssembler;
+	
+	@Transactional
+	public Cozinha atualizar(CozinhaIn cozinhaIn, Long cozinhaId) {
+		Cozinha cozinhaAtual = this.cozinhaRepository.findById(cozinhaId)
+				.orElseThrow( () -> new CozinhaNaoEncontradaException(cozinhaId));
 		
-		BeanUtils.copyProperties(cozinha, cozinhaAtual, "id");
-		
+		this.cozinhaAssembler.cozinhaInToCozinha(cozinhaAtual, cozinhaIn);
 		return this.cozinhaRepository.save(cozinhaAtual);
 	}
 	
-	public Cozinha buscar(Long id) {
-		return this.cozinhaRepository.findById(id)
+	public CozinhaOut buscar(Long id) {
+		Cozinha cozinha = this.cozinhaRepository.findById(id)
 				.orElseThrow( () -> new CozinhaNaoEncontradaException(id));
+		return this.cozinhaDisAssembler.cozinhaToCozinhaOut(cozinha);
 	}
 	
-	public Cozinha buscarPrimeira() {
-		return this.cozinhaRepository.buscarPrimeiro()
+	public CozinhaOut buscarPrimeira() {
+		Cozinha cozinha = this.cozinhaRepository.buscarPrimeiro()
 				.orElseThrow(() -> new CozinhaNaoEncontradaException("Nenhum dado encontrado."));
+		return this.cozinhaDisAssembler.cozinhaToCozinhaOut(cozinha);
 	}
 	
-	public List<Cozinha> listar(){
+	public List<CozinhaOut> listar(){
 		Sort sort = Sort.by("nome");
-		return this.cozinhaRepository.findAll(sort);
+		List<Cozinha> cozinhas = this.cozinhaRepository.findAll(sort);
+		return cozinhas.stream()
+				.map(cozinha -> this.cozinhaDisAssembler.cozinhaToCozinhaOut(cozinha))
+				.collect(Collectors.toList());
 	}
 
-	public Cozinha salvar(Cozinha cozinha) {
-		return cozinhaRepository.save(cozinha);
-	}
-	
+	@Transactional
 	public void remover(Long cozinhaId) {
 		try {			
 			cozinhaRepository.deleteById(cozinhaId);
+			cozinhaRepository.flush();
 		} catch (DataIntegrityViolationException e) {
 			throw new EntidadeEmUsoException(
 					String.format("A cozinha de código %d não pode ser deletada, pois está em uso.", cozinhaId));
@@ -57,4 +72,12 @@ public class CozinhaService {
 			throw new CozinhaNaoEncontradaException(cozinhaId);
 		}
 	}
+	
+	@Transactional
+	public CozinhaOut salvar(CozinhaIn cozinhaIn) {
+		Cozinha cozinha = this.cozinhaAssembler.cozinhaInToCozinha(cozinhaIn);
+		cozinha = cozinhaRepository.save(cozinha);
+		return cozinhaDisAssembler.cozinhaToCozinhaOut(cozinha);
+	}
+
 }

@@ -1,22 +1,25 @@
 package com.ejs.algaworksCurso.domain.services;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.ejs.algaworksCurso.api.model.dto.in.CidadeIn;
+import com.ejs.algaworksCurso.api.model.dto.out.CidadeOut;
 import com.ejs.algaworksCurso.domain.exception.CidadeNaoEncontradaException;
 import com.ejs.algaworksCurso.domain.exception.EntidadeEmUsoException;
 import com.ejs.algaworksCurso.domain.exception.EstadoNaoEncontradoException;
 import com.ejs.algaworksCurso.domain.exception.NegocioException;
 import com.ejs.algaworksCurso.domain.model.Cidade;
-import com.ejs.algaworksCurso.domain.model.Estado;
 import com.ejs.algaworksCurso.domain.repository.CidadeRepository;
 import com.ejs.algaworksCurso.domain.repository.EstadoRepository;
+import com.ejs.algaworksCurso.helper.cidade.CidadeAssembler;
+import com.ejs.algaworksCurso.helper.cidade.CidadeDisAssembler;
 
 @Service
 public class CidadeService {
@@ -27,37 +30,47 @@ public class CidadeService {
 	@Autowired
 	private EstadoRepository estadoRepository;
 	
+	@Autowired
+	private CidadeAssembler cidadeAssembler;
+	
+	@Autowired
+	private CidadeDisAssembler cidadeDisAssembler;
+	
 	@Transactional(rollbackFor = {NegocioException.class, Exception.class})
-	public Cidade atualizar(Cidade cidade, Long id) {
+	public CidadeOut atualizar(CidadeIn cidadeIn, Long id) {
 		
-		Estado estado = this.estadoRepository.findById(cidade.getEstado().getId())
+		this.estadoRepository.findById(cidadeIn.getEstado().getId())
 				.orElseThrow( () -> new NegocioException(
-						String.format("Estado de código %d não existe.", cidade.getEstado().getId())));
+						String.format("Estado de código %d não existe.", cidadeIn.getEstado().getId())));
 
-		Cidade cidadeAtual = this.buscar(id);
+		Cidade cidadeAtual = this.cidadeRepository.findById(id)
+				.orElseThrow( () -> new CidadeNaoEncontradaException(id) );
 		
-		cidade.setEstado(estado);
+		this.cidadeAssembler.cidadeIntoCidade(cidadeAtual, cidadeIn);
 		
-		BeanUtils.copyProperties(cidade, cidadeAtual, "id");
-		
-		return this.cidadeRepository.save(cidadeAtual);			
+		cidadeAtual = this.cidadeRepository.save(cidadeAtual);	
+		return this.cidadeDisAssembler.cidadeToCidadeOut(cidadeAtual);
 	}
 	
-	public Cidade buscar( Long id) {
+	public CidadeOut buscar( Long id) {
 		Cidade cidade = this.cidadeRepository.findById(id)
 				.orElseThrow( () -> new CidadeNaoEncontradaException(id) );
-		return cidade;
+		return this.cidadeDisAssembler.cidadeToCidadeOut(cidade);
 	}
 	
-	public List<Cidade> listar(){
+	public List<CidadeOut> listar(){
 		Sort sort = Sort.by("nome");
-		return this.cidadeRepository.findAll(sort);
+		List<Cidade> cidades = this.cidadeRepository.findAll(sort);
+		return cidades.stream()
+				.map(cidade -> this.cidadeDisAssembler.cidadeToCidadeOut(cidade))
+				.collect(Collectors.toList());
 	}
 	
 	@Transactional(rollbackFor = {NegocioException.class, EmptyResultDataAccessException.class})
 	public void remover( Long id) {
 		try {			
-			this.cidadeRepository.deleteById(id);			
+			this.cidadeRepository.deleteById(id);	
+			cidadeRepository.flush();
 		} catch (EntidadeEmUsoException e) {
 			throw new EntidadeEmUsoException(String.format("Cidade de código %d não pode ser deletada, pois está em uso", id));
 		} catch (EmptyResultDataAccessException e) {
@@ -66,11 +79,13 @@ public class CidadeService {
 	}
 	
 	@Transactional(rollbackFor = {Exception.class})
-	public Cidade salvar( Cidade cidade) {
-		Estado estado = this.estadoRepository.findById(cidade.getEstado().getId())
-				.orElseThrow( () -> new EstadoNaoEncontradoException(cidade.getEstado().getId()));
-		cidade.setEstado(estado);
-		return this.cidadeRepository.save(cidade);
+	public CidadeOut salvar( CidadeIn cidadeIn) {
+		this.estadoRepository.findById(cidadeIn.getEstado().getId())
+				.orElseThrow( () -> new EstadoNaoEncontradoException(cidadeIn.getEstado().getId()));
+		Cidade cidade = this.cidadeAssembler.cidadeInToCidade(cidadeIn);
+		
+		cidade = this.cidadeRepository.save(cidade);
+		return this.cidadeDisAssembler.cidadeToCidadeOut(cidade);
 	}
 
 }

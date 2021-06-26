@@ -12,10 +12,6 @@ import javax.persistence.ManyToOne;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import javax.validation.groups.ConvertGroup;
-import javax.validation.groups.Default;
-
-import com.ejs.algaworksCurso.core.validation.Groups.EstadoId;
 
 @Entity
 public class Cidade implements Serializable {
@@ -26,7 +22,6 @@ public class Cidade implements Serializable {
 	private Long id;
 	
 	@Valid
-	@ConvertGroup(from = Default.class, to = EstadoId.class)
 	@NotNull
 	@ManyToOne
 	@JoinColumn(nullable =  false)

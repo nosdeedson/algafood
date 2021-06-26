@@ -9,9 +9,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import com.ejs.algaworksCurso.api.model.dto.in.CozinhaIn;
 import com.ejs.algaworksCurso.domain.exception.EntidadeEmUsoException;
 import com.ejs.algaworksCurso.domain.exception.EntidadeNaoEncontradaException;
 import com.ejs.algaworksCurso.domain.model.Cozinha;
+import com.ejs.algaworksCurso.domain.repository.CozinhaRepository;
 import com.ejs.algaworksCurso.domain.services.CozinhaService;
 
 @SpringBootTest
@@ -28,6 +30,9 @@ class CadastroCozinhaIntegracaoTestsIT {
 	@Autowired
 	CozinhaService cozinhaService;
 
+	@Autowired
+	CozinhaRepository repository;
+	
 	@Test
 	public void deveAtribuirId_QuandoOsDadosEstaoCorretos() {
 		
@@ -35,8 +40,7 @@ class CadastroCozinhaIntegracaoTestsIT {
 		Cozinha novaCozinha = new Cozinha();
 		novaCozinha.setNome("Americana");
 		//Ação
-		cozinhaService.salvar(novaCozinha);
-		
+		novaCozinha = repository.save(novaCozinha);
 		//validação
 		assertThat(novaCozinha).isNotNull();
 		assertThat(novaCozinha.getId()).isNotNull();
@@ -46,7 +50,7 @@ class CadastroCozinhaIntegracaoTestsIT {
 	@Test 
 	public void deveFalhar_QuandoTentarCadastrarCozinhaSemNome() {
 		//cenário
-		Cozinha novaCozinha = new Cozinha();
+		CozinhaIn novaCozinha = new CozinhaIn();
 		novaCozinha.setNome(null);
 		//Ação
 		assertThrows(ConstraintViolationException.class, () -> { cozinhaService.salvar(novaCozinha);});

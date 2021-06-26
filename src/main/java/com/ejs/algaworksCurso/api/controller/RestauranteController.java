@@ -10,6 +10,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,10 +19,12 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.ejs.algaworksCurso.domain.model.Restaurante;
+import com.ejs.algaworksCurso.api.model.dto.in.RestauranteIn;
+import com.ejs.algaworksCurso.api.model.dto.out.RestauranteOut;
 import com.ejs.algaworksCurso.domain.services.RestauranteService;
 
 @RestController
@@ -31,9 +34,20 @@ public class RestauranteController {
 	@Autowired
 	private RestauranteService restauranteService;
 	
+	@PutMapping("{restauranteId}/aberto")
+	public void abrir(@PathVariable Long restauranteId) {
+		this.restauranteService.abrir(restauranteId);
+	}
+	
+	@PutMapping("{restauranteId}/ativacao")
+	@ResponseStatus(value = HttpStatus.NO_CONTENT)
+	public void ativar(@PathVariable Long restauranteId){
+		this.restauranteService.ativar(restauranteId);
+	}
+	
 	@PutMapping("{restauranteId}")
 	public ResponseEntity<?> atualizar(@PathVariable Long restauranteId,
-			@RequestBody @Valid Restaurante restaurante){
+			@RequestBody @Valid RestauranteIn restaurante){
 		this.restauranteService.atualizar(restaurante, restauranteId);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().buildAndExpand().toUri();
 		return ResponseEntity.ok(uri);
@@ -66,6 +80,12 @@ public class RestauranteController {
 		return ResponseEntity.ok(this.restauranteService.encontrarPrimeiro());
 	}
 	
+	@DeleteMapping("{restauranteId}/aberto")
+	@ResponseStatus(value = HttpStatus.NO_CONTENT)
+	public void fechar(@PathVariable Long restauranteId) {
+		this.restauranteService.fechar(restauranteId);
+	}
+	
 	@GetMapping("encontrar-como")
 	public ResponseEntity<?> find(@RequestParam(name = "nome", required = false) String nome,
 			@RequestParam(required = false) BigDecimal taxaFreteInicial,
@@ -73,6 +93,11 @@ public class RestauranteController {
 		return ResponseEntity.ok(this.restauranteService.find(nome, taxaFreteInicial, taxaFreteFinal));
 	}
 	
+	@DeleteMapping("{restauranteId}/ativacao")
+	@ResponseStatus(value = HttpStatus.NO_CONTENT)
+	public void inativar(@PathVariable Long restauranteId){
+		this.restauranteService.inativar(restauranteId);
+	}
 	
 	@GetMapping
 	public ResponseEntity<?> listar(){
@@ -80,8 +105,8 @@ public class RestauranteController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<?> salvar(@RequestBody @Valid Restaurante restaurante){
-		restaurante = this.restauranteService.salvar(restaurante);
+	public ResponseEntity<?> salvar(@RequestBody @Valid RestauranteIn restauranteIn){
+		RestauranteOut restaurante = this.restauranteService.salvar(restauranteIn);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
 				.path("/{id}").buildAndExpand(restaurante.getId())
 				.toUri();

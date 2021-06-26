@@ -5,23 +5,27 @@ import static com.ejs.algaworksCurso.infrastructure.repository.spec.RestauranteS
 
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.transaction.Transactional;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.server.ServletServerHttpRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.SmartValidator;
 
+import com.ejs.algaworksCurso.api.model.dto.in.FormaPagamentoResumidoDTO;
+import com.ejs.algaworksCurso.api.model.dto.in.RestauranteIn;
+import com.ejs.algaworksCurso.api.model.dto.out.RestauranteOut;
 import com.ejs.algaworksCurso.domain.exception.NegocioException;
 import com.ejs.algaworksCurso.domain.exception.RestauranteNaoEncontradoException;
 import com.ejs.algaworksCurso.domain.exception.ValidacaoException;
@@ -31,6 +35,8 @@ import com.ejs.algaworksCurso.domain.model.Restaurante;
 import com.ejs.algaworksCurso.domain.repository.CozinhaRepository;
 import com.ejs.algaworksCurso.domain.repository.FormaPagamentoRepository;
 import com.ejs.algaworksCurso.domain.repository.RestauranteRepository;
+import com.ejs.algaworksCurso.helper.restaurante.RestauranteAssembler;
+import com.ejs.algaworksCurso.helper.restaurante.RestauranteDisAssembler;
 import com.ejs.algaworksCurso.infrastructure.repository.RestauranteRepositoryCustom;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -55,29 +61,48 @@ public class RestauranteService {
 	@Autowired
 	private SmartValidator smartValidator;
 	
+	@Autowired
+	private RestauranteAssembler restauranteAssembler;
+	
+	@Autowired
+	private RestauranteDisAssembler restauranteDisAssembler;
+	
 	@Transactional
-	public Restaurante atualizar(Restaurante restaurante, Long restauranteId) {
+	public void abrir(Long restauranteId) {
+		Restaurante restauranteAtual = this.buscarOuFalhar(restauranteId);
+		restauranteAtual.abrir();
+	}
+	
+	@Transactional 
+	public void ativar(Long restauranteId) {
+		Restaurante restauranteAtual = this.buscarOuFalhar(restauranteId);
+		restauranteAtual.ativar();
+	}
+	
+	@Transactional
+	public RestauranteOut atualizar(RestauranteIn restauranteIn, Long restauranteId) {
 		
-		Restaurante restauranteAtual = this.buscar(restauranteId);
+		Restaurante restauranteAtual = this.buscarOuFalhar(restauranteId);
 		
-		Long cozinhaId = restaurante.getCozinha().getId();
+		Long cozinhaId = restauranteIn.getCozinha().getId();
 		
-		Cozinha cozinhaAtual =  this.cozinhaRepository.findById(cozinhaId)
+		this.cozinhaRepository.findById(cozinhaId)
 				.orElseThrow( () -> new NegocioException(
 					String.format(COZINHA_NAO_EXISTE, cozinhaId)));
 		
-		this.validarFormasPagamento(restaurante.getFormasPagamento());
+		restauranteAtual.setCozinha(new Cozinha());
+		restauranteAtual.setFormasPagamento(Arrays.asList(new FormaPagamento()));
+		restauranteAssembler.restauranteInToRestaurante(restauranteIn, restauranteAtual);
 		
-		BeanUtils.copyProperties(restaurante, restauranteAtual, "id", "dataCadastro", "formasPagamento", 
-				"endereco");
+		restauranteAtual = this.restauranteRepository.save(restauranteAtual);
 		
-		restauranteAtual.setCozinha(cozinhaAtual);
-		return this.restauranteRepository.save(restauranteAtual);
+		return this.restauranteDisAssembler.restauranteToRestauranteOut(restauranteAtual);
 	}
 	
+	@Transactional
 	public Restaurante atualizarParcial( Map<String, Object> dados, Long id, HttpServletRequest  request) {
 		ServletServerHttpRequest  sshr = new ServletServerHttpRequest(request);
-		final Restaurante restauranteDestino = this.buscar(id);
+		final Restaurante restauranteDestino = this.buscarOuFalhar(id);
 		
 		if (dados.containsKey("cozinha")) {
 			Long cozinhaId = Long.parseLong( dados.get("cozinha").toString());
@@ -98,7 +123,8 @@ public class RestauranteService {
 				ReflectionUtils.setField(field, restauranteDestino, nonoValor);
 			});
 			this.validarRestaurante(restauranteDestino);
-			return this.atualizar(restauranteDestino, id);
+			return null;
+//			return this.atualizar(restauranteDestino, id);
 		} catch (IllegalArgumentException e) {
 			Throwable rootCause = ExceptionUtils.getRootCause(e);
 			throw new HttpMessageNotReadableException("teste", rootCause, sshr);
@@ -106,61 +132,79 @@ public class RestauranteService {
 		
 	}
 	
-	private void validarRestaurante(Restaurante restauranteDestino) {
-		BeanPropertyBindingResult bindingResults = new BeanPropertyBindingResult(restauranteDestino, "restaurante");
-		smartValidator.validate(restauranteDestino, bindingResults);
-		if( bindingResults.hasErrors()) {
-			throw new ValidacaoException(bindingResults);
-		}
-	}
-
-	public Restaurante buscar(Long restauranteId) {	
-		Restaurante retorno = this.restauranteRepository.findById(restauranteId)
-				.orElseThrow( () -> new RestauranteNaoEncontradoException(restauranteId));
-		return retorno;
+	public RestauranteOut buscar(Long restauranteId) {	
+		Restaurante retorno = this.buscarOuFalhar(restauranteId);
+		
+		return this.restauranteDisAssembler.restauranteToRestauranteOut(retorno);
 	}		
 	
-	public List<Restaurante> encontrarComFreteGratis(String nome){
-		/*Exemple com classe*/
+	public List<RestauranteOut> encontrarComFreteGratis(String nome){
+		/*Exemplo com classe*/
 //		RestauranteComFreteGratisSpec freteGratis = new RestauranteComFreteGratisSpec();
 //		RestauranteComNomeSemelhanteSpec nomeSemelhante = new RestauranteComNomeSemelhanteSpec(nome);
 //		
 //		return this.restauranteRepository.findAll(nomeSemelhante.and(freteGratis));
 		
 		/*Exemplo com fabrica de specificatio*/
-		
-		return this.restauranteRepository.findAll(comFreteGratis().and(comNomeSemelhante(nome)));
+		List<Restaurante> restaurantes = this.restauranteRepository.findAll(comFreteGratis().and(comNomeSemelhante(nome)));
+		return restaurantes.stream()
+				.map(item -> this.restauranteDisAssembler.restauranteToRestauranteOut(item))
+				.collect(Collectors.toList());
 	}
 	
-	public Restaurante encontrarPrimeiro() {
-		return this.restauranteRepository.buscarPrimeiro()
+	public RestauranteOut encontrarPrimeiro() {
+		Restaurante restaurante = this.restauranteRepository.buscarPrimeiro()
 		.orElseThrow(() -> new RestauranteNaoEncontradoException("Nenhum restaurante encontrado."));
+		
+		return this.restauranteDisAssembler.restauranteToRestauranteOut(restaurante);
 	}
 	
-	
-	public List<Restaurante> find(String nome, BigDecimal taxaFreteInicial, BigDecimal taxaFreteFinal){
-		return restauranteRepoCustom.find(nome, taxaFreteInicial, taxaFreteFinal);
+	@Transactional
+	public void fechar(Long restauranteId) {
+		Restaurante restauranteAtual = this.buscarOuFalhar(restauranteId);
+		restauranteAtual.fechar();
 	}
 	
+	public List<RestauranteOut> find(String nome, BigDecimal taxaFreteInicial, BigDecimal taxaFreteFinal){
+		List<Restaurante> restaurantes = restauranteRepoCustom.find(nome, taxaFreteInicial, taxaFreteFinal);
+		return restaurantes.stream()
+				.map(item -> this.restauranteDisAssembler.restauranteToRestauranteOut(item))
+				.collect(Collectors.toList());
+	}
 	
-	public List<Restaurante> listar(){
-		return this.restauranteRepository.todas(Sort.by("nome"));
+	@Transactional
+	public void inativar(Long restauranteId) {
+		Restaurante restauranteAtual = this.buscarOuFalhar(restauranteId);
+		restauranteAtual.inativar();
+	}
+	
+	public List<RestauranteOut> listar(){
+		List<Restaurante> restaurantes = this.restauranteRepository.todas(Sort.by("nome"));
+		
+		List<RestauranteOut> restauranteOuts = restaurantes.stream()
+				.map(rest -> 
+				restauranteDisAssembler.restauranteToRestauranteOut(rest))
+				.collect(Collectors.toList());
+		return restauranteOuts;
 	}
 
 	
 	@Transactional
-	public Restaurante salvar(Restaurante restaurante) {
+	public RestauranteOut salvar(RestauranteIn restauranteIn) {
 		
-		Long cozinhaId = restaurante.getCozinha().getId();
+		Long cozinhaId = restauranteIn.getCozinha().getId();
 		
 		Cozinha cozinha = this.cozinhaRepository.findById(cozinhaId)
 				.orElseThrow( () -> new NegocioException(
 					String.format(COZINHA_NAO_EXISTE, cozinhaId)));
+			
+		Restaurante restaurante = restauranteAssembler.restauranteInToRestaurante(restauranteIn);
 		
-		this.validarFormasPagamento(restaurante.getFormasPagamento());	
 		restaurante.setCozinha(cozinha);
 		
-		return this.restauranteRepository.save(restaurante);
+		restaurante = this.restauranteRepository.save(restaurante);
+		
+		return this.restauranteDisAssembler.restauranteToRestauranteOut(restaurante);
 		
 	}
 	
@@ -172,12 +216,28 @@ public class RestauranteService {
 	 * valida as formas de pagamento
 	 * @param formasPagamento
 	 */
-	public void validarFormasPagamento( List<FormaPagamento> formasPagamento) {
+	private void validarFormasPagamento( List<FormaPagamentoResumidoDTO> formasPagamento) {
 		
-		for (FormaPagamento formaPagamento : formasPagamento) {
-			this.formaPagamentoRepository.findById(formaPagamento.getId())
-					.orElseThrow( () -> new NegocioException(
-						String.format("Forma pagamento de código %d não existe.", formaPagamento.getId())));
+		for (FormaPagamentoResumidoDTO formaPagamentoResumidoDTO : formasPagamento) {
+			this.formaPagamentoRepository.findById(formaPagamentoResumidoDTO.getId())
+			.orElseThrow( () -> new NegocioException(
+					String.format("Forma pagamento de código %d não existe.", formaPagamentoResumidoDTO.getId())));
 		}
+		
+
+	}
+	
+	private void validarRestaurante(Restaurante restauranteDestino) {
+		BeanPropertyBindingResult bindingResults = new BeanPropertyBindingResult(restauranteDestino, "restaurante");
+		smartValidator.validate(restauranteDestino, bindingResults);
+		if( bindingResults.hasErrors()) {
+			throw new ValidacaoException(bindingResults);
+		}
+	}
+	
+	private Restaurante buscarOuFalhar( Long restauranteId) {
+		Restaurante retorno = this.restauranteRepository.findById(restauranteId)
+				.orElseThrow( () -> new RestauranteNaoEncontradoException(restauranteId));
+		return retorno;
 	}
 }

@@ -1,18 +1,23 @@
 package com.ejs.algaworksCurso.domain.services;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.ejs.algaworksCurso.api.model.dto.in.EstadoIn;
+import com.ejs.algaworksCurso.api.model.dto.out.EstadoOut;
 import com.ejs.algaworksCurso.domain.exception.EntidadeEmUsoException;
 import com.ejs.algaworksCurso.domain.exception.EstadoNaoEncontradoException;
 import com.ejs.algaworksCurso.domain.model.Estado;
 import com.ejs.algaworksCurso.domain.repository.EstadoRepository;
+import com.ejs.algaworksCurso.helper.estado.EstadoAssembler;
+import com.ejs.algaworksCurso.helper.estado.EstadoDisAssembler;
 
 @Service
 public class EstadoService {
@@ -20,26 +25,39 @@ public class EstadoService {
 	@Autowired
 	private EstadoRepository estadoRepository;
 	
-	public Estado atualizar( Estado estado, Long id ) {
-		Estado estadoAtual = this.buscar(id);
-		
-		BeanUtils.copyProperties(estado, estadoAtual, "id");
-		return this.estadoRepository.save(estadoAtual);
+	@Autowired
+	private EstadoAssembler estadoAssembler;
+	
+	@Autowired
+	private EstadoDisAssembler estadoDisAssembler;
+	
+	@Transactional
+	public EstadoOut atualizar( EstadoIn estadoIn, Long id ) {
+		Estado estadoAtual = this.estadoRepository.findById(id)
+				.orElseThrow( () -> new EstadoNaoEncontradoException(id));
+		this.estadoAssembler.estadoInToEstado(estadoAtual, estadoIn);
+		estadoAtual = this.estadoRepository.save(estadoAtual);
+		return estadoDisAssembler.estadoToEstadoOut(estadoAtual);
 	}
 	
-	public Estado buscar(Long estadoId) {
+	public EstadoOut buscar(Long estadoId) {
 		Estado estado = this.estadoRepository.findById(estadoId)
 				.orElseThrow( () -> new EstadoNaoEncontradoException( estadoId));
-		return estado;
+		return estadoDisAssembler.estadoToEstadoOut(estado);
 	}
 	
-	public List<Estado> listar(){
-		return this.estadoRepository.findAll(Sort.by("nome"));
+	public List<EstadoOut> listar(){
+		List<Estado> estados = this.estadoRepository.findAll(Sort.by("nome"));
+		return estados.stream()
+				.map(estado -> this.estadoDisAssembler.estadoToEstadoOut(estado))
+				.collect(Collectors.toList());
 	}
 	
+	@Transactional
 	public void remover( Long id) {
 		try {
 			this.estadoRepository.deleteById(id);
+			estadoRepository.flush();
 		} catch ( DataIntegrityViolationException e) {
 			throw new EntidadeEmUsoException(
 					String.format("Estado de código %d não pode ser removido, pois está em uso.", id));
@@ -48,7 +66,9 @@ public class EstadoService {
 		}
 	}
 	
-	public Estado salvar(Estado estado) {
+	@Transactional
+	public Estado salvar(EstadoIn estadoIn) {
+		Estado estado = this.estadoAssembler.estadoInToEstado(estadoIn);
 		return this.estadoRepository.save(estado);
 	}
 	

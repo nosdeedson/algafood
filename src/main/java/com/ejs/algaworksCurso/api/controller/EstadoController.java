@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.ejs.algaworksCurso.api.model.dto.in.EstadoIn;
+import com.ejs.algaworksCurso.api.model.dto.out.EstadoOut;
 import com.ejs.algaworksCurso.domain.model.Estado;
 import com.ejs.algaworksCurso.domain.services.EstadoService;
 
@@ -30,21 +32,21 @@ public class EstadoController {
 	
 	@PutMapping("{id}")
 	public ResponseEntity<?> atualizar(@PathVariable Long id,
-			@RequestBody @Valid Estado estado){
-			this.estadoService.atualizar(estado, id);
+			@RequestBody @Valid EstadoIn estadoIn){
+			this.estadoService.atualizar(estadoIn, id);
 			URI uri = ServletUriComponentsBuilder.fromCurrentRequest().buildAndExpand().toUri();
 			return ResponseEntity.ok(uri);
 	}
 	
 	@GetMapping("{id}")
 	public ResponseEntity<?> buscar(@PathVariable Long id){
-		Estado estado = this.estadoService.buscar(id);
+		EstadoOut estado = this.estadoService.buscar(id);
 		return ResponseEntity.ok(estado);
 	}
 	
 	@GetMapping
 	public ResponseEntity<?> listar(){
-		List<Estado> estados = this.estadoService.listar();			
+		List<EstadoOut> estados = this.estadoService.listar();			
 		return ResponseEntity.ok(estados);
 	}
 	
@@ -55,8 +57,8 @@ public class EstadoController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<?> salvar(@RequestBody @Valid Estado estado){
-		estado = this.estadoService.salvar(estado);
+	public ResponseEntity<?> salvar(@RequestBody @Valid EstadoIn estadoIn){
+		Estado estado = this.estadoService.salvar(estadoIn);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
 				.path("/{id}").buildAndExpand(estado.getId())
 				.toUri();

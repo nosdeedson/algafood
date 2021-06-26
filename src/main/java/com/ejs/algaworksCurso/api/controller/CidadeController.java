@@ -17,7 +17,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.ejs.algaworksCurso.domain.model.Cidade;
+import com.ejs.algaworksCurso.api.model.dto.in.CidadeIn;
+import com.ejs.algaworksCurso.api.model.dto.out.CidadeOut;
 import com.ejs.algaworksCurso.domain.services.CidadeService;
 
 @RestController
@@ -29,15 +30,15 @@ public class CidadeController {
 	
 	@PutMapping("{id}")
 	public ResponseEntity<?> atualizar(@PathVariable Long id, 
-			@RequestBody @Valid Cidade cidade){
-		cidade = this.cidadeService.atualizar(cidade, id);
+			@RequestBody @Valid CidadeIn cidadeIn){
+		this.cidadeService.atualizar(cidadeIn, id);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().buildAndExpand().toUri();
 		return ResponseEntity.ok(uri);
 	}
 	
 	@GetMapping("{id}")
 	public ResponseEntity<?> buscar(@PathVariable Long id){
-		Cidade cidade = this.cidadeService.buscar(id);
+		CidadeOut cidade = this.cidadeService.buscar(id);
 		return ResponseEntity.ok(cidade);
 	}
 	
@@ -53,10 +54,10 @@ public class CidadeController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<?> salvar( @RequestBody @Valid Cidade cidade){
-			cidade = this.cidadeService.salvar(cidade);
+	public ResponseEntity<?> salvar( @RequestBody @Valid CidadeIn cidadeIn){
+			CidadeOut out = this.cidadeService.salvar(cidadeIn);
 			URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
-					.path("/{id}").buildAndExpand(cidade.getId())
+					.path("/{id}").buildAndExpand(out.getId())
 					.toUri();
 			return ResponseEntity.status(HttpStatus.CREATED).body(uri);
 	}

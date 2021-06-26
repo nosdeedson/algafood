@@ -18,18 +18,11 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.PositiveOrZero;
-import javax.validation.groups.ConvertGroup;
-import javax.validation.groups.Default;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import com.ejs.algaworksCurso.core.validation.Groups.CozinhaId;
-import com.ejs.algaworksCurso.core.validation.Groups.FormasPagamentoId;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class Restaurante implements Serializable  {
@@ -39,18 +32,13 @@ public class Restaurante implements Serializable  {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@NotBlank(message = "O nome não pode estar vazio.")
 	@Column(nullable = false)
 	private String nome;
 	
-	@NotNull
-	@PositiveOrZero(message = "{TaxaFrete.invalida}")
 	private BigDecimal taxaFrete;
 	
-	@NotNull
 	Boolean ativo;
 	
-	@NotNull
 	Boolean aberto;
 
 	@CreationTimestamp
@@ -61,16 +49,11 @@ public class Restaurante implements Serializable  {
 	@Column(nullable = false, columnDefinition = "datetime")
 	OffsetDateTime dataAtualizacao;
 	
-	@Valid
-	@ConvertGroup(from = Default.class, to = CozinhaId.class)
-	@NotNull
 	@ManyToOne //(fetch = FetchType.LAZY) como o LAZY busca quando necessário
 	@JoinColumn(nullable = false)
 	private Cozinha cozinha;
 	
-	@Valid
-	@ConvertGroup(from = Default.class, to = FormasPagamentoId.class)
-	@NotNull
+	
 	@ManyToMany(targetEntity = FormaPagamento.class)
 	@JoinTable(name = "restaurante_forma_pagamento", 
 		joinColumns = @JoinColumn(name = "restaurante_id"), 
@@ -82,6 +65,7 @@ public class Restaurante implements Serializable  {
 	@Embedded
 	private Endereco endereco;
 	
+	@JsonIgnore
 	@OneToMany(mappedBy = "restaurante")
 	private List<Produto> produtos = new ArrayList<Produto>();
 
@@ -98,6 +82,26 @@ public class Restaurante implements Serializable  {
 		this.dataAtualizacao = dataAtualizacao;
 		this.cozinha = cozinha;
 	}
+	
+	public void ativar() {
+		this.ativo = true;
+	}
+	
+	public void inativar() {
+		this.ativo=false;
+	}
+	
+	public void abrir() {
+		this.aberto = true;
+	}
+	
+	public void fechar() {
+		this.aberto = false;
+	}
+	
+	/*
+	 * Getters and Setters
+	 */
 
 	public Long getId() {
 		return id;

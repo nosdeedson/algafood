@@ -8,9 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 
-import com.ejs.algaworksCurso.core.validation.Groups.CozinhaId;
 import com.fasterxml.jackson.annotation.JsonRootName;
 
 @JsonRootName(value = "cozinha")
@@ -19,7 +17,7 @@ public class Cozinha implements Serializable  {
 	
 	private static final long serialVersionUID = 1L;
 
-	@NotNull(groups = CozinhaId.class)
+//	@NotNull(groups = CozinhaId.class)
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;

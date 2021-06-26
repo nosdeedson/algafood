@@ -6,16 +6,12 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.validation.constraints.NotNull;
-
-import com.ejs.algaworksCurso.core.validation.Groups.FormasPagamentoId;
 
 @Entity
 public class FormaPagamento implements Serializable  {
 
 	private static final long serialVersionUID = 1L;
 	
-	@NotNull(groups = FormasPagamentoId.class)
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
