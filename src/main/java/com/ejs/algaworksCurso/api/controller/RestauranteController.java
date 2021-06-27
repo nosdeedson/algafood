@@ -53,14 +53,6 @@ public class RestauranteController {
 		return ResponseEntity.ok(uri);
 	}
 	
-	@PatchMapping("{id}")
-	public ResponseEntity<?> atualizarParcial(@PathVariable Long id,
-			@RequestBody Map<String, Object>  dadosAtualizar, HttpServletRequest request){
-		this.restauranteService.atualizarParcial(dadosAtualizar, id, request);
-		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().buildAndExpand().toUri();
-		return ResponseEntity.ok(uri);
-	}
-	
 	@GetMapping("/{restauranteId}")
 	public ResponseEntity<?> buscar(@PathVariable Long restauranteId){
 		return ResponseEntity.ok(this.restauranteService.buscar(restauranteId));

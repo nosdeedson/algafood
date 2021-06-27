@@ -33,16 +33,14 @@ public class EstadoService {
 	
 	@Transactional
 	public EstadoOut atualizar( EstadoIn estadoIn, Long id ) {
-		Estado estadoAtual = this.estadoRepository.findById(id)
-				.orElseThrow( () -> new EstadoNaoEncontradoException(id));
+		Estado estadoAtual = this.buscarOuFalhar(id);
 		this.estadoAssembler.estadoInToEstado(estadoAtual, estadoIn);
 		estadoAtual = this.estadoRepository.save(estadoAtual);
 		return estadoDisAssembler.estadoToEstadoOut(estadoAtual);
 	}
 	
 	public EstadoOut buscar(Long estadoId) {
-		Estado estado = this.estadoRepository.findById(estadoId)
-				.orElseThrow( () -> new EstadoNaoEncontradoException( estadoId));
+		Estado estado = this.buscarOuFalhar(estadoId);
 		return estadoDisAssembler.estadoToEstadoOut(estado);
 	}
 	
@@ -70,6 +68,15 @@ public class EstadoService {
 	public Estado salvar(EstadoIn estadoIn) {
 		Estado estado = this.estadoAssembler.estadoInToEstado(estadoIn);
 		return this.estadoRepository.save(estado);
+	}
+	
+	/*
+	 * métodos auxiliares
+	 */
+	
+	public Estado buscarOuFalhar(Long estadoId) {
+		return this.estadoRepository.findById(estadoId)
+				.orElseThrow( () -> new EstadoNaoEncontradoException(estadoId));
 	}
 	
 }

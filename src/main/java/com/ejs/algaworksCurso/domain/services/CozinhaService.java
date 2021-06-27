@@ -33,16 +33,14 @@ public class CozinhaService {
 	
 	@Transactional
 	public Cozinha atualizar(CozinhaIn cozinhaIn, Long cozinhaId) {
-		Cozinha cozinhaAtual = this.cozinhaRepository.findById(cozinhaId)
-				.orElseThrow( () -> new CozinhaNaoEncontradaException(cozinhaId));
+		Cozinha cozinhaAtual = this.buscarOuFalhar(cozinhaId);
 		
 		this.cozinhaAssembler.cozinhaInToCozinha(cozinhaAtual, cozinhaIn);
 		return this.cozinhaRepository.save(cozinhaAtual);
 	}
 	
 	public CozinhaOut buscar(Long id) {
-		Cozinha cozinha = this.cozinhaRepository.findById(id)
-				.orElseThrow( () -> new CozinhaNaoEncontradaException(id));
+		Cozinha cozinha = this.buscarOuFalhar(id);
 		return this.cozinhaDisAssembler.cozinhaToCozinhaOut(cozinha);
 	}
 	
@@ -78,6 +76,15 @@ public class CozinhaService {
 		Cozinha cozinha = this.cozinhaAssembler.cozinhaInToCozinha(cozinhaIn);
 		cozinha = cozinhaRepository.save(cozinha);
 		return cozinhaDisAssembler.cozinhaToCozinhaOut(cozinha);
+	}
+	
+	/*
+	 * métodos auxiliares
+	 */
+	
+	public Cozinha buscarOuFalhar( Long cozinhaId) {
+		return this.cozinhaRepository.findById(cozinhaId)
+				.orElseThrow( () -> new CozinhaNaoEncontradaException(cozinhaId));
 	}
 
 }
