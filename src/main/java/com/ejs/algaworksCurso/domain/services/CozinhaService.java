@@ -10,8 +10,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.ejs.algaworksCurso.api.model.dto.in.CozinhaIn;
-import com.ejs.algaworksCurso.api.model.dto.out.CozinhaOut;
+import com.ejs.algaworksCurso.api.model.dto.in.cozinha.CozinhaIn;
+import com.ejs.algaworksCurso.api.model.dto.out.cozinha.CozinhaOut;
 import com.ejs.algaworksCurso.domain.exception.CozinhaNaoEncontradaException;
 import com.ejs.algaworksCurso.domain.exception.EntidadeEmUsoException;
 import com.ejs.algaworksCurso.domain.model.Cozinha;

@@ -1,8 +1,9 @@
-package com.ejs.algaworksCurso.api.model.dto.out;
+package com.ejs.algaworksCurso.api.model.dto.out.restautante;
 
 import java.math.BigDecimal;
 
-import com.ejs.algaworksCurso.api.model.dto.in.CozinhaResumidaDTO;
+import com.ejs.algaworksCurso.api.model.dto.in.cozinha.CozinhaResumidaIdDTO;
+import com.ejs.algaworksCurso.api.model.dto.out.endereco.EnderecoOut;
 
 public class RestauranteOut {
 
@@ -10,8 +11,9 @@ public class RestauranteOut {
 	private String nome;
 	private boolean aberto;
 	private boolean ativo;
-	private CozinhaResumidaDTO cozinha;
+	private CozinhaResumidaIdDTO cozinha;
 	private BigDecimal taxaFrete;
+	private EnderecoOut endereco;
 	
 	/**
 	 * @return the id
@@ -65,13 +67,13 @@ public class RestauranteOut {
 	/**
 	 * @return the cozinha
 	 */
-	public CozinhaResumidaDTO getCozinha() {
+	public CozinhaResumidaIdDTO getCozinha() {
 		return cozinha;
 	}
 	/**
 	 * @param cozinha the cozinha to set
 	 */
-	public void setCozinha(CozinhaResumidaDTO cozinha) {
+	public void setCozinha(CozinhaResumidaIdDTO cozinha) {
 		this.cozinha = cozinha;
 	}
 	/**
@@ -85,6 +87,18 @@ public class RestauranteOut {
 	 */
 	public void setTaxaFrete(BigDecimal taxaFrete) {
 		this.taxaFrete = taxaFrete;
+	}
+	/**
+	 * @return the endereco
+	 */
+	public EnderecoOut getEndereco() {
+		return endereco;
+	}
+	/**
+	 * @param endereco the endereco to set
+	 */
+	public void setEndereco(EnderecoOut endereco) {
+		this.endereco = endereco;
 	}
 	
 	

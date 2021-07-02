@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.ejs.algaworksCurso.api.model.dto.in.CozinhaIn;
-import com.ejs.algaworksCurso.api.model.dto.out.CozinhaOut;
+import com.ejs.algaworksCurso.api.model.dto.in.cozinha.CozinhaIn;
+import com.ejs.algaworksCurso.api.model.dto.out.cozinha.CozinhaOut;
 import com.ejs.algaworksCurso.domain.services.CozinhaService;
 
 @RestController

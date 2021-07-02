@@ -2,9 +2,7 @@ package com.ejs.algaworksCurso.api.controller;
 
 import java.math.BigDecimal;
 import java.net.URI;
-import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +10,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -23,8 +20,11 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.ejs.algaworksCurso.api.model.dto.in.RestauranteIn;
-import com.ejs.algaworksCurso.api.model.dto.out.RestauranteOut;
+import com.ejs.algaworksCurso.api.model.dto.in.restaurante.RestauranteIn;
+import com.ejs.algaworksCurso.api.model.dto.out.restautante.RestauranteOut;
+import com.ejs.algaworksCurso.domain.exception.CidadeNaoEncontradaException;
+import com.ejs.algaworksCurso.domain.exception.CozinhaNaoEncontradaException;
+import com.ejs.algaworksCurso.domain.exception.NegocioException;
 import com.ejs.algaworksCurso.domain.services.RestauranteService;
 
 @RestController
@@ -48,9 +48,13 @@ public class RestauranteController {
 	@PutMapping("{restauranteId}")
 	public ResponseEntity<?> atualizar(@PathVariable Long restauranteId,
 			@RequestBody @Valid RestauranteIn restaurante){
-		this.restauranteService.atualizar(restaurante, restauranteId);
-		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().buildAndExpand().toUri();
-		return ResponseEntity.ok(uri);
+		try {
+			this.restauranteService.atualizar(restaurante, restauranteId);
+			URI uri = ServletUriComponentsBuilder.fromCurrentRequest().buildAndExpand().toUri();
+			return ResponseEntity.ok(uri);
+		} catch (CozinhaNaoEncontradaException | CidadeNaoEncontradaException e) {
+			throw new NegocioException(e.getMessage());
+		}
 	}
 	
 	@GetMapping("/{restauranteId}")
@@ -98,11 +102,15 @@ public class RestauranteController {
 	
 	@PostMapping
 	public ResponseEntity<?> salvar(@RequestBody @Valid RestauranteIn restauranteIn){
-		RestauranteOut restaurante = this.restauranteService.salvar(restauranteIn);
-		URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
-				.path("/{id}").buildAndExpand(restaurante.getId())
-				.toUri();
-		return ResponseEntity.status(HttpStatus.CREATED).body(uri);
+		try {
+			RestauranteOut restaurante = this.restauranteService.salvar(restauranteIn);
+			URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
+					.path("/{id}").buildAndExpand(restaurante.getId())
+					.toUri();
+			return ResponseEntity.status(HttpStatus.CREATED).body(uri);
+		} catch (CozinhaNaoEncontradaException | CidadeNaoEncontradaException e) {
+			throw new NegocioException(e.getMessage());
+		}
 	}
 	
 

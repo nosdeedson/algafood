@@ -1,8 +1,10 @@
-package com.ejs.algaworksCurso.api.model.dto.in;
+package com.ejs.algaworksCurso.api.model.dto.in.cidade;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+
+import com.ejs.algaworksCurso.api.model.dto.in.estado.EstadoResumidoDTO;
 
 public class CidadeIn {
 

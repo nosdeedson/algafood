@@ -42,3 +42,20 @@ insert into estado (nome) values('Minas Gerais') ON CONFLICT DO NOTHING;
 
 /*inseri cidade*/
 insert into cidade (nome, estado_id) values('Itajuba', 1) ON CONFLICT DO NOTHING;
+
+/* inseri usuario */
+insert into usuario (data_cadastro, email, nome, senha) 
+values((now() at time zone 'utc'), 'lu@gmail.com', 'Lucineia Souza', '1234');
+
+insert into usuario (data_cadastro, email, nome, senha) 
+values((now() at time zone 'utc'), 'jose@gmail.com', 'Jose Souza', '1234');
+
+insert into usuario (data_cadastro, email, nome, senha) 
+values((now() at time zone 'utc'), 'Edson@gmail.com', 'Edson Souza', '1234');
+
+insert into usuario (data_cadastro, email, nome, senha) 
+values((now() at time zone 'utc'), 'joao@gmail.com', 'joao Souza', '1234');
+
+/* inseri grupos */
+insert into grupo (nome) values ('gerente'), ('vendedor'), ('secretária'), ('cadastrador');
+

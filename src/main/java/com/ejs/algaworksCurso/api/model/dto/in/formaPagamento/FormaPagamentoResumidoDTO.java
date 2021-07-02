@@ -1,9 +1,9 @@
-package com.ejs.algaworksCurso.api.model.dto.in;
+package com.ejs.algaworksCurso.api.model.dto.in.formaPagamento;
 
 import javax.validation.constraints.NotNull;
 
-public class EstadoResumidoDTO {
-	
+public class FormaPagamentoResumidoDTO {
+
 	@NotNull
 	private Long id;
 
@@ -21,5 +21,5 @@ public class EstadoResumidoDTO {
 		this.id = id;
 	}
 	
-
+	
 }

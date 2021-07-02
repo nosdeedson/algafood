@@ -4,7 +4,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.ejs.algaworksCurso.api.model.dto.out.CidadeOut;
+import com.ejs.algaworksCurso.api.model.dto.out.cidade.CidadeOut;
 import com.ejs.algaworksCurso.domain.model.Cidade;
 
 @Component

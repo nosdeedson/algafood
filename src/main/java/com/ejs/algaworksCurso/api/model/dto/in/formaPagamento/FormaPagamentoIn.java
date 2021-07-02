@@ -1,4 +1,4 @@
-package com.ejs.algaworksCurso.api.model.dto.in;
+package com.ejs.algaworksCurso.api.model.dto.in.formaPagamento;
 
 import javax.validation.constraints.NotEmpty;
 

@@ -10,8 +10,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.ejs.algaworksCurso.api.model.dto.in.EstadoIn;
-import com.ejs.algaworksCurso.api.model.dto.out.EstadoOut;
+import com.ejs.algaworksCurso.api.model.dto.in.estado.EstadoIn;
+import com.ejs.algaworksCurso.api.model.dto.out.estado.EstadoOut;
 import com.ejs.algaworksCurso.domain.exception.EntidadeEmUsoException;
 import com.ejs.algaworksCurso.domain.exception.EstadoNaoEncontradoException;
 import com.ejs.algaworksCurso.domain.model.Estado;

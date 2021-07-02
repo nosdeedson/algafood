@@ -4,7 +4,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.ejs.algaworksCurso.api.model.dto.in.FormaPagamentoIn;
+import com.ejs.algaworksCurso.api.model.dto.in.formaPagamento.FormaPagamentoIn;
 import com.ejs.algaworksCurso.domain.model.FormaPagamento;
 
 @Component

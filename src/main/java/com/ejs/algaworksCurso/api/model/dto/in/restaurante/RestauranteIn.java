@@ -1,4 +1,4 @@
-package com.ejs.algaworksCurso.api.model.dto.in;
+package com.ejs.algaworksCurso.api.model.dto.in.restaurante;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -7,6 +7,9 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
+
+import com.ejs.algaworksCurso.api.model.dto.in.cozinha.CozinhaResumidaIdDTO;
+import com.ejs.algaworksCurso.api.model.dto.in.endereco.EnderecoIn;
 
 public class RestauranteIn implements Serializable{
 	
@@ -27,7 +30,11 @@ public class RestauranteIn implements Serializable{
 	
 	@Valid
 	@NotNull
-	private CozinhaResumidaDTO cozinha;
+	private CozinhaResumidaIdDTO cozinha;
+	
+	@Valid
+	@NotNull
+	private EnderecoIn endereco;
 	
 	public RestauranteIn() {
 	}
@@ -91,15 +98,30 @@ public class RestauranteIn implements Serializable{
 	/**
 	 * @return the cozinha
 	 */
-	public CozinhaResumidaDTO getCozinha() {
+	public CozinhaResumidaIdDTO getCozinha() {
 		return cozinha;
 	}
 
 	/**
 	 * @param cozinha the cozinha to set
 	 */
-	public void setCozinha(CozinhaResumidaDTO cozinha) {
+	public void setCozinha(CozinhaResumidaIdDTO cozinha) {
 		this.cozinha = cozinha;
 	}
+
+	/**
+	 * @return the endereco
+	 */
+	public EnderecoIn getEndereco() {
+		return endereco;
+	}
+
+	/**
+	 * @param endereco the endereco to set
+	 */
+	public void setEndereco(EnderecoIn endereco) {
+		this.endereco = endereco;
+	}
+	
 
 }

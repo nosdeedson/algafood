@@ -1,18 +1,18 @@
-package com.ejs.algaworksCurso.api.model.dto.in;
+package com.ejs.algaworksCurso.api.model.dto.in.cozinha;
 
 import java.io.Serializable;
 
 import javax.validation.constraints.NotNull;
 
-public class CozinhaResumidaDTO implements Serializable {
+public class CozinhaResumidaIdDTO implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 	@NotNull
 	private Long id;
 	
-	public CozinhaResumidaDTO() {}
+	public CozinhaResumidaIdDTO() {}
 	
-	public CozinhaResumidaDTO(Long id) {
+	public CozinhaResumidaIdDTO(Long id) {
 		this.id = id;
 	}
 

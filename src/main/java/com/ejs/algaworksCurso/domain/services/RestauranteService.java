@@ -4,7 +4,6 @@ import static com.ejs.algaworksCurso.infrastructure.repository.spec.RestauranteS
 import static com.ejs.algaworksCurso.infrastructure.repository.spec.RestauranteSpecs.comNomeSemelhante;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -13,11 +12,11 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.ejs.algaworksCurso.api.model.dto.in.RestauranteIn;
-import com.ejs.algaworksCurso.api.model.dto.out.RestauranteOut;
+import com.ejs.algaworksCurso.api.model.dto.in.restaurante.RestauranteIn;
+import com.ejs.algaworksCurso.api.model.dto.out.restautante.RestauranteOut;
 import com.ejs.algaworksCurso.domain.exception.RestauranteNaoEncontradoException;
+import com.ejs.algaworksCurso.domain.model.Cidade;
 import com.ejs.algaworksCurso.domain.model.Cozinha;
-import com.ejs.algaworksCurso.domain.model.FormaPagamento;
 import com.ejs.algaworksCurso.domain.model.Restaurante;
 import com.ejs.algaworksCurso.domain.repository.RestauranteRepository;
 import com.ejs.algaworksCurso.helper.restaurante.RestauranteAssembler;
@@ -32,6 +31,9 @@ public class RestauranteService {
 	
 	@Autowired
 	private CozinhaService cozinhaService;
+	
+	@Autowired
+	private CidadeService cidadeService;
 	
 	@Autowired
 	private RestauranteRepositoryCustom restauranteRepoCustom;
@@ -60,11 +62,13 @@ public class RestauranteService {
 		Restaurante restauranteAtual = this.buscarOuFalhar(restauranteId);
 		
 		Long cozinhaId = restauranteIn.getCozinha().getId();
+		Long cidadeId = restauranteIn.getEndereco().getCidade().getId();
 		
-		this.cozinhaService.buscarOuFalhar(cozinhaId);
-		
-		restauranteAtual.setCozinha(new Cozinha());
-		restauranteAtual.setFormasPagamento(Arrays.asList(new FormaPagamento()));
+		Cozinha cozinha = this.cozinhaService.buscarOuFalhar(cozinhaId);
+		Cidade cidade = this.cidadeService.buscarOuFalhar(cidadeId);
+		restauranteAtual.setCozinha(cozinha);
+		restauranteAtual.getEndereco().setCidade(cidade);
+//		restauranteAtual.setFormasPagamento(Arrays.asList(new FormaPagamento()));
 		restauranteAssembler.restauranteInToRestaurante(restauranteIn, restauranteAtual);
 		
 		restauranteAtual = this.restauranteRepository.save(restauranteAtual);
@@ -133,13 +137,14 @@ public class RestauranteService {
 	public RestauranteOut salvar(RestauranteIn restauranteIn) {
 		
 		Long cozinhaId = restauranteIn.getCozinha().getId();
+		Long cidadeId = restauranteIn.getEndereco().getCidade().getId();
 		
 		Cozinha cozinha = this.cozinhaService.buscarOuFalhar(cozinhaId);
-			
+		Cidade cidade = this.cidadeService.buscarOuFalhar(cidadeId);
 		Restaurante restaurante = restauranteAssembler.restauranteInToRestaurante(restauranteIn);
 		
 		restaurante.setCozinha(cozinha);
-		
+		restaurante.getEndereco().setCidade(cidade);
 		restaurante = this.restauranteRepository.save(restaurante);
 		
 		return this.restauranteDisAssembler.restauranteToRestauranteOut(restaurante);

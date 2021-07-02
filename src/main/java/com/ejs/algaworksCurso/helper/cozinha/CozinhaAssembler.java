@@ -4,7 +4,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.ejs.algaworksCurso.api.model.dto.in.CozinhaIn;
+import com.ejs.algaworksCurso.api.model.dto.in.cozinha.CozinhaIn;
 import com.ejs.algaworksCurso.domain.model.Cozinha;
 
 @Component

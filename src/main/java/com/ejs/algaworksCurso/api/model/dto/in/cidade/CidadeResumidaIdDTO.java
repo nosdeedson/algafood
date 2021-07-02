@@ -1,9 +1,11 @@
-package com.ejs.algaworksCurso.api.model.dto.in;
+package com.ejs.algaworksCurso.api.model.dto.in.cidade;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
-public class FormaPagamentoResumidoDTO {
-
+public class CidadeResumidaIdDTO {
+	
+	@Valid
 	@NotNull
 	private Long id;
 
@@ -21,5 +23,5 @@ public class FormaPagamentoResumidoDTO {
 		this.id = id;
 	}
 	
-	
+
 }

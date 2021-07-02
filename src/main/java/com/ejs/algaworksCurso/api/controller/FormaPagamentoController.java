@@ -18,8 +18,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.ejs.algaworksCurso.api.model.dto.in.FormaPagamentoIn;
-import com.ejs.algaworksCurso.api.model.dto.out.FormaPagamentoOut;
+import com.ejs.algaworksCurso.api.model.dto.in.formaPagamento.FormaPagamentoIn;
+import com.ejs.algaworksCurso.api.model.dto.out.formaPagamento.FormaPagamentoOut;
 import com.ejs.algaworksCurso.domain.services.FormaPagamentoService;
 
 @RestController

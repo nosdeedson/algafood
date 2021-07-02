@@ -1,7 +1,7 @@
-package com.ejs.algaworksCurso.api.model.dto.out;
+package com.ejs.algaworksCurso.api.model.dto.out.group;
 
-public class CozinhaOut {
-
+public class GrupoOut {
+	
 	private Long id;
 	private String nome;
 	/**
@@ -30,4 +30,5 @@ public class CozinhaOut {
 	}
 	
 	
+
 }

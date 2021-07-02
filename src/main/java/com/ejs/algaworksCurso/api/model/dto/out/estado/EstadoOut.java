@@ -1,4 +1,4 @@
-package com.ejs.algaworksCurso.api.model.dto.out;
+package com.ejs.algaworksCurso.api.model.dto.out.estado;
 
 public class EstadoOut {
 	

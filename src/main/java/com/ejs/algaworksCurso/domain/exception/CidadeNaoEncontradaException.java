@@ -13,7 +13,7 @@ public class CidadeNaoEncontradaException extends EntidadeNaoEncontradaException
 	}
 	
 	public CidadeNaoEncontradaException(Long cidadeId) {
-		this(String.format("Cidade de código %d não esixte.", cidadeId));
+		this(String.format("Cidade de código %d não existe.", cidadeId));
 	}
 	
 	

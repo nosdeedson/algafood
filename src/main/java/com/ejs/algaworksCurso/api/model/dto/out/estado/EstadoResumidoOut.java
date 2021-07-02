@@ -1,10 +1,7 @@
-package com.ejs.algaworksCurso.api.model.dto.in;
+package com.ejs.algaworksCurso.api.model.dto.out.estado;
 
-import javax.validation.constraints.NotNull;
-
-public class EstadoIn {
+public class EstadoResumidoOut {
 	
-	@NotNull
 	private String nome;
 
 	/**
@@ -20,7 +17,6 @@ public class EstadoIn {
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
-	
 	
 
 }

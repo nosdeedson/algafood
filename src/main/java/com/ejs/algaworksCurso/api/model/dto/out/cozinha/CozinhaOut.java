@@ -1,6 +1,6 @@
-package com.ejs.algaworksCurso.api.model.dto.out;
+package com.ejs.algaworksCurso.api.model.dto.out.cozinha;
 
-public class CidadeOut {
+public class CozinhaOut {
 
 	private Long id;
 	private String nome;
@@ -28,5 +28,6 @@ public class CidadeOut {
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
+	
 	
 }
