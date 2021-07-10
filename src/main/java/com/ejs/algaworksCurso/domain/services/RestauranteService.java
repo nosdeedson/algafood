@@ -155,7 +155,7 @@ public class RestauranteService {
 	 * Metodos auxiliares
 	 */
 	
-	private Restaurante buscarOuFalhar( Long restauranteId) {
+	public Restaurante buscarOuFalhar( Long restauranteId) {
 		Restaurante retorno = this.restauranteRepository.findById(restauranteId)
 				.orElseThrow( () -> new RestauranteNaoEncontradoException(restauranteId));
 		return retorno;

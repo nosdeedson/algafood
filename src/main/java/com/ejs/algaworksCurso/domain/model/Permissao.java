@@ -16,8 +16,9 @@ public class Permissao implements Serializable {
 	private Long id;
 	private String descricao;
 	private String nome;
-
-	public void Permisao() {}
+	
+	public Permissao() {
+	}
 
 	public Permissao(Long id, String descricao, String nome) {
 		this.id = id;
@@ -53,7 +54,7 @@ public class Permissao implements Serializable {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result + ((descricao == null) ? 0 : descricao.hashCode());
 		return result;
 	}
 
@@ -66,12 +67,13 @@ public class Permissao implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		Permissao other = (Permissao) obj;
-		if (id == null) {
-			if (other.id != null)
+		if (descricao == null) {
+			if (other.descricao != null)
 				return false;
-		} else if (!id.equals(other.id))
+		} else if (!descricao.equals(other.descricao))
 			return false;
 		return true;
 	}
+
 
 }

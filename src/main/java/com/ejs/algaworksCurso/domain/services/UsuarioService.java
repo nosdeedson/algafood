@@ -1,6 +1,7 @@
 package com.ejs.algaworksCurso.domain.services;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import com.ejs.algaworksCurso.api.model.dto.in.usuario.UsuarioAtualizarIn;
 import com.ejs.algaworksCurso.api.model.dto.in.usuario.UsuarioIn;
 import com.ejs.algaworksCurso.api.model.dto.out.usuario.UsuarioOut;
 import com.ejs.algaworksCurso.domain.exception.EntidadeEmUsoException;
+import com.ejs.algaworksCurso.domain.exception.NegocioException;
 import com.ejs.algaworksCurso.domain.exception.SenhaNaoEncontradoException;
 import com.ejs.algaworksCurso.domain.exception.UsuarioNaoEncontradoException;
 import com.ejs.algaworksCurso.domain.model.Usuario;
@@ -24,6 +26,8 @@ import com.ejs.algaworksCurso.helper.usuario.UsuarioDisAssembler;
 @Service
 public class UsuarioService {
 	
+	private static final String USUARIO_EXISTENTE = "Já existe um usuário com o email %s";
+
 	@Autowired
 	private UsuarioRepository usuarioRepository;
 	
@@ -36,6 +40,11 @@ public class UsuarioService {
 	@Transactional
 	public UsuarioOut atualizar(UsuarioAtualizarIn usuarioAtualizarIn, Long usuarioId) {
 		Usuario user = this.buscarOuFalhar(usuarioId);
+		Optional<Usuario> userExiste = this.usuarioRepository.findByEmail(usuarioAtualizarIn.getEmail());
+		if ( userExiste.isPresent() && !user.equals(userExiste.get())) {
+			throw new NegocioException(
+					String.format(USUARIO_EXISTENTE, usuarioAtualizarIn.getEmail()));
+		}
 		usuarioAssembler.usuarioAtualizarInToUsuario(usuarioAtualizarIn, user);
 		user = this.usuarioRepository.save(user);
 		return this.usuarioDisAssembler.usuarioToUsuarioOut(user);
@@ -81,6 +90,10 @@ public class UsuarioService {
 	
 	@Transactional
 	public UsuarioOut salvar( UsuarioIn usuarioIn) {
+		Optional<Usuario> userExiste=  this.usuarioRepository.findByEmail(usuarioIn.getEmail());
+		if (userExiste.isPresent()) {
+			throw new NegocioException(String.format(USUARIO_EXISTENTE , usuarioIn.getEmail()));
+		}
 		Usuario user = this.usuarioAssembler.usuarioInToUsuario(usuarioIn);
 		user = this.usuarioRepository.save(user);
 		return this.usuarioDisAssembler.usuarioToUsuarioOut(user);
@@ -88,6 +101,7 @@ public class UsuarioService {
 
 	/*
 	 * Metodos auxiliares
+	 * 
 	 */
 	
 	public Usuario buscarOuFalhar( Long UsuarioId) {

@@ -1,0 +1,66 @@
+package com.ejs.algaworksCurso.domain.services;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.ejs.algaworksCurso.api.model.dto.out.permissao.PermissaoOut;
+import com.ejs.algaworksCurso.domain.exception.GrupoNaoEncontradoException;
+import com.ejs.algaworksCurso.domain.exception.NegocioException;
+import com.ejs.algaworksCurso.domain.exception.PermissaoNaoEncontradaException;
+import com.ejs.algaworksCurso.domain.model.Grupo;
+import com.ejs.algaworksCurso.domain.model.Permissao;
+import com.ejs.algaworksCurso.helper.permissao.PermissaoDisAssembler;
+
+@Service
+public class GrupoPermissaoService {
+
+	
+	@Autowired
+	private PermissaoDisAssembler permissaoDisAssembler;
+	
+	@Autowired
+	private GrupoService grupoService;
+	
+	@Autowired
+	private PermissaoService permissaoService;
+	
+	
+	@Transactional
+	public void associar(Long grupoId, Long permissaoId) {
+		Grupo grupo = this.grupoService.buscarOuFalhar(grupoId);
+		Permissao permissao = this.permissaoService.buscarOuFalhar(permissaoId);
+		grupo.associar(permissao);
+	}
+	
+	@Transactional
+	public void desassociar(Long grupoId, Long permissaoId) {
+		try {
+			Grupo grupo = this.grupoService.buscarOuFalhar(grupoId);
+			Permissao permissao = this.permissaoService.buscarOuFalhar(permissaoId);
+			grupo.desassociar(permissao);
+		} catch (GrupoNaoEncontradoException | PermissaoNaoEncontradaException e) {
+			String entity = "";
+			Long id = 0L;
+			if ( e instanceof GrupoNaoEncontradoException){
+				entity = "Grupo";
+				id = grupoId;
+			}else {
+				entity = "permissao";
+				id = permissaoId;
+			}
+			throw new NegocioException(String.format("%s de código %d não existe", entity, id));
+			 
+		} 
+	}
+	
+	public List<PermissaoOut> listar(Long grupoId){
+		Grupo grupo = this.grupoService.buscarOuFalhar(grupoId);
+		return grupo.getPermissoes().stream()
+					.map(permissao -> this.permissaoDisAssembler.permissaoToPermissaoOUt(permissao))
+					.collect(Collectors.toList());
+	}
+}

@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Embedded;
@@ -60,7 +61,7 @@ public class Restaurante implements Serializable  {
 		foreignKey = @ForeignKey(name = "fK_restaurante_id"),
 			inverseJoinColumns = @JoinColumn(name = "forma_pagamento_id")
 			, inverseForeignKey = @ForeignKey(name = "fk_forma_pagamento_id"))
-	private List<FormaPagamento> formasPagamento;
+	private Set<FormaPagamento> formasPagamento;
 	
 	@Embedded
 	private Endereco endereco;
@@ -99,6 +100,14 @@ public class Restaurante implements Serializable  {
 		this.aberto = false;
 	}
 	
+	public void associarFormaPagamento(FormaPagamento formaPagamento) {
+		this.getFormasPagamento().add(formaPagamento);
+	}
+	// não precisa chamar o repositório porque o restaurante está sendo gerenciado pelo JPA, este sincroniza do o banco
+	public void desassociarFormaPagamento(FormaPagamento formaPagamento) {
+		this.getFormasPagamento().remove(formaPagamento);
+	}
+		
 	/*
 	 * Getters and Setters
 	 */
@@ -167,11 +176,11 @@ public class Restaurante implements Serializable  {
 		this.cozinha = cozinha;
 	}
 
-	public List<FormaPagamento> getFormasPagamento() {
+	public Set<FormaPagamento> getFormasPagamento() {
 		return formasPagamento;
 	}
 
-	public void setFormasPagamento(List<FormaPagamento> formasPagamento) {
+	public void setFormasPagamento(Set<FormaPagamento> formasPagamento) {
 		this.formasPagamento = formasPagamento;
 	}
 

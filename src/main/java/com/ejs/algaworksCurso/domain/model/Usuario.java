@@ -2,8 +2,8 @@ package com.ejs.algaworksCurso.domain.model;
 
 import java.io.Serializable;
 import java.time.OffsetDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.ForeignKey;
@@ -36,18 +36,29 @@ public class Usuario implements Serializable {
 	@JoinTable(name = "usuario_grupo",
 			joinColumns = @JoinColumn(name = "usuario_id"), foreignKey = @ForeignKey(name = "fk_usuario_id"),
 			inverseJoinColumns = @JoinColumn(name = "grupo_id"), inverseForeignKey = @ForeignKey(name = "fk_grupo"))
-	private List<Grupo> grupos = new ArrayList<>();
+	private Set<Grupo> grupos = new HashSet<Grupo>();
 	
 	public Usuario() {}
 	
 	public Usuario(Long id, OffsetDateTime dataCadastro, String email, String nome, String senha) {
-		
 		this.id = id;
 		this.dataCadastro = dataCadastro;
 		this.email = email;
 		this.nome = nome;
 		this.senha = senha;
 	}
+	
+	public void associarGrupo(Grupo grupo) {
+		this.getGrupos().add(grupo);
+	}
+	
+	public void desassociarGrupo(Grupo grupo) {
+		this.getGrupos().remove(grupo);
+	}
+	
+	/*
+	 * Getters and Setters
+	 */
 
 	public Long getId() {
 		return id;
@@ -89,11 +100,11 @@ public class Usuario implements Serializable {
 		this.senha = senha;
 	}
 
-	public List<Grupo> getGrupos() {
+	public Set<Grupo> getGrupos() {
 		return grupos;
 	}
 
-	public void setGrupos(List<Grupo> grupos) {
+	public void setGrupos(Set<Grupo> grupos) {
 		this.grupos = grupos;
 	}
 

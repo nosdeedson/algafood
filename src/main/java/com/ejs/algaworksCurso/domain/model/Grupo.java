@@ -1,10 +1,11 @@
 package com.ejs.algaworksCurso.domain.model;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -24,19 +25,32 @@ public class Grupo implements Serializable {
 	
 	private String nome;
 	
-	@ManyToMany(targetEntity = Permissao.class)
+	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "grupo_permissao",
 			joinColumns = @JoinColumn(name = "grupo_id"), foreignKey = @ForeignKey(name="fk_grupo_id"),
 			inverseJoinColumns = @JoinColumn(name = "permissao_id"), inverseForeignKey = @ForeignKey(name = "fk_permissao_id"))
-	private List<Permissao> permissoes = new ArrayList<>();
+	private Set<Permissao> permissoes = new HashSet<Permissao>();
 	
 	public Grupo() {}
 	
-	public Grupo(Long id, String nome) {
+	public Grupo(Long id, String nome, Set<Permissao> permissoes) {
 		this.id = id;
 		this.nome = nome;
+		this.permissoes = permissoes;
 	}
 
+	public void associar( Permissao permissao) {
+		this.getPermissoes().add(permissao);
+	}
+	
+	public void desassociar(Permissao permissao) {
+		this.getPermissoes().remove(permissao);
+	}
+	
+	/*
+	 * Getters and setters
+	 */
+	
 	public Long getId() {
 		return id;
 	}
@@ -53,11 +67,11 @@ public class Grupo implements Serializable {
 		this.nome = nome;
 	}
 
-	public List<Permissao> getPermissoes() {
+	public Set<Permissao> getPermissoes() {
 		return permissoes;
 	}
 
-	public void setPermissoes(List<Permissao> permissoes) {
+	public void setPermissoes(Set<Permissao> permissoes) {
 		this.permissoes = permissoes;
 	}
 
@@ -85,6 +99,7 @@ public class Grupo implements Serializable {
 			return false;
 		return true;
 	}
+
 	
 	
 }

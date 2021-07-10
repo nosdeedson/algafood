@@ -10,4 +10,10 @@ public interface CustomJpaRepository<T, ID> extends JpaRepository<T, ID>  {
 	
 	Optional<T> buscarPrimeiro();
 	
+	/**
+	 * tira a entidade do scope manage do jpa
+	 * @param entity
+	 */
+	void detach( T entity);
+	
 }

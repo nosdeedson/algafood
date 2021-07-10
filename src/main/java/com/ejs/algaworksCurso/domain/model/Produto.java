@@ -20,7 +20,6 @@ public class Produto implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	
 	private Boolean ativo;
 	private String descricao;
 	private String nome;

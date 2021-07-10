@@ -73,7 +73,7 @@ public class FormaPagamentoService {
 		return this.disAssembler.formaPagamentoToFormaPagamentoOut(formaPagamento);
 	}
 	
-	private FormaPagamento buscarOuFalhar(Long formaPagamentoId) {
+	public FormaPagamento buscarOuFalhar(Long formaPagamentoId) {
 		return this.formaPagamentoRespository.findById(formaPagamentoId)
 				.orElseThrow( () -> new FormaPagamentoNaoEncontradoException(formaPagamentoId));
 	}

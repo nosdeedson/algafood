@@ -7,5 +7,5 @@ import com.ejs.algaworksCurso.domain.model.Permissao;
 
 @Repository
 public interface PermissaoRepository extends JpaRepository<Permissao, Long> {
-	
+		
 }
