@@ -24,15 +24,15 @@ insert into produto(ativo, descricao, nome, preco, restaurante_id)
 values(true, 'feijão preto', 'feijão', 6.8, 1) ON CONFLICT DO NOTHING;
 
 /*inseri forma de pagamento restaurante*/
-insert into restaurante_forma_pagamento(restaurante_id, forma_pagamento_id) values(1, 1);
-insert into restaurante_forma_pagamento(restaurante_id, forma_pagamento_id) values(1, 2);
-insert into restaurante_forma_pagamento(restaurante_id, forma_pagamento_id) values(1, 3);
-insert into restaurante_forma_pagamento(restaurante_id, forma_pagamento_id) values(2, 1);
-insert into restaurante_forma_pagamento(restaurante_id, forma_pagamento_id) values(2, 2);
-insert into restaurante_forma_pagamento(restaurante_id, forma_pagamento_id) values(2, 3);
-insert into restaurante_forma_pagamento(restaurante_id, forma_pagamento_id) values(3, 1);
-insert into restaurante_forma_pagamento(restaurante_id, forma_pagamento_id) values(3, 2);
-insert into restaurante_forma_pagamento(restaurante_id, forma_pagamento_id) values(3, 3);
+insert into restaurante_forma_pagamento(restaurante_id, forma_pagamento_id) values(1, 1) ON CONFLICT DO NOTHING;
+insert into restaurante_forma_pagamento(restaurante_id, forma_pagamento_id) values(1, 2) ON CONFLICT DO NOTHING;
+insert into restaurante_forma_pagamento(restaurante_id, forma_pagamento_id) values(1, 3) ON CONFLICT DO NOTHING;
+insert into restaurante_forma_pagamento(restaurante_id, forma_pagamento_id) values(2, 1) ON CONFLICT DO NOTHING;
+insert into restaurante_forma_pagamento(restaurante_id, forma_pagamento_id) values(2, 2) ON CONFLICT DO NOTHING;
+insert into restaurante_forma_pagamento(restaurante_id, forma_pagamento_id) values(2, 3)ON CONFLICT DO NOTHING;
+insert into restaurante_forma_pagamento(restaurante_id, forma_pagamento_id) values(3, 1) ON CONFLICT DO NOTHING;
+insert into restaurante_forma_pagamento(restaurante_id, forma_pagamento_id) values(3, 2) ON CONFLICT DO NOTHING;
+insert into restaurante_forma_pagamento(restaurante_id, forma_pagamento_id) values(3, 3) ON CONFLICT DO NOTHING;
 
 /* inseri estado*/
 insert into estado (nome) values('Minas Gerais') ON CONFLICT DO NOTHING;
@@ -77,4 +77,15 @@ insert into usuario_grupo(usuario_id, grupo_id) values(1, 2) ON CONFLICT DO NOTH
 insert into usuario_grupo(usuario_id, grupo_id) values(1, 3) ON CONFLICT DO NOTHING;
 
 insert into usuario_grupo(usuario_id, grupo_id) values(2, 2) ON CONFLICT DO NOTHING;
+
+/* inseri relação entre restaurante e usuario*/
+insert into restaurante_usuario(restaurante_id, usuario_id)
+values(1, 1) ON CONFLICT DO NOTHING;
+
+insert into restaurante_usuario(restaurante_id, usuario_id)
+values(2, 1) ON CONFLICT DO NOTHING;
+
+insert into restaurante_usuario(restaurante_id, usuario_id)
+values(2, 2) ON CONFLICT DO NOTHING;
+
 

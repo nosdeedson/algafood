@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -70,10 +71,18 @@ public class Restaurante implements Serializable  {
 	@OneToMany(mappedBy = "restaurante")
 	private List<Produto> produtos = new ArrayList<Produto>();
 
+	@ManyToMany
+	@JoinTable(name = "restaurante_usuario", joinColumns = @JoinColumn(name = "restaurante_id"),
+				foreignKey = @ForeignKey(name = "fk_restaurante_id"),
+				inverseJoinColumns = @JoinColumn(name = "usuario_id"),
+				inverseForeignKey = @ForeignKey(name = "fk_usuario_id"))
+	private Set<Usuario> responsaveis =  new HashSet<>();
+	
 	public Restaurante() {}
 	
 	public Restaurante(Long id, String nome, BigDecimal taxaFrete, Boolean ativo, Boolean aberto,
-			OffsetDateTime dataCadastro, OffsetDateTime dataAtualizacao, Cozinha cozinha) {
+			OffsetDateTime dataCadastro, OffsetDateTime dataAtualizacao, Cozinha cozinha,
+			Set<FormaPagamento> formasPagamento, Endereco endereco, List<Produto> produtos, Set<Usuario> responsaveis) {
 		this.id = id;
 		this.nome = nome;
 		this.taxaFrete = taxaFrete;
@@ -82,8 +91,12 @@ public class Restaurante implements Serializable  {
 		this.dataCadastro = dataCadastro;
 		this.dataAtualizacao = dataAtualizacao;
 		this.cozinha = cozinha;
+		this.formasPagamento = formasPagamento;
+		this.endereco = endereco;
+		this.produtos = produtos;
+		this.responsaveis = responsaveis;
 	}
-	
+
 	public void ativar() {
 		this.ativo = true;
 	}
@@ -106,6 +119,14 @@ public class Restaurante implements Serializable  {
 	// não precisa chamar o repositório porque o restaurante está sendo gerenciado pelo JPA, este sincroniza do o banco
 	public void desassociarFormaPagamento(FormaPagamento formaPagamento) {
 		this.getFormasPagamento().remove(formaPagamento);
+	}
+	
+	public void associarResponsavel(Usuario usuario) {
+		this.getResponsaveis().add(usuario);
+	}
+	
+	public void desassociarResponsavel(Usuario usuario) {
+		this.getResponsaveis().remove(usuario);
 	}
 		
 	/*
@@ -198,6 +219,14 @@ public class Restaurante implements Serializable  {
 
 	public void setProdutos(List<Produto> produtos) {
 		this.produtos = produtos;
+	}
+
+	public Set<Usuario> getResponsaveis() {
+		return responsaveis;
+	}
+
+	public void setResponsaveis(Set<Usuario> responsaveis) {
+		this.responsaveis = responsaveis;
 	}
 
 	@Override
