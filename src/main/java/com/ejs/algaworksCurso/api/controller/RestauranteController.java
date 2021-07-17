@@ -2,6 +2,7 @@ package com.ejs.algaworksCurso.api.controller;
 
 import java.math.BigDecimal;
 import java.net.URI;
+import java.util.List;
 
 import javax.validation.Valid;
 
@@ -25,6 +26,7 @@ import com.ejs.algaworksCurso.api.model.dto.out.restautante.RestauranteOut;
 import com.ejs.algaworksCurso.domain.exception.CidadeNaoEncontradaException;
 import com.ejs.algaworksCurso.domain.exception.CozinhaNaoEncontradaException;
 import com.ejs.algaworksCurso.domain.exception.NegocioException;
+import com.ejs.algaworksCurso.domain.exception.RestauranteNaoEncontradoException;
 import com.ejs.algaworksCurso.domain.services.RestauranteService;
 
 @RestController
@@ -43,6 +45,16 @@ public class RestauranteController {
 	@ResponseStatus(value = HttpStatus.NO_CONTENT)
 	public void ativar(@PathVariable Long restauranteId){
 		this.restauranteService.ativar(restauranteId);
+	}
+	
+	@PutMapping("ativacoes")
+	public ResponseEntity<?> ativarMultiplos(@RequestBody List<Long> restauranteIds) {
+		try {
+			this.restauranteService.ativarMultiplos(restauranteIds);
+			return ResponseEntity.noContent().build();
+		} catch (RestauranteNaoEncontradoException e) {
+			throw new NegocioException(e.getMessage());
+		}
 	}
 	
 	@PutMapping("{restauranteId}")
@@ -93,6 +105,16 @@ public class RestauranteController {
 	@ResponseStatus(value = HttpStatus.NO_CONTENT)
 	public void inativar(@PathVariable Long restauranteId){
 		this.restauranteService.inativar(restauranteId);
+	}
+	
+	@DeleteMapping("inativacoes")
+	public ResponseEntity<?> inativarMultiplos(@RequestBody List<Long> restauranteIds){
+		try {
+			this.restauranteService.inativarMultiplos(restauranteIds);
+			return ResponseEntity.noContent().build();
+		} catch (RestauranteNaoEncontradoException e) {
+			throw new NegocioException(e.getMessage());
+		}
 	}
 	
 	@GetMapping

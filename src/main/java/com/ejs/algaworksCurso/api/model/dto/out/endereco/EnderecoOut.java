@@ -9,7 +9,7 @@ public class EnderecoOut {
 	private CidadeOut cidade;
 	private String complemento;
 	private String numero;
-	private String rua;
+	private String logradouro;
 	/**
 	 * @return the bairro
 	 */
@@ -71,16 +71,16 @@ public class EnderecoOut {
 		this.numero = numero;
 	}
 	/**
-	 * @return the rua
+	 * @return the logradouro
 	 */
-	public String getRua() {
-		return rua;
+	public String getLogradouro() {
+		return logradouro;
 	}
 	/**
-	 * @param rua the rua to set
+	 * @param logradouro the logradouro to set
 	 */
-	public void setRua(String rua) {
-		this.rua = rua;
+	public void setLogradouro(String logradouro) {
+		this.logradouro = logradouro;
 	}
 	
 	

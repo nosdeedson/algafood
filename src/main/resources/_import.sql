@@ -29,7 +29,7 @@ insert into restaurante_forma_pagamento(restaurante_id, forma_pagamento_id) valu
 insert into restaurante_forma_pagamento(restaurante_id, forma_pagamento_id) values(1, 3) ON CONFLICT DO NOTHING;
 insert into restaurante_forma_pagamento(restaurante_id, forma_pagamento_id) values(2, 1) ON CONFLICT DO NOTHING;
 insert into restaurante_forma_pagamento(restaurante_id, forma_pagamento_id) values(2, 2) ON CONFLICT DO NOTHING;
-insert into restaurante_forma_pagamento(restaurante_id, forma_pagamento_id) values(2, 3)ON CONFLICT DO NOTHING;
+insert into restaurante_forma_pagamento(restaurante_id, forma_pagamento_id) values(2, 3) ON CONFLICT DO NOTHING;
 insert into restaurante_forma_pagamento(restaurante_id, forma_pagamento_id) values(3, 1) ON CONFLICT DO NOTHING;
 insert into restaurante_forma_pagamento(restaurante_id, forma_pagamento_id) values(3, 2) ON CONFLICT DO NOTHING;
 insert into restaurante_forma_pagamento(restaurante_id, forma_pagamento_id) values(3, 3) ON CONFLICT DO NOTHING;
@@ -87,5 +87,30 @@ values(2, 1) ON CONFLICT DO NOTHING;
 
 insert into restaurante_usuario(restaurante_id, usuario_id)
 values(2, 2) ON CONFLICT DO NOTHING;
+
+
+/** inseri pedido */
+insert into pedido (codigo, restaurante_id, usuario_cliente_id, forma_pagamento_id, endereco_cidade_id, endereco_cep, 
+    endereco_logradouro, endereco_numero, endereco_complemento, endereco_bairro,
+    status, data_criacao, sub_total, taxa_frete, valor_total)
+values ('a34f4d68-cc56-449b-9636-7870f4585d2a', 1, 1, 1, 1, '38400-000', 'Rua Floriano Peixoto', '500', 'Apto 801', 'Brasil',
+'CRIADO', (now() at time zone 'utc'), 298.90, 10, 308.90) ON CONFLICT DO NOTHING;
+
+insert into pedido (codigo, restaurante_id, usuario_cliente_id, forma_pagamento_id, endereco_cidade_id, endereco_cep, 
+	endereco_logradouro, endereco_numero, endereco_complemento, endereco_bairro,
+	status, data_criacao, sub_total, taxa_frete, valor_total)
+values ('1789c9aa-0320-437f-8012-79184519b784', 1, 1, 2, 1, '38400-111', 'Rua Acre', '300', 'Casa 2', 'Centro',
+'CRIADO', (now() at time zone 'utc'), 79, 0, 79);
+
+/* inseri item pedido */
+insert into item_pedido (pedido_id, produto_id, quantidade, preco_unitario, preco_total, observacao)
+values (1, 1, 1, 78.9, 78.9, 'teste');
+
+insert into item_pedido (pedido_id, produto_id, quantidade, preco_unitario, preco_total, observacao)
+values (1, 2, 2, 110, 220, 'Menos picante, por favor');
+
+
+insert into item_pedido (pedido_id, produto_id, quantidade, preco_unitario, preco_total, observacao)
+values (2, 2, 1, 79, 79, 'Ao ponto');
 
 

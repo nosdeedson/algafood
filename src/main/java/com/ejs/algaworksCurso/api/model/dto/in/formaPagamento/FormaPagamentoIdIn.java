@@ -1,9 +1,11 @@
 package com.ejs.algaworksCurso.api.model.dto.in.formaPagamento;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
-public class FormaPagamentoResumidoDTO {
+public class FormaPagamentoIdIn {
 
+	@Valid
 	@NotNull
 	private Long id;
 

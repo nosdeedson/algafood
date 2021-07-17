@@ -1,9 +1,10 @@
 create table pedido(
 	id bigserial not null,
+	codigo varchar(36) not null,
 	data_criacao timestamp not null,
-	data_confirmacao timestamp not null,
-	data_cancelamento timestamp not null,
-	data_entrega timestamp not null,
+	data_confirmacao timestamp,
+	data_cancelamento timestamp,
+	data_entrega timestamp,
 	endereco_cidade_id bigint not null,
   	endereco_cep varchar(9) not null,
   	endereco_logradouro varchar(100) not null,
@@ -13,11 +14,12 @@ create table pedido(
 	forma_pagamento_id bigint not null,
 	restaurante_id bigint not null,
 	status varchar(10) not null,
-	subtotal decimal(10,2) not null,
+	sub_total decimal(10,2) not null,
 	taxa_frete decimal(10,2) not null,
 	valor_total decimal(10,2) not null,
 	usuario_cliente_id bigint not null,
 	primary key(id),
+	constraint uk_pedido_codigo unique(codigo),
 	constraint fk_pedido_restaurante 
 	foreign key (restaurante_id)
 	references restaurante(id),
@@ -29,11 +31,12 @@ create table pedido(
 	references forma_pagamento(id)
 );
 
+
 create table item_pedido(
 	id bigserial,
 	observacao varchar(255) not null,
 	pedido_id bigint not null,
-	preco_unitatio decimal(10,2) not null,
+	preco_unitario decimal(10,2) not null,
 	preco_total decimal(10,2) not null,
 	produto_id bigint not null,
 	quantidade smallint not null,

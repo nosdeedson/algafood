@@ -25,17 +25,17 @@ public class Endereco {
 	@Column(name = "endereco_numero")
 	private String numero;
 	
-	@Column(name = "endereco_rua")
-	private String rua;
+	@Column(name = "endereco_logradouro")
+	private String logradouro;
 	
 	public Endereco() {}
 	
-	public Endereco(String cep, Cidade cidade, String complemento, String bairro, String rua) {
+	public Endereco(String cep, Cidade cidade, String complemento, String bairro, String logradouro) {
 		this.cep = cep;
 		this.cidade = cidade;
 		this.complemento = complemento;
 		this.bairro = bairro;
-		this.rua = rua;
+		this.logradouro = logradouro;
 	}
 
 	/**
@@ -111,15 +111,15 @@ public class Endereco {
 	/**
 	 * @return the rua
 	 */
-	public String getRua() {
-		return rua;
+	public String getLogradouro() {
+		return logradouro;
 	}
 
 	/**
 	 * @param rua the rua to set
 	 */
-	public void setRua(String rua) {
-		this.rua = rua;
+	public void setLogradouro(String logradouro) {
+		this.logradouro = logradouro;
 	}
 
 	

@@ -62,7 +62,7 @@ CREATE TABLE restaurante (
   endereco_cep varchar(255) DEFAULT NULL,
   endereco_complemento varchar(255) DEFAULT NULL,
   endereco_numero varchar(255) DEFAULT NULL,
-  endereco_rua varchar(255) DEFAULT NULL,
+  endereco_logradouro varchar(255) DEFAULT NULL,
   nome varchar(255) not NULL,
   taxa_frete decimal DEFAULT NULL,
   cozinha_id bigint NOT NULL,

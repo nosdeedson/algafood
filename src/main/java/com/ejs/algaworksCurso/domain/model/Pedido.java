@@ -5,20 +5,26 @@ import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.PrePersist;
 
 import org.hibernate.annotations.CreationTimestamp;
+
+import com.ejs.algaworksCurso.domain.exception.NegocioException;
 
 @Entity
 public class Pedido implements Serializable {
@@ -28,6 +34,8 @@ public class Pedido implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	
+	private String codigo;
 	
 	@CreationTimestamp
 	private OffsetDateTime dataCriacao;
@@ -40,11 +48,11 @@ public class Pedido implements Serializable {
 	@Embedded
 	private Endereco enderecoEntrega;
 	
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(nullable = false)
 	private FormaPagamento formaPagamento;
 	
-	@OneToMany(mappedBy = "pedido")
+	@OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL)
 	private List<ItemPedido> itens = new ArrayList<>();
 	
 	@ManyToOne
@@ -54,9 +62,13 @@ public class Pedido implements Serializable {
 	@Enumerated(EnumType.STRING)
 	private StatusPedido status;
 	
+	@Column(name = "sub_total")
 	private BigDecimal subTotal;
 	
+	@Column(name = "taxa_frete")
 	private BigDecimal taxaFrete;
+	
+	@Column(name = "valor_total")
 	private BigDecimal valorTotal;
 
 	@ManyToOne
@@ -64,16 +76,20 @@ public class Pedido implements Serializable {
 	private Usuario cliente;
 	
 	public Pedido() {}	
-
-	public Pedido(Long id, OffsetDateTime dataCriacao, OffsetDateTime dataConfirmacao, OffsetDateTime dataCancelamento,
-			OffsetDateTime dataEntrega, Endereco enderecoEntrega, Restaurante restaurante, StatusPedido status,
+	
+	public Pedido(Long id, String codigo, OffsetDateTime dataCriacao, OffsetDateTime dataConfirmacao,
+			OffsetDateTime dataCancelamento, OffsetDateTime dataEntrega, Endereco enderecoEntrega,
+			FormaPagamento formaPagamento, List<ItemPedido> itens, Restaurante restaurante, StatusPedido status,
 			BigDecimal subTotal, BigDecimal taxaFrete, BigDecimal valorTotal, Usuario cliente) {
 		this.id = id;
+		this.codigo = codigo;
 		this.dataCriacao = dataCriacao;
 		this.dataConfirmacao = dataConfirmacao;
 		this.dataCancelamento = dataCancelamento;
 		this.dataEntrega = dataEntrega;
 		this.enderecoEntrega = enderecoEntrega;
+		this.formaPagamento = formaPagamento;
+		this.itens = itens;
 		this.restaurante = restaurante;
 		this.status = status;
 		this.subTotal = subTotal;
@@ -81,7 +97,35 @@ public class Pedido implements Serializable {
 		this.valorTotal = valorTotal;
 		this.cliente = cliente;
 	}
+
+	/*
+	 * Métodos auxiliares
+	 */
 	
+	public void cancelar() {
+		this.setStatus(StatusPedido.CANCELADO);
+		this.setDataCancelamento(OffsetDateTime.now());
+	}
+	
+	public void confirmar() {
+		this.setStatus(StatusPedido.CONFIRMADO);
+		this.setDataConfirmacao(OffsetDateTime.now());
+	}
+	
+	public void criar() {
+		this.status = StatusPedido.CRIADO;
+		this.setDataCriacao(OffsetDateTime.now());
+	}
+	
+	public void entregar() {
+		this.setStatus(StatusPedido.ENTREGUE);
+		this.setDataEntrega(OffsetDateTime.now());
+	}
+	
+	
+	/**
+	 * Getters and Setters 
+	*/
 	
 	public Long getId() {
 		return id;
@@ -90,6 +134,8 @@ public class Pedido implements Serializable {
 	public void setId(Long id) {
 		this.id = id;
 	}
+	
+	
 
 	public OffsetDateTime getDataCriacao() {
 		return dataCriacao;
@@ -151,8 +197,13 @@ public class Pedido implements Serializable {
 		return status;
 	}
 
-	public void setStatus(StatusPedido status) {
-		this.status = status;
+	private void setStatus(StatusPedido novoStatus) {
+		if( this.getStatus().naoPodeMudarStatusPara(novoStatus)) {
+			throw new NegocioException(String.format(
+					"Pedido de código %d não poder ser alterado do status %s para o status %s", this.getCodigo(), 
+					this.getStatus().getDescricao(), novoStatus.getDescricao()));
+		}
+		this.status = novoStatus;
 	}
 
 	public BigDecimal getSubTotal() {
@@ -185,6 +236,35 @@ public class Pedido implements Serializable {
 
 	public void setCliente(Usuario cliente) {
 		this.cliente = cliente;
+	}
+	
+	/**
+	 * @return the codigo
+	 */
+	public String getCodigo() {
+		return codigo;
+	}
+
+	/**
+	 * @param codigo the codigo to set
+	 */
+	@PrePersist
+	private void setCodigo() {
+		this.codigo = UUID.randomUUID().toString();
+	}
+
+	/**
+	 * @return the formaPagamento
+	 */
+	public FormaPagamento getFormaPagamento() {
+		return formaPagamento;
+	}
+
+	/**
+	 * @param formaPagamento the formaPagamento to set
+	 */
+	public void setFormaPagamento(FormaPagamento formaPagamento) {
+		this.formaPagamento = formaPagamento;
 	}
 
 	@Override

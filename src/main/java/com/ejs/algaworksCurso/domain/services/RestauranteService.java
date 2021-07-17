@@ -14,9 +14,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.ejs.algaworksCurso.api.model.dto.in.restaurante.RestauranteIn;
 import com.ejs.algaworksCurso.api.model.dto.out.restautante.RestauranteOut;
+import com.ejs.algaworksCurso.domain.exception.FormaPagamentoNaoEncontradoException;
 import com.ejs.algaworksCurso.domain.exception.RestauranteNaoEncontradoException;
 import com.ejs.algaworksCurso.domain.model.Cidade;
 import com.ejs.algaworksCurso.domain.model.Cozinha;
+import com.ejs.algaworksCurso.domain.model.FormaPagamento;
 import com.ejs.algaworksCurso.domain.model.Restaurante;
 import com.ejs.algaworksCurso.domain.repository.RestauranteRepository;
 import com.ejs.algaworksCurso.helper.restaurante.RestauranteAssembler;
@@ -54,6 +56,11 @@ public class RestauranteService {
 	public void ativar(Long restauranteId) {
 		Restaurante restauranteAtual = this.buscarOuFalhar(restauranteId);
 		restauranteAtual.ativar();
+	}
+	
+	@Transactional
+	public void ativarMultiplos(List<Long> restauranteIds) {
+		restauranteIds.forEach(this::ativar);
 	}
 	
 	@Transactional
@@ -121,6 +128,12 @@ public class RestauranteService {
 		Restaurante restauranteAtual = this.buscarOuFalhar(restauranteId);
 		restauranteAtual.inativar();
 	}
+	
+	@Transactional
+	public void inativarMultiplos(List<Long> restauranteIds) {
+		restauranteIds.forEach(this::inativar);
+	}
+	
 	
 	public List<RestauranteOut> listar(){
 		List<Restaurante> restaurantes = this.restauranteRepository.todas(Sort.by("nome"));
