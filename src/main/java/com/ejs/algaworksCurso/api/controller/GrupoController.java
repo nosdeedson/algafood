@@ -17,8 +17,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.ejs.algaworksCurso.api.model.dto.in.grupo.GrupoIn;
-import com.ejs.algaworksCurso.api.model.dto.out.group.GrupoOut;
+import com.ejs.algaworksCurso.api.model.in.grupo.GrupoIn;
+import com.ejs.algaworksCurso.api.model.out.group.GrupoOut;
 import com.ejs.algaworksCurso.domain.services.GrupoService;
 
 @RestController

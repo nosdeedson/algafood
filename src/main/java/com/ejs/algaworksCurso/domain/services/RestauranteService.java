@@ -12,13 +12,11 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.ejs.algaworksCurso.api.model.dto.in.restaurante.RestauranteIn;
-import com.ejs.algaworksCurso.api.model.dto.out.restautante.RestauranteOut;
-import com.ejs.algaworksCurso.domain.exception.FormaPagamentoNaoEncontradoException;
+import com.ejs.algaworksCurso.api.model.in.restaurante.RestauranteIn;
+import com.ejs.algaworksCurso.api.model.out.restautante.RestauranteOut;
 import com.ejs.algaworksCurso.domain.exception.RestauranteNaoEncontradoException;
 import com.ejs.algaworksCurso.domain.model.Cidade;
 import com.ejs.algaworksCurso.domain.model.Cozinha;
-import com.ejs.algaworksCurso.domain.model.FormaPagamento;
 import com.ejs.algaworksCurso.domain.model.Restaurante;
 import com.ejs.algaworksCurso.domain.repository.RestauranteRepository;
 import com.ejs.algaworksCurso.helper.restaurante.RestauranteAssembler;

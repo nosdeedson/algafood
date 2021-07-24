@@ -13,6 +13,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -154,12 +155,22 @@ public class ApiHandlerException extends ResponseEntityExceptionHandler {
 		return super.handleExceptionInternal(ex, body, headers, status, request);
 	}
 	
+	@Override
+	protected ResponseEntity<Object> handleBindException(BindException ex, HttpHeaders headers, HttpStatus status,
+			WebRequest request) {
+		// TODO Auto-generated method stub
+		return this.handleValidationInternal(ex, headers, status, request, ex.getBindingResult());
+	}
 	
 	@Override
 	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
 			HttpHeaders headers, HttpStatus status, WebRequest request) {
+		return handleValidationInternal(ex, headers, status, request, ex.getBindingResult());
+	}
+
+	private ResponseEntity<Object> handleValidationInternal(Exception ex, HttpHeaders headers,
+			HttpStatus status, WebRequest request, BindingResult bindingResults) {
 		String detail = "Um ou mais campos estão inválidos, corrija, e tente novamente.";
-		BindingResult bindingResults = ex.getBindingResult();
 	
 		List<CampoComErro> camposComErro = this.adicionaErros(bindingResults);
 				
@@ -170,18 +181,16 @@ public class ApiHandlerException extends ResponseEntityExceptionHandler {
 				.build();
 		return handleExceptionInternal(ex, problem, headers, status, request);
 	}
-	
+		
 	private Problem.Builder createProblem(HttpStatus status, String detail, ProblemType problemType) {
 		return new  Problem.Builder().detail(detail).status(status.value()).title(problemType.getTitle()).type(problemType.getUri());
 	}
 
-	private List<CampoComErro> adicionaErros(BindingResult bindingResult){
-		List<CampoComErro> erros = bindingResult.getFieldErrors().stream()
-												.map( erro -> {
-													String message = messageSource.getMessage(erro, LocaleContextHolder.getLocale());
-													return new CampoComErro.Builder().nome(erro.getField()).menssagem(message).build();
-												})
-												.collect(Collectors.toList());
+	private List<CampoComErro> adicionaErros(BindingResult bindingResult) {
+		List<CampoComErro> erros = bindingResult.getFieldErrors().stream().map(erro -> {
+			String message = messageSource.getMessage(erro, LocaleContextHolder.getLocale());
+			return new CampoComErro.Builder().nome(erro.getField()).menssagem(message).build();
+		}).collect(Collectors.toList());
 		return erros;
 	}
 	

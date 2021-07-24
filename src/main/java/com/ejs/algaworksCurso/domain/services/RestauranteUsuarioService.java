@@ -8,7 +8,7 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.ejs.algaworksCurso.api.model.dto.out.usuario.UsuarioOut;
+import com.ejs.algaworksCurso.api.model.out.usuario.UsuarioOut;
 import com.ejs.algaworksCurso.domain.exception.NegocioException;
 import com.ejs.algaworksCurso.domain.exception.RestauranteNaoEncontradoException;
 import com.ejs.algaworksCurso.domain.exception.UsuarioNaoEncontradoException;

@@ -3,16 +3,22 @@ package com.ejs.algaworksCurso.domain.services;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.ejs.algaworksCurso.api.model.dto.in.ItensPedidoIn;
-import com.ejs.algaworksCurso.api.model.dto.in.PedidoIn;
-import com.ejs.algaworksCurso.api.model.dto.out.pedido.PedidoOut;
-import com.ejs.algaworksCurso.api.model.dto.out.pedido.PedidoResumidoDTO;
+import com.ejs.algaworksCurso.api.model.in.itensPedido.ItensPedidoIn;
+import com.ejs.algaworksCurso.api.model.in.pedido.PedidoIn;
+import com.ejs.algaworksCurso.api.model.out.pedido.PedidoOut;
+import com.ejs.algaworksCurso.api.model.out.pedido.PedidoResumidoDTO;
 import com.ejs.algaworksCurso.domain.exception.NegocioException;
 import com.ejs.algaworksCurso.domain.exception.PedidoNaoEncontradaException;
 import com.ejs.algaworksCurso.domain.exception.RestauranteNaoEncontradoException;
@@ -23,9 +29,11 @@ import com.ejs.algaworksCurso.domain.model.Pedido;
 import com.ejs.algaworksCurso.domain.model.Produto;
 import com.ejs.algaworksCurso.domain.model.Restaurante;
 import com.ejs.algaworksCurso.domain.model.Usuario;
+import com.ejs.algaworksCurso.domain.model.filter.PedidoFilter;
 import com.ejs.algaworksCurso.domain.repository.PedidoRepository;
 import com.ejs.algaworksCurso.helper.pedido.PedidoAssembler;
 import com.ejs.algaworksCurso.helper.pedido.PedidoDisAssembler;
+import com.ejs.algaworksCurso.infrastructure.repository.spec.PedidoSpecs;
 
 @Service
 public class PedidoService {
@@ -76,11 +84,16 @@ public class PedidoService {
 		pedido.entregar();
 	}
 	
-	public List<PedidoResumidoDTO> listar(){
-		List<Pedido> pedidos = this.pedidoRepository.findAll();
-		return pedidos.stream()
+	public Page<PedidoResumidoDTO> listar(Pageable pageable, PedidoFilter filtro){
+		pageable = this.deParaPageable(pageable);
+		Page<Pedido> pedidos = this.pedidoRepository.findAll(PedidoSpecs.usandoFiltor(filtro), pageable);
+		List<PedidoResumidoDTO> pedidosOut = pedidos.stream()
 				.map(pedido -> this.pedidoDisAssembler.pedidoToPedidoResumidoDTO(pedido))
 				.collect(Collectors.toList());
+		
+		Page<PedidoResumidoDTO> pedidosPage = new PageImpl<PedidoResumidoDTO>(pedidosOut, pageable, pedidos.getTotalElements());
+		
+		return pedidosPage;
 	}
 	
 	@Transactional
@@ -146,12 +159,24 @@ public class PedidoService {
 	
 	
 	
+	/**
+	 * Verifica se os campos passados na requisição podem ser usados como filtro da pesquisa
+	 * @param pageable
+	 * @return
+	 */
+	private Pageable deParaPageable( Pageable pageable) {
+		Map<String, String> map = Map.of("codigo", "codigo", "subTotal", "subTotal", "taxaFrete", "taxaFrete",
+				"valorTotal", "valoTotal", "restaurante.id", "restauranteId", "nomeCliente", "cliente.nome");
 		
-	
-	
-	
-	
-	
+		
+		var orders = pageable.getSort().stream()
+				.filter(order -> map.containsKey(order.getProperty()) )
+				.map(order -> new Sort.Order(order.getDirection(), map.get(order.getProperty())))
+				.collect(Collectors.toList());
+		
+		return PageRequest.of( pageable.getPageNumber(), pageable.getPageSize(), Sort.by(orders));
+	}
+		
 	
 	
 	

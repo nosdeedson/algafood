@@ -4,7 +4,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import com.ejs.algaworksCurso.api.model.dto.in.ItensPedidoIn;
+import com.ejs.algaworksCurso.api.model.in.itensPedido.ItensPedidoIn;
 import com.ejs.algaworksCurso.domain.model.ItemPedido;
 
 @Configuration

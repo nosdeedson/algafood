@@ -10,8 +10,10 @@ import com.ejs.algaworksCurso.domain.model.Produto;
 @Repository
 public interface ProdutoRepository extends CustomJpaRepository<Produto, Long>{
 	
-	Optional<Produto> findByIdAndRestaurante_Id(Long id, Long RestauranteId);
+	Optional<Produto> findByIdAndRestaurante_Id(Long id, Long restauranteId);
 	
-	List<Produto> findByRestauranteId(Long RestauranteId);
+	List<Produto> findByRestauranteId(Long restauranteId);
+	
+	List<Produto> findByRestauranteIdAndAtivo(Long restauranteId, boolean ativo);
 
 }

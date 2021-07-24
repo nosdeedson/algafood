@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ejs.algaworksCurso.api.model.dto.out.permissao.PermissaoOut;
+import com.ejs.algaworksCurso.api.model.out.permissao.PermissaoOut;
 import com.ejs.algaworksCurso.domain.services.GrupoPermissaoService;
 
 @RestController

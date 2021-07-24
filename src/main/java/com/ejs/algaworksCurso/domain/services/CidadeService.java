@@ -9,8 +9,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.ejs.algaworksCurso.api.model.dto.in.cidade.CidadeIn;
-import com.ejs.algaworksCurso.api.model.dto.out.cidade.CidadeOut;
+import com.ejs.algaworksCurso.api.model.in.cidade.CidadeIn;
+import com.ejs.algaworksCurso.api.model.out.cidade.CidadeOut;
 import com.ejs.algaworksCurso.domain.exception.CidadeNaoEncontradaException;
 import com.ejs.algaworksCurso.domain.exception.EntidadeEmUsoException;
 import com.ejs.algaworksCurso.domain.exception.NegocioException;

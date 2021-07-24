@@ -8,8 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.ejs.algaworksCurso.api.model.dto.in.produto.ProdutoIn;
-import com.ejs.algaworksCurso.api.model.dto.in.produto.ProdutoOut;
+import com.ejs.algaworksCurso.api.model.in.produto.ProdutoIn;
+import com.ejs.algaworksCurso.api.model.in.produto.ProdutoOut;
 import com.ejs.algaworksCurso.domain.exception.ProdutoNaoEncontradoException;
 import com.ejs.algaworksCurso.domain.model.Produto;
 import com.ejs.algaworksCurso.domain.model.Restaurante;
@@ -36,11 +36,11 @@ public class RestauranteProdutoService {
 	@Transactional
 	public void atualizarProduto( Long restauranteId, Long ProdutoId, ProdutoIn produtoIn) {
 		this.restauranteService.buscarOuFalhar(restauranteId);
-		Produto produto = this.produtoRepository.findByIdAndRestaurante_Id(ProdutoId, restauranteId)
+		Produto prpduto = this.produtoRepository.findByIdAndRestaurante_Id(ProdutoId, restauranteId)
 				.orElseThrow( () -> new ProdutoNaoEncontradoException(ProdutoId, restauranteId) );
 		
-		this.produtoAssembler.produtoInToProduto(produtoIn, produto);
-		this.produtoRepository.save(produto);		
+		this.produtoAssembler.produtoInToProduto(produtoIn, prpduto);
+		this.produtoRepository.save(prpduto);		
 	}
 	
 	public ProdutoOut buscarProduto(Long restauranteId, Long produtoId) {
@@ -49,9 +49,15 @@ public class RestauranteProdutoService {
 		return this.produtoDisAssembler.produtoToProdutoOUt(produto);
 	}
 	
-	public List<ProdutoOut> listarProduto(Long restauranteId){
+	public List<ProdutoOut> listarProduto(Long restauranteId, boolean incluirInativos){
 		Restaurante restaurante = this.restauranteService.buscarOuFalhar(restauranteId);
-		return restaurante.getProdutos().stream()
+		List<Produto> produtos = null;
+		if ( incluirInativos) {
+			produtos = this.produtoRepository.findByRestauranteId(restaurante.getId());
+		}else {
+			produtos = this.produtoRepository.findByRestauranteIdAndAtivo(restaurante.getId(), true);
+		}
+		return produtos.stream()
 					.map(produto -> this.produtoDisAssembler.produtoToProdutoOUt(produto))
 					.collect(Collectors.toList());
 	}

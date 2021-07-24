@@ -1,7 +1,8 @@
 /*inseri cozinha*/
 insert into cozinha (nome) values('tailandesa') ON CONFLICT DO NOTHING;
 insert into cozinha (nome) values('mexicana') ON CONFLICT DO NOTHING;
-
+insert into cozinha (nome) values('italiana') ON CONFLICT DO NOTHING;
+insert into cozinha (nome) values('mineira') ON CONFLICT DO NOTHING;
 
 /*inseri fomas de pagamento*/
 insert into forma_pagamento(descricao) values('dinheiro') ON CONFLICT DO NOTHING;
@@ -102,6 +103,23 @@ insert into pedido (codigo, restaurante_id, usuario_cliente_id, forma_pagamento_
 values ('1789c9aa-0320-437f-8012-79184519b784', 1, 1, 2, 1, '38400-111', 'Rua Acre', '300', 'Casa 2', 'Centro',
 'CRIADO', (now() at time zone 'utc'), 79, 0, 79);
 
+insert into pedido (codigo, restaurante_id, usuario_cliente_id, forma_pagamento_id, endereco_cidade_id, endereco_cep, 
+	endereco_logradouro, endereco_numero, endereco_complemento, endereco_bairro,
+	status, data_criacao, sub_total, taxa_frete, valor_total)
+values ('5ae7facd-27d0-43b2-bf4d-a70a3515321f', 2, 2, 2, 1, '38400-111', 'Rua Acre', '300', 'Casa 2', 'Centro',
+'CRIADO', (now() at time zone 'utc'), 79, 0, 79);
+
+insert into pedido (codigo, restaurante_id, usuario_cliente_id, forma_pagamento_id, endereco_cidade_id, endereco_cep, 
+	endereco_logradouro, endereco_numero, endereco_complemento, endereco_bairro,
+	status, data_criacao, sub_total, taxa_frete, valor_total)
+values ('9f10c133-fef4-4aee-aed2-8ffc4e3a44b8', 2, 2, 2, 1, '38400-111', 'Rua Acre', '300', 'Casa 2', 'Centro',
+'CRIADO', (now() at time zone 'utc'), 79, 0, 79);
+
+
+
+
+
+
 /* inseri item pedido */
 insert into item_pedido (pedido_id, produto_id, quantidade, preco_unitario, preco_total, observacao)
 values (1, 1, 1, 78.9, 78.9, 'teste');
@@ -113,4 +131,9 @@ values (1, 2, 2, 110, 220, 'Menos picante, por favor');
 insert into item_pedido (pedido_id, produto_id, quantidade, preco_unitario, preco_total, observacao)
 values (2, 2, 1, 79, 79, 'Ao ponto');
 
+insert into item_pedido (pedido_id, produto_id, quantidade, preco_unitario, preco_total, observacao)
+values (4, 2, 1, 79, 79, 'Ao ponto');
+
+insert into item_pedido (pedido_id, produto_id, quantidade, preco_unitario, preco_total, observacao)
+values (5, 2, 1, 79, 79, 'Ao ponto');
 

@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ejs.algaworksCurso.api.model.dto.out.formaPagamento.FormaPagamentoOut;
+import com.ejs.algaworksCurso.api.model.out.formaPagamento.FormaPagamentoOut;
 import com.ejs.algaworksCurso.domain.services.RestauranteFormasPagamentoService;
 
 @RestController

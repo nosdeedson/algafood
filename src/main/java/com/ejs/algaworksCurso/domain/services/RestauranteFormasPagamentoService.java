@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.ejs.algaworksCurso.api.model.dto.out.formaPagamento.FormaPagamentoOut;
+import com.ejs.algaworksCurso.api.model.out.formaPagamento.FormaPagamentoOut;
 import com.ejs.algaworksCurso.domain.model.FormaPagamento;
 import com.ejs.algaworksCurso.domain.model.Restaurante;
 import com.ejs.algaworksCurso.helper.formaPagamento.FormaPagamentoDisAssembler;

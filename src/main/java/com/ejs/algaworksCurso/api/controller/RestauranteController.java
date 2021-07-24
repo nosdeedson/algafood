@@ -21,8 +21,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.ejs.algaworksCurso.api.model.dto.in.restaurante.RestauranteIn;
-import com.ejs.algaworksCurso.api.model.dto.out.restautante.RestauranteOut;
+import com.ejs.algaworksCurso.api.model.in.restaurante.RestauranteIn;
+import com.ejs.algaworksCurso.api.model.out.restautante.RestauranteOut;
 import com.ejs.algaworksCurso.domain.exception.CidadeNaoEncontradaException;
 import com.ejs.algaworksCurso.domain.exception.CozinhaNaoEncontradaException;
 import com.ejs.algaworksCurso.domain.exception.NegocioException;

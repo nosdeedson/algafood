@@ -6,12 +6,14 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.ejs.algaworksCurso.api.model.dto.in.cozinha.CozinhaIn;
-import com.ejs.algaworksCurso.api.model.dto.out.cozinha.CozinhaOut;
+import com.ejs.algaworksCurso.api.model.in.cozinha.CozinhaIn;
+import com.ejs.algaworksCurso.api.model.out.cozinha.CozinhaOut;
 import com.ejs.algaworksCurso.domain.exception.CozinhaNaoEncontradaException;
 import com.ejs.algaworksCurso.domain.exception.EntidadeEmUsoException;
 import com.ejs.algaworksCurso.domain.model.Cozinha;
@@ -50,12 +52,15 @@ public class CozinhaService {
 		return this.cozinhaDisAssembler.cozinhaToCozinhaOut(cozinha);
 	}
 	
-	public List<CozinhaOut> listar(){
-		Sort sort = Sort.by("nome");
-		List<Cozinha> cozinhas = this.cozinhaRepository.findAll(sort);
-		return cozinhas.stream()
+	public Page<CozinhaOut> listar(Pageable pageable){
+		Page<Cozinha> cozinhas = this.cozinhaRepository.findAll(pageable);
+		
+		List<CozinhaOut> cozinhaOuts = cozinhas.stream()
 				.map(cozinha -> this.cozinhaDisAssembler.cozinhaToCozinhaOut(cozinha))
 				.collect(Collectors.toList());
+		
+		Page<CozinhaOut> cozinhasPage = new PageImpl<>(cozinhaOuts, pageable, cozinhas.getTotalElements());
+		return cozinhasPage;
 	}
 
 	@Transactional

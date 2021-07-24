@@ -18,10 +18,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.ejs.algaworksCurso.api.model.dto.in.senha.SenhaAtualizarIn;
-import com.ejs.algaworksCurso.api.model.dto.in.usuario.UsuarioAtualizarIn;
-import com.ejs.algaworksCurso.api.model.dto.in.usuario.UsuarioIn;
-import com.ejs.algaworksCurso.api.model.dto.out.usuario.UsuarioOut;
+import com.ejs.algaworksCurso.api.model.in.senha.SenhaAtualizarIn;
+import com.ejs.algaworksCurso.api.model.in.usuario.UsuarioAtualizarIn;
+import com.ejs.algaworksCurso.api.model.in.usuario.UsuarioIn;
+import com.ejs.algaworksCurso.api.model.out.usuario.UsuarioOut;
 import com.ejs.algaworksCurso.domain.services.UsuarioService;
 
 @RestController

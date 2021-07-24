@@ -9,8 +9,8 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.ejs.algaworksCurso.api.model.dto.in.grupo.GrupoIn;
-import com.ejs.algaworksCurso.api.model.dto.out.group.GrupoOut;
+import com.ejs.algaworksCurso.api.model.in.grupo.GrupoIn;
+import com.ejs.algaworksCurso.api.model.out.group.GrupoOut;
 import com.ejs.algaworksCurso.domain.exception.EntidadeEmUsoException;
 import com.ejs.algaworksCurso.domain.exception.GrupoNaoEncontradoException;
 import com.ejs.algaworksCurso.domain.model.Grupo;

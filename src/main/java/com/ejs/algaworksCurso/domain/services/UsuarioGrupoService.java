@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.ejs.algaworksCurso.api.model.dto.out.group.GrupoOut;
+import com.ejs.algaworksCurso.api.model.out.group.GrupoOut;
 import com.ejs.algaworksCurso.domain.exception.GrupoNaoEncontradoException;
 import com.ejs.algaworksCurso.domain.exception.NegocioException;
 import com.ejs.algaworksCurso.domain.exception.UsuarioNaoEncontradoException;

@@ -10,10 +10,10 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.ejs.algaworksCurso.api.model.dto.in.senha.SenhaAtualizarIn;
-import com.ejs.algaworksCurso.api.model.dto.in.usuario.UsuarioAtualizarIn;
-import com.ejs.algaworksCurso.api.model.dto.in.usuario.UsuarioIn;
-import com.ejs.algaworksCurso.api.model.dto.out.usuario.UsuarioOut;
+import com.ejs.algaworksCurso.api.model.in.senha.SenhaAtualizarIn;
+import com.ejs.algaworksCurso.api.model.in.usuario.UsuarioAtualizarIn;
+import com.ejs.algaworksCurso.api.model.in.usuario.UsuarioIn;
+import com.ejs.algaworksCurso.api.model.out.usuario.UsuarioOut;
 import com.ejs.algaworksCurso.domain.exception.EntidadeEmUsoException;
 import com.ejs.algaworksCurso.domain.exception.NegocioException;
 import com.ejs.algaworksCurso.domain.exception.SenhaNaoEncontradoException;

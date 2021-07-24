@@ -18,8 +18,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.ejs.algaworksCurso.api.model.dto.in.estado.EstadoIn;
-import com.ejs.algaworksCurso.api.model.dto.out.estado.EstadoOut;
+import com.ejs.algaworksCurso.api.model.in.estado.EstadoIn;
+import com.ejs.algaworksCurso.api.model.out.estado.EstadoOut;
 import com.ejs.algaworksCurso.domain.model.Estado;
 import com.ejs.algaworksCurso.domain.services.EstadoService;
 
