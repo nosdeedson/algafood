@@ -23,5 +23,8 @@ public interface ProdutoRepository extends CustomJpaRepository<Produto, Long>{
 			+ " ON f.produto = p WHERE p.id= :produtoId AND p.restaurante.id= :restauranteId ")
 	Optional<FotoProduto> findByRestauranteIdProdutoId(@Param("restauranteId") Long restauranteId,
 			@Param("produtoId") Long produtoId);
+	
+	@Query("DELETE FROM FotoProduto f where f.produto.id = :produtoId")
+	void deletarByProdutoId(@Param("produtoId") Long produtoId);
 
 }
