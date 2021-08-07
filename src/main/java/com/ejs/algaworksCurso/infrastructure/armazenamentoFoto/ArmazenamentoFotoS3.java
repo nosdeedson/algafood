@@ -9,7 +9,7 @@ import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
-import com.ejs.algaworksCurso.api.core.storage.StorageProperties;
+import com.ejs.algaworksCurso.api.core.storage.ArmazenamentoProperties;
 import com.ejs.algaworksCurso.domain.services.ArmazenamentoFoto;
 import com.ejs.algaworksCurso.helper.foto.FotoRecuperada;
 import com.ejs.algaworksCurso.helper.foto.NovaFoto;
@@ -18,7 +18,7 @@ import com.ejs.algaworksCurso.helper.foto.NovaFoto;
 public class ArmazenamentoFotoS3 implements ArmazenamentoFoto {
 	
 	@Autowired
-	private StorageProperties storageProperties;
+	private ArmazenamentoProperties storageProperties;
 
 	
 	@Autowired

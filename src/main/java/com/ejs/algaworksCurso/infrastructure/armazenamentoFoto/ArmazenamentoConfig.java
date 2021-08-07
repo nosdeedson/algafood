@@ -9,15 +9,15 @@ import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
-import com.ejs.algaworksCurso.api.core.storage.StorageProperties;
-import com.ejs.algaworksCurso.api.core.storage.StorageProperties.TipoArmazenamento;
+import com.ejs.algaworksCurso.api.core.storage.ArmazenamentoProperties;
+import com.ejs.algaworksCurso.api.core.storage.ArmazenamentoProperties.TipoArmazenamento;
 import com.ejs.algaworksCurso.domain.services.ArmazenamentoFoto;
 
 @Configuration
 public class ArmazenamentoConfig {
 	
 	@Autowired
-	private StorageProperties storageProperties;
+	private ArmazenamentoProperties storageProperties;
 
 	@Bean
 	@ConditionalOnProperty(name = "algafood.armazenamento.tipo", havingValue = "s3")

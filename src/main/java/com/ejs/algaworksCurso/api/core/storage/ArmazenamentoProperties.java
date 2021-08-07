@@ -7,7 +7,7 @@ import com.amazonaws.regions.Regions;
 
 @Component
 @ConfigurationProperties("algafood.armazenamento")
-public class StorageProperties {
+public class ArmazenamentoProperties {
 	
 	private Local local = new Local();
 	private S3 s3 = new S3();

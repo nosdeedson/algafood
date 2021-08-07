@@ -8,7 +8,7 @@ import java.nio.file.Path;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.FileCopyUtils;
 
-import com.ejs.algaworksCurso.api.core.storage.StorageProperties;
+import com.ejs.algaworksCurso.api.core.storage.ArmazenamentoProperties;
 import com.ejs.algaworksCurso.domain.services.ArmazenamentoFoto;
 import com.ejs.algaworksCurso.helper.foto.FotoRecuperada;
 import com.ejs.algaworksCurso.helper.foto.NovaFoto;
@@ -19,7 +19,7 @@ public class ArmazenaFotoLocal implements ArmazenamentoFoto{
 //	private String diretorioFotos;
 	
 	@Autowired
-	private StorageProperties storageProperties;
+	private ArmazenamentoProperties storageProperties;
 	
 	@Override
 	public void armazenar(NovaFoto novaFoto) {

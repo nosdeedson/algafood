@@ -43,16 +43,16 @@ insert into cidade (nome, estado_id) values('Itajuba', 1) ON CONFLICT DO NOTHING
 
 /* inseri usuario */
 insert into usuario (data_cadastro, email, nome, senha) 
-values((now() at time zone 'utc'), 'lu@gmail.com', 'Lucineia Souza', '1234') ON CONFLICT DO NOTHING;;
+values((now() at time zone 'utc'), 'josemariazumira+lucianeia@gmail.com', 'Lucineia Souza', '1234') ON CONFLICT DO NOTHING;;
 
 insert into usuario (data_cadastro, email, nome, senha) 
-values((now() at time zone 'utc'), 'jose@gmail.com', 'Jose Souza', '1234') ON CONFLICT DO NOTHING;;
+values((now() at time zone 'utc'), 'josemariazumira+jose@gmail.com', 'Jose Souza', '1234') ON CONFLICT DO NOTHING;;
 
 insert into usuario (data_cadastro, email, nome, senha) 
-values((now() at time zone 'utc'), 'Edson@gmail.com', 'Edson Souza', '1234') ON CONFLICT DO NOTHING;;
+values((now() at time zone 'utc'), 'josemariazumira+Edson@gmail.com', 'Edson Souza', '1234') ON CONFLICT DO NOTHING;;
 
 insert into usuario (data_cadastro, email, nome, senha) 
-values((now() at time zone 'utc'), 'joao@gmail.com', 'joao Souza', '1234') ON CONFLICT DO NOTHING;
+values((now() at time zone 'utc'), 'josemariazumira+joao@gmail.com', 'joao Souza', '1234') ON CONFLICT DO NOTHING;
 
 /* inseri grupos */
 insert into grupo (nome) values ('gerente'), ('vendedor'), ('secretária'), ('cadastrador');
