@@ -1,66 +1,25 @@
 package com.ejs.algaworksCurso.domain.services;
 
-import java.util.Set;
+import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
+
+import com.ejs.algaworksCurso.infrastructure.email.EmailException;
+import com.ejs.algaworksCurso.infrastructure.email.Mensagem;
+
+import freemarker.template.Configuration;
+import freemarker.template.Template;
 
 public interface EnvioEmailService {
 	
-	void enviar( Menssagem menssagem);
 	
-	class Menssagem{
-		private Set<String> destinatarios;
-		private String assunto;
-		private String corpo;
+	void enviar( Mensagem mensagem);
+	
+	default String processarHtml(Mensagem mensagem, Configuration freeMarker) {
 		
-		public Set<String> getDestinatarios() {
-			return destinatarios;
+		try {
+			Template template = freeMarker.getTemplate(mensagem.getCorpo());
+			return FreeMarkerTemplateUtils.processTemplateIntoString(template, mensagem.getVariaveis());
+		} catch (Exception e) {
+			throw new EmailException("Não foi possível gerar o templatE do email");
 		}
-		public void setDestinatarios(Set<String> destinatarios) {
-			this.destinatarios = destinatarios;
-		}
-		public String getAssunto() {
-			return assunto;
-		}
-		public void setAssunto(String assunto) {
-			this.assunto = assunto;
-		}
-		public String getCorpo() {
-			return corpo;
-		}
-		public void setCorpo(String corpo) {
-			this.corpo = corpo;
-		}
-		
-		class Builder{
-			private Set<String> destinatarios;
-			private String assunto;
-			private String corpo;
-			
-			public Builder() {}
-			
-			public Builder destinatarios(String destinatario) {
-				this.destinatarios.add(destinatario);
-				return this;
-			}
-			
-			public Builder assunto(String assunto) {
-				this.assunto = assunto;
-				return this;
-			}
-			
-			public Builder corpo(String corpo) {
-				this.corpo = corpo;
-				return this;
-			}
-			
-			public Menssagem build() {
-				Menssagem menssagem = new Menssagem();
-				menssagem.assunto = this.assunto;
-				menssagem.corpo = this.corpo;
-				menssagem.destinatarios = this.destinatarios;
-				return menssagem;
-			}
-		}
-		
 	}
-
 }

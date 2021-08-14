@@ -33,6 +33,7 @@ import com.ejs.algaworksCurso.domain.model.filter.PedidoFilter;
 import com.ejs.algaworksCurso.domain.repository.PedidoRepository;
 import com.ejs.algaworksCurso.helper.pedido.PedidoAssembler;
 import com.ejs.algaworksCurso.helper.pedido.PedidoDisAssembler;
+import com.ejs.algaworksCurso.infrastructure.email.EmailException;
 import com.ejs.algaworksCurso.infrastructure.repository.spec.PedidoSpecs;
 
 @Service
@@ -59,18 +60,22 @@ public class PedidoService {
 	@Autowired 
 	FormaPagamentoService formaPagamentoService;
 	
-	
 	@Transactional
 	public void cancelarPedido( String codigoPedido) {
 		Pedido pedido = this.buscarOuFalhar(codigoPedido);
 		pedido.cancelar();
+		pedidoRepository.save(pedido);
 	}
 	
 	@Transactional
 	public void confirmarPedido(String codigoPedido) {
-		Pedido pedido = this.buscarOuFalhar(codigoPedido);
-		pedido.confirmar();
-		
+		try {
+			Pedido pedido = this.buscarOuFalhar(codigoPedido);
+			pedido.confirmar();
+			pedidoRepository.save(pedido);
+		} catch (EmailException e) {
+			throw new EmailException("Não foi possível enviar email");
+		}
 	}
 	
 	public PedidoOut buscar(String codigoPedido) {

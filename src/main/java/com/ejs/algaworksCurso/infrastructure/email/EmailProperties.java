@@ -12,6 +12,10 @@ public class EmailProperties {
 	
 	@NonNull
 	private String remetente;
+	
+	private String tipoEnvio;
+	
+	private String destinatario;
 
 	public String getRemetente() {
 		return remetente;
@@ -20,7 +24,21 @@ public class EmailProperties {
 	public void setRemetente(String remetente) {
 		this.remetente = remetente;
 	}
-	
-	
 
+	public String getTipoEnvio() {
+		return tipoEnvio;
+	}
+
+	public void setTipoEnvio(String tipoEnvio) {
+		this.tipoEnvio = tipoEnvio;
+	}
+
+	public String getDestinatario() {
+		return destinatario;
+	}
+
+	public void setDestinatario(String destinatario) {
+		this.destinatario = destinatario;
+	}
+	
 }

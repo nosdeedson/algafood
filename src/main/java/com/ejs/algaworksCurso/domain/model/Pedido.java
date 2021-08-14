@@ -23,14 +23,17 @@ import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 
 import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.data.domain.AbstractAggregateRoot;
 
+import com.ejs.algaworksCurso.domain.event.PedidoCanceladoEvent;
+import com.ejs.algaworksCurso.domain.event.PedidoConfirmadoEvent;
 import com.ejs.algaworksCurso.domain.exception.NegocioException;
 
 @Entity
-public class Pedido implements Serializable {
-
-	private static final long serialVersionUID = 1L;
+public class Pedido extends AbstractAggregateRoot<Pedido> implements Serializable {
 	
+	private static final long serialVersionUID = 1L;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -105,11 +108,14 @@ public class Pedido implements Serializable {
 	public void cancelar() {
 		this.setStatus(StatusPedido.CANCELADO);
 		this.setDataCancelamento(OffsetDateTime.now());
+		this.registerEvent(new PedidoCanceladoEvent(this));
 	}
 	
 	public void confirmar() {
 		this.setStatus(StatusPedido.CONFIRMADO);
 		this.setDataConfirmacao(OffsetDateTime.now());
+		
+		this.registerEvent(new PedidoConfirmadoEvent(this));
 	}
 	
 	public void criar() {
