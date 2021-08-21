@@ -2,10 +2,13 @@ package com.ejs.algaworksCurso.api.controller;
 
 import java.net.URI;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.CacheControl;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -39,13 +42,18 @@ public class FormaPagamentoController {
 	@GetMapping("{formaPagamentoId}")
 	public ResponseEntity<?> buscar(@PathVariable Long formaPagamentoId) {
 		FormaPagamentoOut out = formaPagamentoService.buscar(formaPagamentoId);
-		return ResponseEntity.ok(out);
+		return ResponseEntity.ok()
+				.cacheControl(CacheControl.maxAge(15, TimeUnit.SECONDS))
+				.body(out);
 	}
 	
 	@GetMapping
 	public ResponseEntity<?> listar(){
 		List<FormaPagamentoOut> formasPagamentos = this.formaPagamentoService.listar();
-		return ResponseEntity.ok(formasPagamentos);
+		return ResponseEntity
+				.ok()
+				.cacheControl(CacheControl.maxAge(10, TimeUnit.SECONDS))
+				.body(formasPagamentos);
 	}
 	
 	@DeleteMapping("{formaPagamentoId}")
