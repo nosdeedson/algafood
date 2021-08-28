@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.ejs.algaworksCurso.api.model.StringUriResposta;
 import com.ejs.algaworksCurso.api.model.in.pedido.PedidoIn;
 import com.ejs.algaworksCurso.api.model.out.pedido.PedidoOut;
 import com.ejs.algaworksCurso.api.model.out.pedido.PedidoResumidoDTO;
@@ -70,12 +71,13 @@ public class PedidoController implements PedidoControllerOpenApi {
 	
 	@Override
 	@PostMapping
-	public ResponseEntity<?> salvar(@RequestBody PedidoIn pedidoIn){
+	public ResponseEntity<StringUriResposta> salvar(@RequestBody PedidoIn pedidoIn){
 		PedidoOut out = this.pedidoService.salvar(pedidoIn);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
 				.path("/{codigoPedido}").buildAndExpand(out.getCodigo())
 				.toUri();
-		return ResponseEntity.status(HttpStatus.CREATED).body(uri);
+		StringUriResposta url = new StringUriResposta("http:// " + uri.getAuthority() + uri.getPath());
+		return ResponseEntity.status(HttpStatus.CREATED).body(url);
 	}
 	
 	/* para receber filtros getmapping 2*/

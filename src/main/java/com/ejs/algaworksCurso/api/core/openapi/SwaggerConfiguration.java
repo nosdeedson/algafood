@@ -65,7 +65,23 @@ public class SwaggerConfiguration implements WebMvcConfigurer {
 				.directModelSubstitute(Pageable.class, PageableModelOpenApi.class)
 				.alternateTypeRules(AlternateTypeRules
 						.newRule(typeResolver.resolve(Page.class, CozinhaOut.class), CozinhasModelOpenApi.class))
-				.tags(new Tag("Cidades", "Gerencia Cidades"), new Tag("Grupos", "Gerencia Grupos"))
+				.tags( 
+						new Tag("Cidades", "Gerencia cidades"), 
+						new Tag("Grupos", "Gerencia grupos"),
+						new Tag("Estados", "Gerencia estados"),
+						new Tag("Cozinhas", "Gerencia cozinhas"), 
+						new Tag("Estatísticas", "Gerencia estatísticas"),
+						new Tag("Forma de Pagamentos", "Gerencia formas de pagamento"),
+						new Tag("Grupo Permissão", "Gerencia a relação entre grupos e permissão"), 
+						new Tag("Pedidos", "Gerencia pedidos"),
+						new Tag("Restaurantes", "Gerencia restaurantes"),
+						new Tag("Restaurante Formas Pagamento", "Gerencia a relação entre restaurantes e formas de pagamento"), 
+						new Tag("Foto Produto", "Faz upload de foto de produto"),
+						new Tag("Restaurantes Produtos", "Gerencia a relação entre restaurantes e produtos"),
+						new Tag("Restaurante Proprietários", "Gerencia a relação entre restaurantes e proprietários"), 
+						new Tag("Usuário", "Gerencia usuários"),
+						new Tag("Usuário Grupos", "Gerencia a relação entre usuários e grupos")
+					)
 				.additionalModels(typeResolver.resolve(Problem.class));
 	}
 	

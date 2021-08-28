@@ -16,56 +16,66 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.ejs.algaworksCurso.api.model.StringUriResposta;
 import com.ejs.algaworksCurso.api.model.in.produto.ProdutoIn;
 import com.ejs.algaworksCurso.api.model.in.produto.ProdutoOut;
+import com.ejs.algaworksCurso.api.openApi.controller.RestauranteProdutoControllerOpenApi;
 import com.ejs.algaworksCurso.domain.services.RestauranteProdutoService;
 
 @RestController
 @RequestMapping("restaurantes/{restauranteId}/produtos")
-public class RestauranteProdutoController {
+public class RestauranteProdutoController implements RestauranteProdutoControllerOpenApi {
 	
 	@Autowired
 	private RestauranteProdutoService restauranteProdutoService;
 	
+	@Override
 	@PutMapping("{produtoId}")
-	public ResponseEntity<?> atualizarProduto(@PathVariable Long restauranteId, 
+	public ResponseEntity<StringUriResposta> atualizarProduto(@PathVariable Long restauranteId, 
 			@PathVariable Long produtoId, @RequestBody @Valid ProdutoIn produtoIn) {
 		this.restauranteProdutoService.atualizarProduto(restauranteId, produtoId, produtoIn);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().buildAndExpand().toUri();
-		return ResponseEntity.ok(uri);
+		StringUriResposta url = new StringUriResposta("http://"+ uri.getAuthority() + uri.getPath());
+		return ResponseEntity.ok(url);
 	}
 	
+	@Override
 	@GetMapping("{produtoId}")
-	public ResponseEntity<?> buscarProduto(@PathVariable Long restauranteId,
+	public ResponseEntity<ProdutoOut> buscarProduto(@PathVariable Long restauranteId,
 			@PathVariable Long produtoId){
 		ProdutoOut out = this.restauranteProdutoService.buscarProduto(restauranteId, produtoId);
 		return ResponseEntity.ok(out);
 	}
 	
+	@Override
 	@GetMapping()
-	public ResponseEntity<?> listarProduto(@PathVariable Long restauranteId, 
+	public ResponseEntity<List<ProdutoOut>> listarProduto(@PathVariable Long restauranteId, 
 			@RequestParam(required = false) boolean incluirInativos){
 		List<ProdutoOut> produtos = this.restauranteProdutoService.listarProduto(restauranteId, incluirInativos);
 		return ResponseEntity.ok(produtos);
 	}
 	
+	@Override
 	@DeleteMapping("{produtoId}")
-	public ResponseEntity<?> remover(@PathVariable Long restauranteId,
+	@ResponseStatus(code = HttpStatus.NO_CONTENT)
+	public void remover(@PathVariable Long restauranteId,
 			@PathVariable Long produtoId){
 		this.restauranteProdutoService.removerProduto(restauranteId, produtoId);
-		return ResponseEntity.noContent().build();
 	}
 	
+	@Override
 	@PostMapping
-	public ResponseEntity<?> salvar(@PathVariable Long restauranteId,
+	public ResponseEntity<StringUriResposta> salvar(@PathVariable Long restauranteId,
 			@RequestBody @Valid ProdutoIn produtoIn) {
 		ProdutoOut out = this.restauranteProdutoService.salvarProduto(restauranteId, produtoIn);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
 				.buildAndExpand(out.getId()).toUri();
-		return ResponseEntity.status(HttpStatus.CREATED).body(uri);
+		StringUriResposta url = new StringUriResposta("http://"+ uri.getAuthority() + uri.getPath());
+		return ResponseEntity.status(HttpStatus.CREATED).body(url);
 	}
 	
 	

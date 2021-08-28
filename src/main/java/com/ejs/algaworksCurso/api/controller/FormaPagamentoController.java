@@ -18,19 +18,22 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.filter.ShallowEtagHeaderFilter;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.ejs.algaworksCurso.api.model.StringUriResposta;
 import com.ejs.algaworksCurso.api.model.in.formaPagamento.FormaPagamentoIn;
 import com.ejs.algaworksCurso.api.model.out.formaPagamento.FormaPagamentoOut;
+import com.ejs.algaworksCurso.api.openApi.controller.FormaPagamentoControllerOpenApi;
 import com.ejs.algaworksCurso.domain.repository.FormaPagamentoRepository;
 import com.ejs.algaworksCurso.domain.services.FormaPagamentoService;
 
 @RestController
 @RequestMapping("forma-pagamentos")
-public class FormaPagamentoController {
+public class FormaPagamentoController implements FormaPagamentoControllerOpenApi {
 
 	@Autowired
 	private FormaPagamentoService formaPagamentoService;
@@ -38,15 +41,20 @@ public class FormaPagamentoController {
 	@Autowired
 	private FormaPagamentoRepository formaPagamentoRepository;
 	
+	@Override
 	@PutMapping("{formaPagamentoId}")
-	public ResponseEntity<?> autalizar(@RequestBody @Valid FormaPagamentoIn formaPagamentoIn,
+	public ResponseEntity<StringUriResposta> autalizar(@RequestBody @Valid FormaPagamentoIn formaPagamentoIn,
 			@PathVariable(name = "formaPagamentoId") Long formaPagamentoId ){
-		FormaPagamentoOut formaPagamentoOut = this.formaPagamentoService.atualizar(formaPagamentoIn, formaPagamentoId);
-		return ResponseEntity.ok(formaPagamentoOut);
+		this.formaPagamentoService.atualizar(formaPagamentoIn, formaPagamentoId);
+		URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
+				.buildAndExpand().toUri();
+		StringUriResposta urlResposta =  new StringUriResposta("http://" + uri.getAuthority() + uri.getPath());
+		return ResponseEntity.ok(urlResposta);
 	}
 	
+	@Override
 	@GetMapping("{formaPagamentoId}")
-	public ResponseEntity<?> buscar(@PathVariable Long formaPagamentoId, ServletWebRequest request) {
+	public ResponseEntity<FormaPagamentoOut> buscar(@PathVariable Long formaPagamentoId, ServletWebRequest request) {
 		
 		ShallowEtagHeaderFilter.disableContentCaching(request.getRequest());
 		OffsetDateTime ultimaDataAtualizacao = this.formaPagamentoRepository.ultimaDataAtualizacao();
@@ -66,8 +74,9 @@ public class FormaPagamentoController {
 				.body(out);
 	}
 	
+	@Override
 	@GetMapping
-	public ResponseEntity<?> listar( ServletWebRequest request ){
+	public ResponseEntity<List<FormaPagamentoOut>> listar( ServletWebRequest request ){
 		
 		ShallowEtagHeaderFilter.disableContentCaching(request.getRequest());
 		OffsetDateTime ultimaDataAtualizacao = this.formaPagamentoRepository.ultimaDataAtualizacao();
@@ -80,7 +89,6 @@ public class FormaPagamentoController {
 			return null;
 		}
 		
-		
 		List<FormaPagamentoOut> formasPagamentos = this.formaPagamentoService.listar();
 		return ResponseEntity
 				.ok()
@@ -89,34 +97,25 @@ public class FormaPagamentoController {
 				.body(formasPagamentos);
 	}
 	
+	
+	@Override
 	@DeleteMapping("{formaPagamentoId}")
-	public ResponseEntity<?> remover(@PathVariable Long formaPagamentoId){
+	@ResponseStatus(code = HttpStatus.NO_CONTENT)
+	public void remover(@PathVariable Long formaPagamentoId){
 		this.formaPagamentoService.remover(formaPagamentoId);
-		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 	}
 	
+	@Override
 	@PostMapping
-	public ResponseEntity<?> salvar(@RequestBody @Valid FormaPagamentoIn formaPagamentoIn){
+	public ResponseEntity<StringUriResposta> salvar(@RequestBody @Valid FormaPagamentoIn formaPagamentoIn){
 		FormaPagamentoOut formaPagamentoOut = this.formaPagamentoService.salvar(formaPagamentoIn);
 		URI uri = ServletUriComponentsBuilder
 				.fromCurrentRequest()
 				.path("/{formaPagamentoId}")
 				.buildAndExpand(formaPagamentoOut.getId())
 				.toUri();
-		return ResponseEntity.status(HttpStatus.CREATED).body(uri);
+		StringUriResposta url = new StringUriResposta("httl://" + uri.getAuthority() + uri.getPath());
+		return ResponseEntity.status(HttpStatus.CREATED).body(url);
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 }

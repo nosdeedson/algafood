@@ -21,8 +21,10 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.ejs.algaworksCurso.api.model.StringUriResposta;
 import com.ejs.algaworksCurso.api.model.in.restaurante.RestauranteIn;
 import com.ejs.algaworksCurso.api.model.out.restautante.RestauranteOut;
+import com.ejs.algaworksCurso.api.openApi.controller.RestauranteControllerOpenApin;
 import com.ejs.algaworksCurso.domain.exception.CidadeNaoEncontradaException;
 import com.ejs.algaworksCurso.domain.exception.CozinhaNaoEncontradaException;
 import com.ejs.algaworksCurso.domain.exception.NegocioException;
@@ -31,51 +33,58 @@ import com.ejs.algaworksCurso.domain.services.RestauranteService;
 
 @RestController
 @RequestMapping("restaurantes")
-public class RestauranteController {
+public class RestauranteController implements RestauranteControllerOpenApin {
 	
 	@Autowired
 	private RestauranteService restauranteService;
 	
+	@Override
 	@PutMapping("{restauranteId}/aberto")
 	public void abrir(@PathVariable Long restauranteId) {
 		this.restauranteService.abrir(restauranteId);
 	}
 	
+	@Override
 	@PutMapping("{restauranteId}/ativacao")
 	@ResponseStatus(value = HttpStatus.NO_CONTENT)
 	public void ativar(@PathVariable Long restauranteId){
 		this.restauranteService.ativar(restauranteId);
 	}
 	
+	@Override
 	@PutMapping("ativacoes")
-	public ResponseEntity<?> ativarMultiplos(@RequestBody List<Long> restauranteIds) {
+	@ResponseStatus(code = HttpStatus.NO_CONTENT)
+	public void ativarMultiplos(@RequestBody List<Long> restauranteIds) {
 		try {
 			this.restauranteService.ativarMultiplos(restauranteIds);
-			return ResponseEntity.noContent().build();
 		} catch (RestauranteNaoEncontradoException e) {
 			throw new NegocioException(e.getMessage());
 		}
 	}
 	
+	@Override
 	@PutMapping("{restauranteId}")
-	public ResponseEntity<?> atualizar(@PathVariable Long restauranteId,
+	public ResponseEntity<StringUriResposta> atualizar(@PathVariable Long restauranteId,
 			@RequestBody @Valid RestauranteIn restaurante){
 		try {
 			this.restauranteService.atualizar(restaurante, restauranteId);
 			URI uri = ServletUriComponentsBuilder.fromCurrentRequest().buildAndExpand().toUri();
-			return ResponseEntity.ok(uri);
+			StringUriResposta url = new StringUriResposta("http://" + uri.getAuthority() + uri.getPath());
+			return ResponseEntity.ok(url);
 		} catch (CozinhaNaoEncontradaException | CidadeNaoEncontradaException e) {
 			throw new NegocioException(e.getMessage());
 		}
 	}
 	
+	@Override
 	@GetMapping("/{restauranteId}")
-	public ResponseEntity<?> buscar(@PathVariable Long restauranteId){
+	public ResponseEntity<RestauranteOut> buscar(@PathVariable Long restauranteId){
 		return ResponseEntity.ok(this.restauranteService.buscar(restauranteId));
 	}
 	
+	@Override
 	@GetMapping("com-frete-gratis")
-	public ResponseEntity<?> encontrarComFreteGratis(@RequestParam(name = "nome", required = true) String nome){
+	public ResponseEntity<List<RestauranteOut>> encontrarComFreteGratis(@RequestParam(name = "nome", required = true) String nome){
 		/* Exemplo com classes*/
 		//return ResponseEntity.ok(this.restauranteService.encontrarComFreteGratis(nome));
 		/*Exemplo com a fábrica de specs*/
@@ -83,53 +92,61 @@ public class RestauranteController {
 		return ResponseEntity.ok(this.restauranteService.encontrarComFreteGratis(nome));
 	}
 	
+	@Override
 	@GetMapping("encocntrar-primeiro")
-	public ResponseEntity<?> encontrarPrimeiro(){
+	public ResponseEntity<RestauranteOut> encontrarPrimeiro(){
 		return ResponseEntity.ok(this.restauranteService.encontrarPrimeiro());
 	}
 	
+	@Override
 	@DeleteMapping("{restauranteId}/aberto")
 	@ResponseStatus(value = HttpStatus.NO_CONTENT)
 	public void fechar(@PathVariable Long restauranteId) {
 		this.restauranteService.fechar(restauranteId);
 	}
 	
+	@Override
 	@GetMapping("encontrar-como")
-	public ResponseEntity<?> find(@RequestParam(name = "nome", required = false) String nome,
+	public ResponseEntity<List<RestauranteOut>> listar(@RequestParam(name = "nome", required = false) String nome,
 			@RequestParam(required = false) BigDecimal taxaFreteInicial,
 			@RequestParam(required = false) BigDecimal taxaFreteFinal){
-		return ResponseEntity.ok(this.restauranteService.find(nome, taxaFreteInicial, taxaFreteFinal));
+		return ResponseEntity.ok(this.restauranteService.listar(nome, taxaFreteInicial, taxaFreteFinal));
 	}
 	
+	@Override
 	@DeleteMapping("{restauranteId}/ativacao")
 	@ResponseStatus(value = HttpStatus.NO_CONTENT)
 	public void inativar(@PathVariable Long restauranteId){
 		this.restauranteService.inativar(restauranteId);
 	}
 	
+	@Override
 	@DeleteMapping("inativacoes")
-	public ResponseEntity<?> inativarMultiplos(@RequestBody List<Long> restauranteIds){
+	@ResponseStatus(code = HttpStatus.NO_CONTENT)
+	public void inativarMultiplos(@RequestBody List<Long> restauranteIds){
 		try {
 			this.restauranteService.inativarMultiplos(restauranteIds);
-			return ResponseEntity.noContent().build();
 		} catch (RestauranteNaoEncontradoException e) {
 			throw new NegocioException(e.getMessage());
 		}
 	}
 	
+	@Override
 	@GetMapping
-	public ResponseEntity<?> listar(){
+	public ResponseEntity<List<RestauranteOut>> listar(){
 		return ResponseEntity.ok(this.restauranteService.listar());
 	}
 		
+	@Override
 	@PostMapping
-	public ResponseEntity<?> salvar(@RequestBody @Valid RestauranteIn restauranteIn){
+	public ResponseEntity<StringUriResposta> salvar(@RequestBody @Valid RestauranteIn restauranteIn){
 		try {
 			RestauranteOut restaurante = this.restauranteService.salvar(restauranteIn);
 			URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
 					.path("/{id}").buildAndExpand(restaurante.getId())
 					.toUri();
-			return ResponseEntity.status(HttpStatus.CREATED).body(uri);
+			StringUriResposta url = new StringUriResposta("http://" + uri.getAuthority() + uri.getPath());
+			return ResponseEntity.status(HttpStatus.CREATED).body(url);
 		} catch (CozinhaNaoEncontradaException | CidadeNaoEncontradaException e) {
 			throw new NegocioException(e.getMessage());
 		}

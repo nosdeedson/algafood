@@ -31,11 +31,10 @@ public class FormaPagamentoService {
 	private FormaPagamentoDisAssembler disAssembler;
 	
 	@Transactional
-	public FormaPagamentoOut atualizar( FormaPagamentoIn formaPagamentoIn, Long formaPagamentoId) {
+	public void atualizar( FormaPagamentoIn formaPagamentoIn, Long formaPagamentoId) {
 		FormaPagamento formaPagamento = this.buscarOuFalhar(formaPagamentoId);
 		this.assembler.formaPagamentoInToFormaPagamento(formaPagamentoIn, formaPagamento);
 		formaPagamento = this.formaPagamentoRespository.save(formaPagamento);
-		return disAssembler.formaPagamentoToFormaPagamentoOut(formaPagamento);
 	}
 	
 	public FormaPagamentoOut buscar( Long formaPagamentoId) {

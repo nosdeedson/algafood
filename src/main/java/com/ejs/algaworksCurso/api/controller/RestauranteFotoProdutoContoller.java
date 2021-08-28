@@ -18,24 +18,27 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ejs.algaworksCurso.api.model.in.produto.FotoProdutoIn;
 import com.ejs.algaworksCurso.api.model.out.fotoProduto.FotoProdutoOut;
 import com.ejs.algaworksCurso.api.model.out.fotoProduto.ImagemOut;
+import com.ejs.algaworksCurso.api.openApi.controller.RestauranteFotoProdutoControllerOpenApi;
 import com.ejs.algaworksCurso.domain.exception.EntidadeNaoEncontradaException;
 import com.ejs.algaworksCurso.domain.exception.NegocioException;
 import com.ejs.algaworksCurso.domain.services.FotoProdutoService;
 
 @RestController
 @RequestMapping("restaurantes/{restauranteId}/produtos/{produtoId}/foto")
-public class RestauranteFotoProdutoContoller {
+public class RestauranteFotoProdutoContoller implements RestauranteFotoProdutoControllerOpenApi {
 
 	@Autowired
 	FotoProdutoService fotoProdutoService;
 	
+	@Override
 	@PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-	public ResponseEntity<?> atualizarFoto(@PathVariable("restauranteId") Long restauranteId,
+	public ResponseEntity<FotoProdutoOut> atualizarFoto(@PathVariable("restauranteId") Long restauranteId,
 		@PathVariable("produtoId") Long produtoId, @Valid FotoProdutoIn fotoProdutoIn ) throws IOException{
 	
 		try {
@@ -46,16 +49,18 @@ public class RestauranteFotoProdutoContoller {
 		}
 	}
 	
+	@Override
 	@GetMapping
-	public ResponseEntity<?> buscarDadosFoto(@PathVariable("restauranteId") Long restauranteId,
+	public ResponseEntity<FotoProdutoOut> buscarDadosFoto(@PathVariable("restauranteId") Long restauranteId,
 			@PathVariable("produtoId") Long produtoId){
 		FotoProdutoOut out = this.fotoProdutoService.recuperar(restauranteId, produtoId);
 		return ResponseEntity.ok(out);
 	}
 	
+	@Override
 	@GetMapping( path = "imagem" )
 	public ResponseEntity<?> buscarFoto(@PathVariable("restauranteId") Long restauranteId,
-			@PathVariable("produtoId") Long produtoId, @RequestHeader("accept") String acceptType) throws HttpMediaTypeNotAcceptableException{
+			@PathVariable("produtoId") Long produtoId, @RequestHeader(value =  "accept", required = false) String acceptType) throws HttpMediaTypeNotAcceptableException{
 		try {
 						
 			ImagemOut imgOut = this.fotoProdutoService.recuperarFoto(restauranteId, produtoId, acceptType);
@@ -77,31 +82,12 @@ public class RestauranteFotoProdutoContoller {
 	}
 	
 	
+	@Override
 	@DeleteMapping
-	public ResponseEntity<?> deletarFotoProduto(@PathVariable("restauranteId") Long restauranteId,
+	@ResponseStatus(code = HttpStatus.NO_CONTENT)
+	public void deletarFotoProduto(@PathVariable("restauranteId") Long restauranteId,
 			@PathVariable("produtoId") Long produtoId){
-		this.fotoProdutoService.deletarFotoProduto(restauranteId, produtoId);
-		return ResponseEntity.noContent().build();
-		
+		this.fotoProdutoService.deletarFotoProduto(restauranteId, produtoId);		
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 }

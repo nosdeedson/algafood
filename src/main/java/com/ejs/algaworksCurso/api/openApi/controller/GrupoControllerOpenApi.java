@@ -1,22 +1,26 @@
 package com.ejs.algaworksCurso.api.openApi.controller;
 
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
 
+import com.ejs.algaworksCurso.api.model.StringUriResposta;
 import com.ejs.algaworksCurso.api.model.in.grupo.GrupoIn;
+import com.ejs.algaworksCurso.api.model.out.group.GrupoOut;
 
 import io.swagger.annotations.Api;
 
 @Api(tags = "Grupos")
 public interface GrupoControllerOpenApi {
 
-	ResponseEntity<?> atualizar(GrupoIn grupoIn, Long grupoId);
+	ResponseEntity<StringUriResposta> atualizar(GrupoIn grupoIn, Long grupoId);
 
-	ResponseEntity<?> buscar(Long grupoId);
+	ResponseEntity<GrupoOut> buscar(Long grupoId);
 
-	ResponseEntity<?> listar();
+	ResponseEntity<List<GrupoOut>> listar();
 
-	ResponseEntity<?> remover(Long grupoId);
+	void remover(Long grupoId);
 
-	ResponseEntity<?> salvar(GrupoIn grupoIn);
+	ResponseEntity<StringUriResposta> salvar(GrupoIn grupoIn);
 
 }

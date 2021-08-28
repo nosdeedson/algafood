@@ -5,9 +5,9 @@ insert into cozinha (nome) values('italiana') ON CONFLICT DO NOTHING;
 insert into cozinha (nome) values('mineira') ON CONFLICT DO NOTHING;
 
 /*inseri fomas de pagamento*/
-insert into forma_pagamento(descricao) values('dinheiro') ON CONFLICT DO NOTHING;
-insert into forma_pagamento(descricao) values('cartao de debito') ON CONFLICT DO NOTHING;
-insert into forma_pagamento(descricao) values('cartao de credito') ON CONFLICT DO NOTHING;
+insert into forma_pagamento(descricao,data_atualizacao) values('dinheiro', (now() at time zone 'utc')) ON CONFLICT DO NOTHING;
+insert into forma_pagamento(descricao, data_atualizacao) values('cartao de debito', (now() at time zone 'utc')) ON CONFLICT DO NOTHING;
+insert into forma_pagamento(descricao, data_atualizacao) values('cartao de credito', (now() at time zone 'utc')) ON CONFLICT DO NOTHING;
 
 /*inseri restaurante*/
 insert into restaurante(aberto, ativo, data_atualizacao, data_cadastro, nome, taxa_frete, cozinha_id) 

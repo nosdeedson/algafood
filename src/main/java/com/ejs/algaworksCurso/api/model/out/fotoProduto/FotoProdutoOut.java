@@ -1,11 +1,21 @@
 package com.ejs.algaworksCurso.api.model.out.fotoProduto;
 
+import io.swagger.annotations.ApiModelProperty;
+
 public class FotoProdutoOut {
 	
+	@ApiModelProperty(value = "Nome do arquivo")
 	private String nomeArquivo;
+	
+	@ApiModelProperty(value = "Descrição da imagem")
 	private String descricao;
+	
+	@ApiModelProperty(value = "Tipo de arquivo", example = "png/jpeg")
 	private String contentType;
+	
+	@ApiModelProperty(value = "Tamanho do arquivo")
 	private Long tamanho;
+	
 	/**
 	 * @return the nomeArquivo
 	 */

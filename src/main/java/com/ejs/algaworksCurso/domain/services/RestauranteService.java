@@ -114,7 +114,7 @@ public class RestauranteService {
 		restauranteAtual.fechar();
 	}
 	
-	public List<RestauranteOut> find(String nome, BigDecimal taxaFreteInicial, BigDecimal taxaFreteFinal){
+	public List<RestauranteOut> listar(String nome, BigDecimal taxaFreteInicial, BigDecimal taxaFreteFinal){
 		List<Restaurante> restaurantes = restauranteRepoCustom.find(nome, taxaFreteInicial, taxaFreteFinal);
 		return restaurantes.stream()
 				.map(item -> this.restauranteDisAssembler.restauranteToRestauranteOut(item))

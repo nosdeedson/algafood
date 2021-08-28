@@ -15,71 +15,73 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.ejs.algaworksCurso.api.model.StringUriResposta;
 import com.ejs.algaworksCurso.api.model.in.senha.SenhaAtualizarIn;
 import com.ejs.algaworksCurso.api.model.in.usuario.UsuarioAtualizarIn;
 import com.ejs.algaworksCurso.api.model.in.usuario.UsuarioIn;
 import com.ejs.algaworksCurso.api.model.out.usuario.UsuarioOut;
+import com.ejs.algaworksCurso.api.openApi.controller.UsuarioControllerOpenApi;
 import com.ejs.algaworksCurso.domain.services.UsuarioService;
 
 @RestController
 @RequestMapping("usuarios")
-public class UsuarioController {
+public class UsuarioController implements UsuarioControllerOpenApi {
 	
 	@Autowired
 	private UsuarioService usuarioService;
 	
+	@Override
 	@PutMapping("{usuarioId}")
-	public ResponseEntity<?> atualizar(@PathVariable("usuarioId") Long usuarioId, 
+	public ResponseEntity<StringUriResposta> atualizar(@PathVariable("usuarioId") Long usuarioId, 
 			@RequestBody @Valid UsuarioAtualizarIn usuarioIn ){
 		this.usuarioService.atualizar(usuarioIn, usuarioId);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
 				.buildAndExpand().toUri();
-		return ResponseEntity.ok(uri);
+		StringUriResposta url = new StringUriResposta("http://" + uri.getAuthority() + uri.getPath());
+		return ResponseEntity.ok(url);
 	}
 	
+	@Override
 	@PutMapping("atualizar-senha/{usuarioId}")
-	public ResponseEntity<?> atualizarSemha(@RequestBody @Valid SenhaAtualizarIn senhaIn, 
+	@ResponseStatus(code= HttpStatus.NO_CONTENT)
+	public void atualizarSenha(@RequestBody @Valid SenhaAtualizarIn senhaIn, 
 			@PathVariable("usuarioId") Long usuarioId){
 		this.usuarioService.atualizarSenha(senhaIn, usuarioId);
-		return ResponseEntity.noContent().build();
-
 	}
 	
+	@Override
 	@GetMapping("{usuarioId}")
-	public ResponseEntity<?> buscar(@PathVariable("usuarioId") Long usuarioId){
+	public ResponseEntity<UsuarioOut> buscar(@PathVariable("usuarioId") Long usuarioId){
 		UsuarioOut usuarioOut = this.usuarioService.buscar(usuarioId);
 		return ResponseEntity.ok(usuarioOut);
 	}
 	
+	@Override
 	@GetMapping
-	public ResponseEntity<?> listar(){
+	public ResponseEntity<List<UsuarioOut>> listar(){
 		List<UsuarioOut> usuarios = this.usuarioService.listar();
 		return ResponseEntity.ok(usuarios);
 	}
 	
+	@Override
 	@DeleteMapping("{usuarioId}")
-	public ResponseEntity<?> remover(@PathVariable("usuarioId") Long usuarioId){
+	@ResponseStatus(code= HttpStatus.NO_CONTENT)
+	public void remover(@PathVariable("usuarioId") Long usuarioId){
 		this.usuarioService.remover(usuarioId);
-		return ResponseEntity.noContent().build();
 	}
 	
+	@Override
 	@PostMapping
-	public ResponseEntity<?> salvar(@RequestBody @Valid UsuarioIn usuarioIn){
+	public ResponseEntity<StringUriResposta> salvar(@RequestBody @Valid UsuarioIn usuarioIn){
 		UsuarioOut usuarioOut = this.usuarioService.salvar(usuarioIn);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
 				.path("/{id}").buildAndExpand(usuarioOut.getId()).toUri();
-		return ResponseEntity.status(HttpStatus.CREATED).body(uri);
+		StringUriResposta url = new StringUriResposta("http://" + uri.getAuthority() + uri.getPath());
+		return ResponseEntity.status(HttpStatus.CREATED).body(url);
 	}
-	
-	
-	
-	
-	
-	
-	
-	
 
 }
