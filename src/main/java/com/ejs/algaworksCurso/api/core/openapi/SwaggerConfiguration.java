@@ -80,7 +80,8 @@ public class SwaggerConfiguration implements WebMvcConfigurer {
 						new Tag("Restaurantes Produtos", "Gerencia a relação entre restaurantes e produtos"),
 						new Tag("Restaurante Proprietários", "Gerencia a relação entre restaurantes e proprietários"), 
 						new Tag("Usuário", "Gerencia usuários"),
-						new Tag("Usuário Grupos", "Gerencia a relação entre usuários e grupos")
+						new Tag("Usuário Grupos", "Gerencia a relação entre usuários e grupos"),
+						new Tag("Index", "Home")
 					)
 				.additionalModels(typeResolver.resolve(Problem.class));
 	}
