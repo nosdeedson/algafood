@@ -8,15 +8,29 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
+@ApiModel(value = "Problema")
 @JsonInclude(Include.NON_NULL)
 public class Problem {
 	
+	@ApiModelProperty(example = "400", value = "código HTTP da resposta")
 	private Integer status;
+	
+	@ApiModelProperty(example = "https://algafood.com.br/dados-invalidos")
 	private String type;
+	
+	@ApiModelProperty(example = "Dados inválidos")	
 	private String title;
+	
+	@ApiModelProperty(example = "Um ou mais campos estão inválidos, corrija, e tente novamente.")
 	private String detail;
 	
+	@ApiModelProperty(example = "Um ou mais campos estão inválidos, corrija, e tente novamente.")
 	private String userMessage;
+	
+	@ApiModelProperty(example = "25/08/2021 01:27:54")
 	private String timeStamp;
 	
 	private List<CampoComErro> camposComErro = new ArrayList<>();

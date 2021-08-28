@@ -44,6 +44,7 @@ public class FormaPagamentoService {
 	}
 	
 	public List<FormaPagamentoOut> listar(){
+				
 		List<FormaPagamento> formasPagamento = this.formaPagamentoRespository.findAll();
 		return formasPagamento.stream()
 				.map(fp -> this.disAssembler.formaPagamentoToFormaPagamentoOut(fp))

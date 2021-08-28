@@ -19,6 +19,7 @@ public class SquigglyConfig {
 		var filterRegistration =  new FilterRegistrationBean<SquigglyRequestFilter>();
 		filterRegistration.setFilter(new SquigglyRequestFilter());
 		filterRegistration.setOrder(1);
+//		filterRegistration.addUrlPatterns("/*");
 		filterRegistration.addUrlPatterns("/pedidos/*", "/restaurantes/*");
 				
 		return filterRegistration;

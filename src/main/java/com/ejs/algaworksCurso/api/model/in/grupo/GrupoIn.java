@@ -2,8 +2,11 @@ package com.ejs.algaworksCurso.api.model.in.grupo;
 
 import javax.validation.constraints.NotBlank;
 
+import io.swagger.annotations.ApiModelProperty;
+
 public class GrupoIn {
 	
+	@ApiModelProperty(example = "Gerencia", value = "Nome de grupo de acesso")
 	@NotBlank
 	private String nome;
 

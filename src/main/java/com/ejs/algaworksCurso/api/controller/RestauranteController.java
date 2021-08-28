@@ -121,7 +121,7 @@ public class RestauranteController {
 	public ResponseEntity<?> listar(){
 		return ResponseEntity.ok(this.restauranteService.listar());
 	}
-	
+		
 	@PostMapping
 	public ResponseEntity<?> salvar(@RequestBody @Valid RestauranteIn restauranteIn){
 		try {

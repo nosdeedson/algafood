@@ -6,8 +6,11 @@ import javax.validation.constraints.NotNull;
 
 import com.ejs.algaworksCurso.api.model.in.estado.EstadoResumidoDTO;
 
+import io.swagger.annotations.ApiModelProperty;
+
 public class CidadeIn {
 
+	@ApiModelProperty(required = true)
 	@NotEmpty
 	private String nome;
 	
