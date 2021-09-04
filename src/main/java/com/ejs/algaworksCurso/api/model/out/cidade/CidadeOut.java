@@ -2,10 +2,14 @@ package com.ejs.algaworksCurso.api.model.out.cidade;
 
 import com.ejs.algaworksCurso.api.model.out.estado.EstadoResumidoOut;
 
+import io.swagger.annotations.ApiModelProperty;
+
 public class CidadeOut {
 
 	private Long id;
 	private String nome;
+	
+	@ApiModelProperty(value = "estado")
 	private EstadoResumidoOut estado;
 	
 	/**

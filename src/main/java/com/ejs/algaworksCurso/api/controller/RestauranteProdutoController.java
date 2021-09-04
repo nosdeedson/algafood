@@ -1,6 +1,5 @@
 package com.ejs.algaworksCurso.api.controller;
 
-import java.net.URI;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -18,9 +17,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.ejs.algaworksCurso.api.model.StringUriResposta;
+import com.ejs.algaworksCurso.api.helper.ResourceUriHelper;
 import com.ejs.algaworksCurso.api.model.in.produto.ProdutoIn;
 import com.ejs.algaworksCurso.api.model.in.produto.ProdutoOut;
 import com.ejs.algaworksCurso.api.openApi.controller.RestauranteProdutoControllerOpenApi;
@@ -35,12 +33,11 @@ public class RestauranteProdutoController implements RestauranteProdutoControlle
 	
 	@Override
 	@PutMapping("{produtoId}")
-	public ResponseEntity<StringUriResposta> atualizarProduto(@PathVariable Long restauranteId, 
+	public ResponseEntity<ProdutoOut> atualizarProduto(@PathVariable Long restauranteId, 
 			@PathVariable Long produtoId, @RequestBody @Valid ProdutoIn produtoIn) {
-		this.restauranteProdutoService.atualizarProduto(restauranteId, produtoId, produtoIn);
-		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().buildAndExpand().toUri();
-		StringUriResposta url = new StringUriResposta("http://"+ uri.getAuthority() + uri.getPath());
-		return ResponseEntity.ok(url);
+		ProdutoOut out = this.restauranteProdutoService.atualizarProduto(restauranteId, produtoId, produtoIn);
+		ResourceUriHelper.addUriHeaderUpdate();
+		return ResponseEntity.ok(out);
 	}
 	
 	@Override
@@ -69,13 +66,11 @@ public class RestauranteProdutoController implements RestauranteProdutoControlle
 	
 	@Override
 	@PostMapping
-	public ResponseEntity<StringUriResposta> salvar(@PathVariable Long restauranteId,
+	public ResponseEntity<ProdutoOut> salvar(@PathVariable Long restauranteId,
 			@RequestBody @Valid ProdutoIn produtoIn) {
 		ProdutoOut out = this.restauranteProdutoService.salvarProduto(restauranteId, produtoIn);
-		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
-				.buildAndExpand(out.getId()).toUri();
-		StringUriResposta url = new StringUriResposta("http://"+ uri.getAuthority() + uri.getPath());
-		return ResponseEntity.status(HttpStatus.CREATED).body(url);
+		ResourceUriHelper.addUriHeaderSave(out.getId());
+		return ResponseEntity.status(HttpStatus.CREATED).body(out);
 	}
 	
 	

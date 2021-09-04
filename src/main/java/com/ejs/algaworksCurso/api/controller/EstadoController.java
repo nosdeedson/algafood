@@ -1,6 +1,5 @@
 package com.ejs.algaworksCurso.api.controller;
 
-import java.net.URI;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -17,13 +16,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.ejs.algaworksCurso.api.model.StringUriResposta;
+import com.ejs.algaworksCurso.api.helper.ResourceUriHelper;
 import com.ejs.algaworksCurso.api.model.in.estado.EstadoIn;
 import com.ejs.algaworksCurso.api.model.out.estado.EstadoOut;
 import com.ejs.algaworksCurso.api.openApi.controller.EstadoControllerOpenApi;
-import com.ejs.algaworksCurso.domain.model.Estado;
 import com.ejs.algaworksCurso.domain.services.EstadoService;
 
 @RestController
@@ -35,12 +32,11 @@ public class EstadoController implements EstadoControllerOpenApi {
 	
 	@Override
 	@PutMapping("{id}")
-	public ResponseEntity<StringUriResposta> atualizar(@PathVariable Long id,
+	public ResponseEntity<EstadoOut> atualizar(@PathVariable Long id,
 			@RequestBody @Valid EstadoIn estadoIn){
-			this.estadoService.atualizar(estadoIn, id);
-			URI uri = ServletUriComponentsBuilder.fromCurrentRequest().buildAndExpand().toUri();
-			StringUriResposta uriResposta = new StringUriResposta("http://" + uri.getAuthority() + uri.getPath());
-			return ResponseEntity.ok(uriResposta);
+			EstadoOut out = this.estadoService.atualizar(estadoIn, id);
+			ResourceUriHelper.addUriHeaderUpdate();
+			return ResponseEntity.ok(out);
 	}
 	
 	@Override
@@ -67,13 +63,10 @@ public class EstadoController implements EstadoControllerOpenApi {
 	
 	@Override
 	@PostMapping
-	public ResponseEntity<StringUriResposta> salvar(@RequestBody @Valid EstadoIn estadoIn){
-		Estado estado = this.estadoService.salvar(estadoIn);
-		URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
-				.path("/{id}").buildAndExpand(estado.getId())
-				.toUri();
-		StringUriResposta uriResposta = new StringUriResposta("http://" + uri.getAuthority() + uri.getPath());
-		return ResponseEntity.status(HttpStatus.CREATED).body(uriResposta);
+	public ResponseEntity<EstadoOut> salvar(@RequestBody @Valid EstadoIn estadoIn){
+		EstadoOut estado = this.estadoService.salvar(estadoIn);
+		ResourceUriHelper.addUriHeaderSave(estado.getId());
+		return ResponseEntity.status(HttpStatus.CREATED).body(estado);
 	}
 
 }

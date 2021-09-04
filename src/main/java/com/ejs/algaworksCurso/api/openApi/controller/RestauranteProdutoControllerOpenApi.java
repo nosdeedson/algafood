@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.springframework.http.ResponseEntity;
 
-import com.ejs.algaworksCurso.api.model.StringUriResposta;
 import com.ejs.algaworksCurso.api.model.in.produto.ProdutoIn;
 import com.ejs.algaworksCurso.api.model.in.produto.ProdutoOut;
 
@@ -15,7 +14,7 @@ import io.swagger.annotations.ApiOperation;
 public interface RestauranteProdutoControllerOpenApi {
 
 	@ApiOperation(value = "Atualiza Produto de restaurante")
-	ResponseEntity<StringUriResposta> atualizarProduto(Long restauranteId, Long produtoId, ProdutoIn produtoIn);
+	ResponseEntity<ProdutoOut> atualizarProduto(Long restauranteId, Long produtoId, ProdutoIn produtoIn);
 
 	@ApiOperation(value = "Busca produto")
 	ResponseEntity<ProdutoOut> buscarProduto(Long restauranteId, Long produtoId);
@@ -25,6 +24,6 @@ public interface RestauranteProdutoControllerOpenApi {
 
 	void remover(Long restauranteId, Long produtoId);
 
-	ResponseEntity<StringUriResposta> salvar(Long restauranteId, ProdutoIn produtoIn);
+	ResponseEntity<ProdutoOut> salvar(Long restauranteId, ProdutoIn produtoIn);
 
 }

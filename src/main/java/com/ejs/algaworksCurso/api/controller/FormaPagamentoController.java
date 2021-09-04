@@ -1,6 +1,5 @@
 package com.ejs.algaworksCurso.api.controller;
 
-import java.net.URI;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -22,9 +21,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.filter.ShallowEtagHeaderFilter;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.ejs.algaworksCurso.api.model.StringUriResposta;
+import com.ejs.algaworksCurso.api.helper.ResourceUriHelper;
 import com.ejs.algaworksCurso.api.model.in.formaPagamento.FormaPagamentoIn;
 import com.ejs.algaworksCurso.api.model.out.formaPagamento.FormaPagamentoOut;
 import com.ejs.algaworksCurso.api.openApi.controller.FormaPagamentoControllerOpenApi;
@@ -43,13 +41,10 @@ public class FormaPagamentoController implements FormaPagamentoControllerOpenApi
 	
 	@Override
 	@PutMapping("{formaPagamentoId}")
-	public ResponseEntity<StringUriResposta> autalizar(@RequestBody @Valid FormaPagamentoIn formaPagamentoIn,
+	public ResponseEntity<FormaPagamentoOut> autalizar(@RequestBody @Valid FormaPagamentoIn formaPagamentoIn,
 			@PathVariable(name = "formaPagamentoId") Long formaPagamentoId ){
-		this.formaPagamentoService.atualizar(formaPagamentoIn, formaPagamentoId);
-		URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
-				.buildAndExpand().toUri();
-		StringUriResposta urlResposta =  new StringUriResposta("http://" + uri.getAuthority() + uri.getPath());
-		return ResponseEntity.ok(urlResposta);
+		FormaPagamentoOut out = this.formaPagamentoService.atualizar(formaPagamentoIn, formaPagamentoId);
+		return ResponseEntity.ok(out);
 	}
 	
 	@Override
@@ -107,15 +102,10 @@ public class FormaPagamentoController implements FormaPagamentoControllerOpenApi
 	
 	@Override
 	@PostMapping
-	public ResponseEntity<StringUriResposta> salvar(@RequestBody @Valid FormaPagamentoIn formaPagamentoIn){
+	public ResponseEntity<FormaPagamentoOut> salvar(@RequestBody @Valid FormaPagamentoIn formaPagamentoIn){
 		FormaPagamentoOut formaPagamentoOut = this.formaPagamentoService.salvar(formaPagamentoIn);
-		URI uri = ServletUriComponentsBuilder
-				.fromCurrentRequest()
-				.path("/{formaPagamentoId}")
-				.buildAndExpand(formaPagamentoOut.getId())
-				.toUri();
-		StringUriResposta url = new StringUriResposta("httl://" + uri.getAuthority() + uri.getPath());
-		return ResponseEntity.status(HttpStatus.CREATED).body(url);
+		ResourceUriHelper.addUriHeaderSave(formaPagamentoOut.getId());
+		return ResponseEntity.status(HttpStatus.CREATED).body(formaPagamentoOut);
 	}
 	
 }

@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.springframework.http.ResponseEntity;
 
-import com.ejs.algaworksCurso.api.model.StringUriResposta;
 import com.ejs.algaworksCurso.api.model.in.estado.EstadoIn;
 import com.ejs.algaworksCurso.api.model.out.estado.EstadoOut;
 
@@ -13,7 +12,7 @@ import io.swagger.annotations.Api;
 @Api(tags = "Estados")
 public interface EstadoControllerOpenApi {
 
-	ResponseEntity<StringUriResposta> atualizar(Long id, EstadoIn estadoIn);
+	ResponseEntity<EstadoOut> atualizar(Long id, EstadoIn estadoIn);
 
 	ResponseEntity<EstadoOut> buscar(Long id);
 
@@ -21,6 +20,6 @@ public interface EstadoControllerOpenApi {
 
 	void remover(Long id);
 
-	ResponseEntity<StringUriResposta> salvar(EstadoIn estadoIn);
+	ResponseEntity<EstadoOut> salvar(EstadoIn estadoIn);
 
 }

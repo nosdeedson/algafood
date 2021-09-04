@@ -4,7 +4,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 
-import com.ejs.algaworksCurso.api.model.StringUriResposta;
 import com.ejs.algaworksCurso.api.model.in.cozinha.CozinhaIn;
 import com.ejs.algaworksCurso.api.model.out.cozinha.CozinhaOut;
 
@@ -14,7 +13,7 @@ import io.swagger.annotations.ApiOperation;
 @Api(tags = "Cozinhas")
 public interface CozinhaControllerOpenApi {
 
-	ResponseEntity<StringUriResposta> atualizar(CozinhaIn cozinhaIn, Long cozinhaId);
+	ResponseEntity<CozinhaOut> atualizar(CozinhaIn cozinhaIn, Long cozinhaId);
 
 	ResponseEntity<CozinhaOut> buscar(Long id);
 
@@ -25,6 +24,6 @@ public interface CozinhaControllerOpenApi {
 
 	void remover(Long cozinhaId);
 
-	ResponseEntity<StringUriResposta> salvar(CozinhaIn cozinhaIn);
+	ResponseEntity<CozinhaOut> salvar(CozinhaIn cozinhaIn);
 
 }

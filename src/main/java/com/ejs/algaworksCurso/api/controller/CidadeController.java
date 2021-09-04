@@ -1,6 +1,5 @@
 package com.ejs.algaworksCurso.api.controller;
 
-import java.net.URI;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -18,9 +17,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.ejs.algaworksCurso.api.model.StringUriResposta;
+import com.ejs.algaworksCurso.api.helper.ResourceUriHelper;
 import com.ejs.algaworksCurso.api.model.in.cidade.CidadeIn;
 import com.ejs.algaworksCurso.api.model.out.cidade.CidadeOut;
 import com.ejs.algaworksCurso.api.openApi.controller.CidadeControllerOpenApi;
@@ -39,13 +37,11 @@ public class CidadeController implements CidadeControllerOpenApi {
 	@Override
 	@ApiOperation(value = "Atualiza cidade")
 	@PutMapping("{id}")
-	public ResponseEntity<StringUriResposta> atualizar(@PathVariable Long id, 
+	public ResponseEntity<CidadeOut> atualizar(@PathVariable Long id, 
 			@RequestBody @Valid CidadeIn cidadeIn){
-		this.cidadeService.atualizar(cidadeIn, id);
-		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().buildAndExpand().toUri();
-		String url = "http://" + uri.getAuthority() + uri.getPath();
-        StringUriResposta uriRetorno = new StringUriResposta(url);
-		return ResponseEntity.ok(uriRetorno);
+		CidadeOut out =  this.cidadeService.atualizar(cidadeIn, id);
+		ResourceUriHelper.addUriHeaderUpdate();
+		return ResponseEntity.status(HttpStatus.CREATED).body(out);
 	}
 	
 	@Override
@@ -70,13 +66,9 @@ public class CidadeController implements CidadeControllerOpenApi {
 	
 	@Override
 	@PostMapping
-	public ResponseEntity<StringUriResposta> salvar( @RequestBody @Valid CidadeIn cidadeIn){
+	public ResponseEntity<CidadeOut> salvar( @RequestBody @Valid CidadeIn cidadeIn){
 			CidadeOut out = this.cidadeService.salvar(cidadeIn);
-			URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
-					.path("/{id}").buildAndExpand(out.getId())
-					.toUri();
-			String url = "http://" + uri.getAuthority() + uri.getPath();
-	        StringUriResposta uriRetorno = new StringUriResposta(url);
-			return ResponseEntity.status(HttpStatus.CREATED).body(uriRetorno);
+			ResourceUriHelper.addUriHeaderSave(out.getId());
+			return ResponseEntity.status(HttpStatus.CREATED).body(out);
 	}
 }

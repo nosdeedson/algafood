@@ -34,13 +34,14 @@ public class RestauranteProdutoService {
 	
 		
 	@Transactional
-	public void atualizarProduto( Long restauranteId, Long ProdutoId, ProdutoIn produtoIn) {
+	public ProdutoOut atualizarProduto( Long restauranteId, Long ProdutoId, ProdutoIn produtoIn) {
 		this.restauranteService.buscarOuFalhar(restauranteId);
-		Produto prpduto = this.produtoRepository.findByIdAndRestaurante_Id(ProdutoId, restauranteId)
+		Produto produto = this.produtoRepository.findByIdAndRestaurante_Id(ProdutoId, restauranteId)
 				.orElseThrow( () -> new ProdutoNaoEncontradoException(ProdutoId, restauranteId) );
 		
-		this.produtoAssembler.produtoInToProduto(produtoIn, prpduto);
-		this.produtoRepository.save(prpduto);		
+		this.produtoAssembler.produtoInToProduto(produtoIn, produto);
+		produto = this.produtoRepository.save(produto);		
+		return this.produtoDisAssembler.produtoToProdutoOUt(produto);
 	}
 	
 	public ProdutoOut buscarProduto(Long restauranteId, Long produtoId) {

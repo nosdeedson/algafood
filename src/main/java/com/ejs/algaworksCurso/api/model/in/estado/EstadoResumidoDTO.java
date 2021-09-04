@@ -2,6 +2,9 @@ package com.ejs.algaworksCurso.api.model.in.estado;
 
 import javax.validation.constraints.NotNull;
 
+import io.swagger.annotations.ApiModel;
+
+@ApiModel(value = "Estado")
 public class EstadoResumidoDTO {
 	
 	@NotNull

@@ -1,7 +1,6 @@
 package com.ejs.algaworksCurso.api.controller;
 
 import java.math.BigDecimal;
-import java.net.URI;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -19,9 +18,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.ejs.algaworksCurso.api.model.StringUriResposta;
+import com.ejs.algaworksCurso.api.helper.ResourceUriHelper;
 import com.ejs.algaworksCurso.api.model.in.restaurante.RestauranteIn;
 import com.ejs.algaworksCurso.api.model.out.restautante.RestauranteOut;
 import com.ejs.algaworksCurso.api.openApi.controller.RestauranteControllerOpenApin;
@@ -64,13 +62,12 @@ public class RestauranteController implements RestauranteControllerOpenApin {
 	
 	@Override
 	@PutMapping("{restauranteId}")
-	public ResponseEntity<StringUriResposta> atualizar(@PathVariable Long restauranteId,
+	public ResponseEntity<RestauranteOut> atualizar(@PathVariable Long restauranteId,
 			@RequestBody @Valid RestauranteIn restaurante){
 		try {
-			this.restauranteService.atualizar(restaurante, restauranteId);
-			URI uri = ServletUriComponentsBuilder.fromCurrentRequest().buildAndExpand().toUri();
-			StringUriResposta url = new StringUriResposta("http://" + uri.getAuthority() + uri.getPath());
-			return ResponseEntity.ok(url);
+			RestauranteOut out = this.restauranteService.atualizar(restaurante, restauranteId);
+			ResourceUriHelper.addUriHeaderUpdate();
+			return ResponseEntity.ok(out);
 		} catch (CozinhaNaoEncontradaException | CidadeNaoEncontradaException e) {
 			throw new NegocioException(e.getMessage());
 		}
@@ -139,14 +136,11 @@ public class RestauranteController implements RestauranteControllerOpenApin {
 		
 	@Override
 	@PostMapping
-	public ResponseEntity<StringUriResposta> salvar(@RequestBody @Valid RestauranteIn restauranteIn){
+	public ResponseEntity<RestauranteOut> salvar(@RequestBody @Valid RestauranteIn restauranteIn){
 		try {
 			RestauranteOut restaurante = this.restauranteService.salvar(restauranteIn);
-			URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
-					.path("/{id}").buildAndExpand(restaurante.getId())
-					.toUri();
-			StringUriResposta url = new StringUriResposta("http://" + uri.getAuthority() + uri.getPath());
-			return ResponseEntity.status(HttpStatus.CREATED).body(url);
+			ResourceUriHelper.addUriHeaderSave(restaurante.getId());
+			return ResponseEntity.status(HttpStatus.CREATED).body(restaurante);
 		} catch (CozinhaNaoEncontradaException | CidadeNaoEncontradaException e) {
 			throw new NegocioException(e.getMessage());
 		}

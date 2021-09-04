@@ -34,11 +34,12 @@ public class CozinhaService {
 	private CozinhaDisAssembler cozinhaDisAssembler;
 	
 	@Transactional
-	public Cozinha atualizar(CozinhaIn cozinhaIn, Long cozinhaId) {
+	public CozinhaOut atualizar(CozinhaIn cozinhaIn, Long cozinhaId) {
 		Cozinha cozinhaAtual = this.buscarOuFalhar(cozinhaId);
 		
 		this.cozinhaAssembler.cozinhaInToCozinha(cozinhaAtual, cozinhaIn);
-		return this.cozinhaRepository.save(cozinhaAtual);
+		cozinhaAtual = this.cozinhaRepository.save(cozinhaAtual);
+		return cozinhaDisAssembler.cozinhaToCozinhaOut(cozinhaAtual);
 	}
 	
 	public CozinhaOut buscar(Long id) {

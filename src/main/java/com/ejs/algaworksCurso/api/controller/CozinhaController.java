@@ -1,7 +1,5 @@
 package com.ejs.algaworksCurso.api.controller;
 
-import java.net.URI;
-
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,9 +17,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.ejs.algaworksCurso.api.model.StringUriResposta;
+import com.ejs.algaworksCurso.api.helper.ResourceUriHelper;
 import com.ejs.algaworksCurso.api.model.in.cozinha.CozinhaIn;
 import com.ejs.algaworksCurso.api.model.out.cozinha.CozinhaOut;
 import com.ejs.algaworksCurso.api.openApi.controller.CozinhaControllerOpenApi;
@@ -36,13 +33,13 @@ public class CozinhaController implements CozinhaControllerOpenApi {
 
 	@Override
 	@PutMapping("{cozinhaId}")
-	public ResponseEntity<StringUriResposta> atualizar(@RequestBody
+	public ResponseEntity<CozinhaOut> atualizar(@RequestBody
 			@Valid CozinhaIn cozinhaIn, @PathVariable("cozinhaId") Long cozinhaId) {
-		this.cozinhaService.atualizar(cozinhaIn, cozinhaId);
-		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().buildAndExpand().toUri();
-        String url = "http://" + uri.getAuthority() + uri.getPath();
-        StringUriResposta uriRetorno = new StringUriResposta(url);
-		return ResponseEntity.ok(uriRetorno);
+		CozinhaOut out = this.cozinhaService.atualizar(cozinhaIn, cozinhaId);
+		
+		ResourceUriHelper.addUriHeaderUpdate();
+		
+		return ResponseEntity.ok(out);
 	}
 
 	@Override
@@ -73,13 +70,10 @@ public class CozinhaController implements CozinhaControllerOpenApi {
 
 	@Override
 	@PostMapping
-	public ResponseEntity<StringUriResposta> salvar(@RequestBody @Valid CozinhaIn cozinhaIn) {
+	public ResponseEntity<CozinhaOut> salvar(@RequestBody @Valid CozinhaIn cozinhaIn) {
 		CozinhaOut cozinha = this.cozinhaService.salvar(cozinhaIn);
-		URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
-				.path("/{id}").buildAndExpand(cozinha.getId())
-				.toUri();
-		StringUriResposta uriResposta = new StringUriResposta("http://" + uri.getAuthority() + uri.getPath());
-		return ResponseEntity.status(HttpStatus.CREATED).body(uriResposta);
+		ResourceUriHelper.addUriHeaderSave(cozinha.getId());
+		return ResponseEntity.status(HttpStatus.CREATED).body(cozinha);
 	}
 	
 }

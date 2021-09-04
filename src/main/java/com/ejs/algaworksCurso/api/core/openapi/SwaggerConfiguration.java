@@ -1,5 +1,6 @@
 package com.ejs.algaworksCurso.api.core.openapi;
 
+import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
 
@@ -11,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.context.request.ServletWebRequest;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -61,7 +63,7 @@ public class SwaggerConfiguration implements WebMvcConfigurer {
 //										.modelRef(new ModelRef("Strig"))
 //										.build()))
 				.apiInfo(this.apiInfo())
-				.ignoredParameterTypes(ServletWebRequest.class)
+				.ignoredParameterTypes(ServletWebRequest.class, URI.class, ModelAndView.class)
 				.directModelSubstitute(Pageable.class, PageableModelOpenApi.class)
 				.alternateTypeRules(AlternateTypeRules
 						.newRule(typeResolver.resolve(Page.class, CozinhaOut.class), CozinhasModelOpenApi.class))
@@ -70,7 +72,7 @@ public class SwaggerConfiguration implements WebMvcConfigurer {
 						new Tag("Grupos", "Gerencia grupos"),
 						new Tag("Estados", "Gerencia estados"),
 						new Tag("Cozinhas", "Gerencia cozinhas"), 
-						new Tag("Estatísticas", "Gerencia estatísticas"),
+						new Tag("Estatisticas", "Gerencia estatísticas"),
 						new Tag("Forma de Pagamentos", "Gerencia formas de pagamento"),
 						new Tag("Grupo Permissão", "Gerencia a relação entre grupos e permissão"), 
 						new Tag("Pedidos", "Gerencia pedidos"),

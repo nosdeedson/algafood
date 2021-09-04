@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.springframework.http.ResponseEntity;
 
-import com.ejs.algaworksCurso.api.model.StringUriResposta;
 import com.ejs.algaworksCurso.api.model.in.restaurante.RestauranteIn;
 import com.ejs.algaworksCurso.api.model.out.restautante.RestauranteOut;
 
@@ -24,7 +23,7 @@ public interface RestauranteControllerOpenApin {
 	@ApiOperation(value = "Ativa vários restaurantes")
 	void ativarMultiplos(List<Long> restauranteIds);
 
-	ResponseEntity<StringUriResposta> atualizar(Long restauranteId, RestauranteIn restaurante);
+	ResponseEntity<RestauranteOut> atualizar(Long restauranteId, RestauranteIn restaurante);
 
 	ResponseEntity<RestauranteOut> buscar(Long restauranteId);
 
@@ -47,6 +46,6 @@ public interface RestauranteControllerOpenApin {
 
 	ResponseEntity<List<RestauranteOut>> listar();
 
-	ResponseEntity<StringUriResposta> salvar(RestauranteIn restauranteIn);
+	ResponseEntity<RestauranteOut> salvar(RestauranteIn restauranteIn);
 
 }

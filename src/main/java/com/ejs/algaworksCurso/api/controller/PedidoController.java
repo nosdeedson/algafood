@@ -1,7 +1,5 @@
 package com.ejs.algaworksCurso.api.controller;
 
-import java.net.URI;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,9 +14,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.ejs.algaworksCurso.api.model.StringUriResposta;
+import com.ejs.algaworksCurso.api.helper.ResourceUriHelper;
 import com.ejs.algaworksCurso.api.model.in.pedido.PedidoIn;
 import com.ejs.algaworksCurso.api.model.out.pedido.PedidoOut;
 import com.ejs.algaworksCurso.api.model.out.pedido.PedidoResumidoDTO;
@@ -71,13 +68,10 @@ public class PedidoController implements PedidoControllerOpenApi {
 	
 	@Override
 	@PostMapping
-	public ResponseEntity<StringUriResposta> salvar(@RequestBody PedidoIn pedidoIn){
+	public ResponseEntity<PedidoOut> salvar(@RequestBody PedidoIn pedidoIn){
 		PedidoOut out = this.pedidoService.salvar(pedidoIn);
-		URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
-				.path("/{codigoPedido}").buildAndExpand(out.getCodigo())
-				.toUri();
-		StringUriResposta url = new StringUriResposta("http:// " + uri.getAuthority() + uri.getPath());
-		return ResponseEntity.status(HttpStatus.CREATED).body(url);
+		ResourceUriHelper.addUriHeaderSave(out.getCodigo());
+		return ResponseEntity.status(HttpStatus.CREATED).body(out);
 	}
 	
 	/* para receber filtros getmapping 2*/

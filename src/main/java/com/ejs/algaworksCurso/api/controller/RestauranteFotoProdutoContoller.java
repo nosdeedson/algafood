@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.ejs.algaworksCurso.api.model.in.produto.FotoProdutoIn;
 import com.ejs.algaworksCurso.api.model.out.fotoProduto.FotoProdutoOut;
@@ -37,9 +38,9 @@ public class RestauranteFotoProdutoContoller implements RestauranteFotoProdutoCo
 	FotoProdutoService fotoProdutoService;
 	
 	@Override
-	@PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	@PutMapping(consumes = MediaType.ALL_VALUE)
 	public ResponseEntity<FotoProdutoOut> atualizarFoto(@PathVariable("restauranteId") Long restauranteId,
-		@PathVariable("produtoId") Long produtoId, @Valid FotoProdutoIn fotoProdutoIn ) throws IOException{
+		@PathVariable("produtoId") Long produtoId, @Valid FotoProdutoIn fotoProdutoIn, MultipartFile arquivo ) throws IOException{
 	
 		try {
 			FotoProdutoOut out = this.fotoProdutoService.salvar(fotoProdutoIn, restauranteId, produtoId);		

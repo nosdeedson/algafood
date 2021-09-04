@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.springframework.http.ResponseEntity;
 
-import com.ejs.algaworksCurso.api.model.StringUriResposta;
 import com.ejs.algaworksCurso.api.model.in.senha.SenhaAtualizarIn;
 import com.ejs.algaworksCurso.api.model.in.usuario.UsuarioAtualizarIn;
 import com.ejs.algaworksCurso.api.model.in.usuario.UsuarioIn;
@@ -16,7 +15,7 @@ import io.swagger.annotations.ApiOperation;
 @Api(tags = "Usuário")
 public interface UsuarioControllerOpenApi {
 
-	ResponseEntity<StringUriResposta> atualizar(Long usuarioId, UsuarioAtualizarIn usuarioIn);
+	ResponseEntity<UsuarioOut> atualizar(Long usuarioId, UsuarioAtualizarIn usuarioIn);
 
 	@ApiOperation(value = "Alualiza senha")
 	void atualizarSenha(SenhaAtualizarIn senhaIn, Long usuarioId);
@@ -27,6 +26,6 @@ public interface UsuarioControllerOpenApi {
 
 	void remover(Long usuarioId);
 
-	ResponseEntity<StringUriResposta> salvar(UsuarioIn usuarioIn);
+	ResponseEntity<UsuarioOut> salvar(UsuarioIn usuarioIn);
 
 }

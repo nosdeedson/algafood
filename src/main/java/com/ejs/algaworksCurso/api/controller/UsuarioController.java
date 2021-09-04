@@ -1,6 +1,5 @@
 package com.ejs.algaworksCurso.api.controller;
 
-import java.net.URI;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -17,9 +16,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.ejs.algaworksCurso.api.model.StringUriResposta;
+import com.ejs.algaworksCurso.api.helper.ResourceUriHelper;
 import com.ejs.algaworksCurso.api.model.in.senha.SenhaAtualizarIn;
 import com.ejs.algaworksCurso.api.model.in.usuario.UsuarioAtualizarIn;
 import com.ejs.algaworksCurso.api.model.in.usuario.UsuarioIn;
@@ -36,13 +34,11 @@ public class UsuarioController implements UsuarioControllerOpenApi {
 	
 	@Override
 	@PutMapping("{usuarioId}")
-	public ResponseEntity<StringUriResposta> atualizar(@PathVariable("usuarioId") Long usuarioId, 
+	public ResponseEntity<UsuarioOut> atualizar(@PathVariable("usuarioId") Long usuarioId, 
 			@RequestBody @Valid UsuarioAtualizarIn usuarioIn ){
-		this.usuarioService.atualizar(usuarioIn, usuarioId);
-		URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
-				.buildAndExpand().toUri();
-		StringUriResposta url = new StringUriResposta("http://" + uri.getAuthority() + uri.getPath());
-		return ResponseEntity.ok(url);
+		UsuarioOut out = this.usuarioService.atualizar(usuarioIn, usuarioId);
+		ResourceUriHelper.addUriHeaderUpdate();
+		return ResponseEntity.ok(out);
 	}
 	
 	@Override
@@ -76,12 +72,10 @@ public class UsuarioController implements UsuarioControllerOpenApi {
 	
 	@Override
 	@PostMapping
-	public ResponseEntity<StringUriResposta> salvar(@RequestBody @Valid UsuarioIn usuarioIn){
+	public ResponseEntity<UsuarioOut> salvar(@RequestBody @Valid UsuarioIn usuarioIn){
 		UsuarioOut usuarioOut = this.usuarioService.salvar(usuarioIn);
-		URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
-				.path("/{id}").buildAndExpand(usuarioOut.getId()).toUri();
-		StringUriResposta url = new StringUriResposta("http://" + uri.getAuthority() + uri.getPath());
-		return ResponseEntity.status(HttpStatus.CREATED).body(url);
+		ResourceUriHelper.addUriHeaderSave(usuarioOut.getId()); 
+		return ResponseEntity.status(HttpStatus.CREATED).body(usuarioOut);
 	}
 
 }

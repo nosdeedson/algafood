@@ -1,6 +1,5 @@
 package com.ejs.algaworksCurso.api.controller;
 
-import java.net.URI;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -18,9 +17,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.ejs.algaworksCurso.api.model.StringUriResposta;
+import com.ejs.algaworksCurso.api.helper.ResourceUriHelper;
 import com.ejs.algaworksCurso.api.model.in.grupo.GrupoIn;
 import com.ejs.algaworksCurso.api.model.out.group.GrupoOut;
 import com.ejs.algaworksCurso.api.openApi.controller.GrupoControllerOpenApi;
@@ -35,12 +33,11 @@ public class GrupoController implements GrupoControllerOpenApi {
 	
 	@Override
 	@PutMapping("{grupoId}")
-	public ResponseEntity<StringUriResposta> atualizar(@RequestBody @Valid GrupoIn grupoIn,
+	public ResponseEntity<GrupoOut> atualizar(@RequestBody @Valid GrupoIn grupoIn,
 			@PathVariable("grupoId") Long grupoId){
-		this.grupoService.atualizar(grupoIn, grupoId);
-		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().buildAndExpand().toUri();
-		StringUriResposta url = new StringUriResposta("http://" + uri.getAuthority() + uri.getPath());
-		return ResponseEntity.ok(url);
+		GrupoOut out = this.grupoService.atualizar(grupoIn, grupoId);
+		ResourceUriHelper.addUriHeaderUpdate();
+		return ResponseEntity.ok(out);
 	}
 	
 	@Override
@@ -66,12 +63,10 @@ public class GrupoController implements GrupoControllerOpenApi {
 	
 	@Override
 	@PostMapping
-	public ResponseEntity<StringUriResposta> salvar(@RequestBody @Valid GrupoIn grupoIn){
+	public ResponseEntity<GrupoOut> salvar(@RequestBody @Valid GrupoIn grupoIn){
 		GrupoOut grupoOut = this.grupoService.salvar(grupoIn);
-		URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
-				.path("/{id}").buildAndExpand(grupoOut.getId()).toUri();
-		StringUriResposta url = new StringUriResposta("http://"+ uri.getAuthority() + uri.getPath());
-		return ResponseEntity.status(HttpStatus.CREATED).body(url);
+		ResourceUriHelper.addUriHeaderSave(grupoOut.getId());
+		return ResponseEntity.status(HttpStatus.CREATED).body(grupoOut);
 	}
 	
 }

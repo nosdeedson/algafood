@@ -65,9 +65,10 @@ public class EstadoService {
 	}
 	
 	@Transactional
-	public Estado salvar(EstadoIn estadoIn) {
+	public EstadoOut salvar(EstadoIn estadoIn) {
 		Estado estado = this.estadoAssembler.estadoInToEstado(estadoIn);
-		return this.estadoRepository.save(estado);
+		estado = this.estadoRepository.save(estado);
+		return estadoDisAssembler.estadoToEstadoOut(estado);
 	}
 	
 	/*
