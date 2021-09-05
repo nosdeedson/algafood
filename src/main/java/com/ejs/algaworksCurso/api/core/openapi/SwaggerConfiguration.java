@@ -73,7 +73,7 @@ public class SwaggerConfiguration implements WebMvcConfigurer {
 						new Tag("Estados", "Gerencia estados"),
 						new Tag("Cozinhas", "Gerencia cozinhas"), 
 						new Tag("Estatisticas", "Gerencia estatísticas"),
-						new Tag("Forma de Pagamentos", "Gerencia formas de pagamento"),
+						new Tag("Forma Pagamentos", "Gerencia formas de pagamento"),
 						new Tag("Grupo Permissão", "Gerencia a relação entre grupos e permissão"), 
 						new Tag("Pedidos", "Gerencia pedidos"),
 						new Tag("Restaurantes", "Gerencia restaurantes"),
