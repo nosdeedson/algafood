@@ -1,8 +1,12 @@
 package com.ejs.algaworksCurso.api.model.out.endereco;
 
+import org.springframework.hateoas.RepresentationModel;
+import org.springframework.hateoas.server.core.Relation;
+
 import com.ejs.algaworksCurso.api.model.out.cidade.CidadeOut;
 
-public class EnderecoOut {
+@Relation(collectionRelation = "endereco entrega")
+public class EnderecoOut extends RepresentationModel<EnderecoOut> {
 
 	private String bairro;	
 	private String cep;	

@@ -1,7 +1,5 @@
 package com.ejs.algaworksCurso.api.helper;
 
-import java.net.URI;
-
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.http.HttpHeaders;
@@ -13,25 +11,37 @@ public class ResourceUriHelper {
 	
 	public static void addUriHeaderUpdate() {
 		
-		URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
-				.buildAndExpand().toUri();
+		String uri = getUri(null);
 		        
         HttpServletResponse response = ((ServletRequestAttributes)
         		RequestContextHolder.getRequestAttributes()).getResponse();
-        response.setHeader(HttpHeaders.LOCATION, uri.toString());
+        response.setHeader(HttpHeaders.LOCATION, uri);
         
 	}
 	
 	public static void addUriHeaderSave(Object resourceId) {
 		
-		URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
-				.path("/{id}")
-				.buildAndExpand(resourceId).toUri();
+		String uri = getUri(resourceId);
 		        
         HttpServletResponse response = ((ServletRequestAttributes)
         		RequestContextHolder.getRequestAttributes()).getResponse();
-        response.setHeader(HttpHeaders.LOCATION, uri.toString());
+        response.setHeader(HttpHeaders.LOCATION, uri);
         
+	}
+	
+	public static String uriRequest(Object resourceId) {
+		return getUri(resourceId);
+	}
+	
+	private static String getUri(Object resourceId) {
+		if ( resourceId == null) {
+			return ServletUriComponentsBuilder.fromCurrentRequest()
+					.buildAndExpand().toUri().toString();
+		}else {
+			return ServletUriComponentsBuilder.fromCurrentRequest()
+					.path("/{id}")
+					.buildAndExpand(resourceId).toUri().toString();
+		}
 	}
 
 }

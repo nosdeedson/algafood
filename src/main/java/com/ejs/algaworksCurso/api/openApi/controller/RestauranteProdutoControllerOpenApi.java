@@ -1,7 +1,6 @@
 package com.ejs.algaworksCurso.api.openApi.controller;
 
-import java.util.List;
-
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.ResponseEntity;
 
 import com.ejs.algaworksCurso.api.model.in.produto.ProdutoIn;
@@ -20,7 +19,7 @@ public interface RestauranteProdutoControllerOpenApi {
 	ResponseEntity<ProdutoOut> buscarProduto(Long restauranteId, Long produtoId);
 
 	@ApiOperation(value = "Lista produto")
-	ResponseEntity<List<ProdutoOut>> listarProduto(Long restauranteId, boolean incluirInativos);
+	ResponseEntity<CollectionModel<ProdutoOut>> listarProduto(Long restauranteId, Boolean incluirInativos);
 
 	void remover(Long restauranteId, Long produtoId);
 

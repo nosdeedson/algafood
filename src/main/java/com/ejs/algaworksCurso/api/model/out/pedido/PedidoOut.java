@@ -4,13 +4,17 @@ import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.List;
 
+import org.springframework.hateoas.RepresentationModel;
+import org.springframework.hateoas.server.core.Relation;
+
 import com.ejs.algaworksCurso.api.model.out.endereco.EnderecoOut;
 import com.ejs.algaworksCurso.api.model.out.formaPagamento.FormaPagamentoOut;
 import com.ejs.algaworksCurso.api.model.out.itemPedido.ItemPedidoOut;
 import com.ejs.algaworksCurso.api.model.out.restautante.RestauranteOut;
 import com.ejs.algaworksCurso.api.model.out.usuario.UsuarioOut;
 
-public class PedidoOut {
+@Relation(collectionRelation = "pedidos")
+public class PedidoOut extends RepresentationModel<PedidoOut> {
 
 	private String codigo;
     private BigDecimal subtotal;

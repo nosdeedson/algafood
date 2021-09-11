@@ -4,7 +4,11 @@ import java.io.Serializable;
 
 import javax.validation.constraints.NotNull;
 
-public class CozinhaResumidaIdDTO implements Serializable {
+import org.springframework.hateoas.RepresentationModel;
+import org.springframework.hateoas.server.core.Relation;
+
+@Relation(collectionRelation = "cozinhas")
+public class CozinhaResumidaIdDTO extends RepresentationModel<CozinhaResumidaIdDTO> implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 	@NotNull

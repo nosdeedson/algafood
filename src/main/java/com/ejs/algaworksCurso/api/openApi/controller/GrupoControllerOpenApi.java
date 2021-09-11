@@ -1,7 +1,6 @@
 package com.ejs.algaworksCurso.api.openApi.controller;
 
-import java.util.List;
-
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.ResponseEntity;
 
 import com.ejs.algaworksCurso.api.model.in.grupo.GrupoIn;
@@ -16,7 +15,7 @@ public interface GrupoControllerOpenApi {
 
 	ResponseEntity<GrupoOut> buscar(Long grupoId);
 
-	ResponseEntity<List<GrupoOut>> listar();
+	ResponseEntity<CollectionModel<GrupoOut>> listar();
 
 	void remover(Long grupoId);
 

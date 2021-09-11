@@ -1,6 +1,10 @@
 package com.ejs.algaworksCurso.api.model.out.restautante;
 
-public class RestauranteResumidoDTO {
+import org.springframework.hateoas.RepresentationModel;
+import org.springframework.hateoas.server.core.Relation;
+
+@Relation(collectionRelation = "restaurantes")
+public class RestauranteResumidoDTO extends RepresentationModel<RestauranteResumidoDTO>{
 	
 	private Long id;
 	private String nome;

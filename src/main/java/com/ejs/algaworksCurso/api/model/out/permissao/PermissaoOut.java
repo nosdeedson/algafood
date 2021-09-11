@@ -1,6 +1,10 @@
 package com.ejs.algaworksCurso.api.model.out.permissao;
 
-public class PermissaoOut {
+import org.springframework.hateoas.RepresentationModel;
+import org.springframework.hateoas.server.core.Relation;
+
+@Relation(collectionRelation = "pemissoes")
+public class PermissaoOut extends RepresentationModel<PermissaoOut> {
 
 	private Long id;
     private String nome;

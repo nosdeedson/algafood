@@ -1,7 +1,6 @@
 package com.ejs.algaworksCurso.api.openApi.controller;
 
-import java.util.List;
-
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.context.request.ServletWebRequest;
 
@@ -17,7 +16,7 @@ public interface FormaPagamentoControllerOpenApi {
 
 	ResponseEntity<FormaPagamentoOut> buscar(Long formaPagamentoId, ServletWebRequest request);
 
-	ResponseEntity<List<FormaPagamentoOut>> listar(ServletWebRequest request);
+	ResponseEntity<CollectionModel<FormaPagamentoOut>> listar(ServletWebRequest request);
 
 	void remover(Long formaPagamentoId);
 

@@ -1,14 +1,12 @@
 package com.ejs.algaworksCurso.domain.services;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,35 +31,35 @@ public class CozinhaService {
 	@Autowired
 	private CozinhaDisAssembler cozinhaDisAssembler;
 	
+	@Autowired
+	private PagedResourcesAssembler<Cozinha> pagedResourceAssembler;
+	
 	@Transactional
 	public CozinhaOut atualizar(CozinhaIn cozinhaIn, Long cozinhaId) {
 		Cozinha cozinhaAtual = this.buscarOuFalhar(cozinhaId);
 		
 		this.cozinhaAssembler.cozinhaInToCozinha(cozinhaAtual, cozinhaIn);
 		cozinhaAtual = this.cozinhaRepository.save(cozinhaAtual);
-		return cozinhaDisAssembler.cozinhaToCozinhaOut(cozinhaAtual);
+		return cozinhaDisAssembler.toModel(cozinhaAtual);
 	}
 	
 	public CozinhaOut buscar(Long id) {
 		Cozinha cozinha = this.buscarOuFalhar(id);
-		return this.cozinhaDisAssembler.cozinhaToCozinhaOut(cozinha);
+		return this.cozinhaDisAssembler.toModel(cozinha);
 	}
 	
 	public CozinhaOut buscarPrimeira() {
 		Cozinha cozinha = this.cozinhaRepository.buscarPrimeiro()
 				.orElseThrow(() -> new CozinhaNaoEncontradaException("Nenhum dado encontrado."));
-		return this.cozinhaDisAssembler.cozinhaToCozinhaOut(cozinha);
+		return this.cozinhaDisAssembler.toModel(cozinha);
 	}
 	
-	public Page<CozinhaOut> listar(Pageable pageable){
+	public PagedModel<CozinhaOut> listar(Pageable pageable){
 		Page<Cozinha> cozinhas = this.cozinhaRepository.findAll(pageable);
 		
-		List<CozinhaOut> cozinhaOuts = cozinhas.stream()
-				.map(cozinha -> this.cozinhaDisAssembler.cozinhaToCozinhaOut(cozinha))
-				.collect(Collectors.toList());
-		
-		Page<CozinhaOut> cozinhasPage = new PageImpl<>(cozinhaOuts, pageable, cozinhas.getTotalElements());
-		return cozinhasPage;
+		PagedModel<CozinhaOut> cozinhasOut = this.pagedResourceAssembler.toModel(cozinhas, cozinhaDisAssembler);
+	
+		return cozinhasOut;
 	}
 
 	@Transactional
@@ -81,7 +79,7 @@ public class CozinhaService {
 	public CozinhaOut salvar(CozinhaIn cozinhaIn) {
 		Cozinha cozinha = this.cozinhaAssembler.cozinhaInToCozinha(cozinhaIn);
 		cozinha = cozinhaRepository.save(cozinha);
-		return cozinhaDisAssembler.cozinhaToCozinhaOut(cozinha);
+		return cozinhaDisAssembler.toModel(cozinha);
 	}
 	
 	/*

@@ -1,9 +1,7 @@
 package com.ejs.algaworksCurso.domain.services;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -68,11 +66,10 @@ public class UsuarioGrupoService {
 	}
 	
 	
-	public List<GrupoOut> listar(Long usuarioId) {
+	public CollectionModel<GrupoOut> listar(Long usuarioId) {
 		try {
 			Usuario user = this.usuarioService.buscarOuFalhar(usuarioId);
-			return user.getGrupos().stream().map(grupo -> this.grupoDisAssembler.grupoToGrupoOut(grupo))
-					.collect(Collectors.toList());
+			return this.grupoDisAssembler.toCollectionModel(user.getGrupos());
 		} catch (UsuarioNaoEncontradoException e) {
 			throw new NegocioException(String.format("Usuário de código %d não existe.", usuarioId));
 		}

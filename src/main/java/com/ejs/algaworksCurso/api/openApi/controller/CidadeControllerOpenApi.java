@@ -1,7 +1,6 @@
 package com.ejs.algaworksCurso.api.openApi.controller;
 
-import java.util.List;
-
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.ResponseEntity;
 
 import com.ejs.algaworksCurso.api.exceptionHandler.Problem;
@@ -25,10 +24,9 @@ public interface CidadeControllerOpenApi {
 		@ApiResponse(code = 404, message = "Cidade não encontrada", response = Problem.class)
 	})
 	@ApiOperation("Busca uma cidade por ID")
-	ResponseEntity<CidadeOut> buscar(@ApiParam(value = "ID de uma cidade")
-	Long id);
+	ResponseEntity<CidadeOut> buscar(@ApiParam(value = "ID de uma cidade")Long id);
 
-	List<CidadeOut> listar();
+	CollectionModel<CidadeOut> listar();
 
 	void remover(@ApiParam(value = "ID de uma cidade") // anotation for documentation
 	Long id);

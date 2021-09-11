@@ -1,7 +1,6 @@
 package com.ejs.algaworksCurso.api.openApi.controller;
 
-import java.util.List;
-
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.ResponseEntity;
 
 import com.ejs.algaworksCurso.api.model.out.usuario.UsuarioOut;
@@ -13,12 +12,12 @@ import io.swagger.annotations.ApiOperation;
 public interface RestauranteUsuarioControllerOpenApi {
 
 	@ApiOperation(value="Associa responsável a restaurante")
-	ResponseEntity<?> associarResponsavel(Long restauranteId, Long usuarioId);
+	ResponseEntity<Void> associarResponsavel(Long restauranteId, Long usuarioId);
 
 	@ApiOperation(value="Desassocia responsável a restaurante")
-	ResponseEntity<?> desassociarResponsavel(Long restauranteId, Long usuarioId);
+	ResponseEntity<Void> desassociarResponsavel(Long restauranteId, Long usuarioId);
 
 	@ApiOperation(value="Lista responsáveis")
-	ResponseEntity<List<UsuarioOut>> listarResponsaveis(Long restauranteId);
+	ResponseEntity<CollectionModel<UsuarioOut>> listarResponsaveis(Long restauranteId);
 
 }

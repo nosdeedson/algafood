@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -78,13 +79,13 @@ public class RestauranteService {
 		
 		restauranteAtual = this.restauranteRepository.save(restauranteAtual);
 		
-		return this.restauranteDisAssembler.restauranteToRestauranteOut(restauranteAtual);
+		return this.restauranteDisAssembler.toModel(restauranteAtual);
 	}
 	
 	public RestauranteOut buscar(Long restauranteId) {	
 		Restaurante retorno = this.buscarOuFalhar(restauranteId);
 		
-		return this.restauranteDisAssembler.restauranteToRestauranteOut(retorno);
+		return this.restauranteDisAssembler.toModel(retorno);
 	}		
 	
 	public List<RestauranteOut> encontrarComFreteGratis(String nome){
@@ -97,7 +98,7 @@ public class RestauranteService {
 		/*Exemplo com fabrica de specificatio*/
 		List<Restaurante> restaurantes = this.restauranteRepository.findAll(comFreteGratis().and(comNomeSemelhante(nome)));
 		return restaurantes.stream()
-				.map(item -> this.restauranteDisAssembler.restauranteToRestauranteOut(item))
+				.map(item -> this.restauranteDisAssembler.toModel(item))
 				.collect(Collectors.toList());
 	}
 	
@@ -105,7 +106,7 @@ public class RestauranteService {
 		Restaurante restaurante = this.restauranteRepository.buscarPrimeiro()
 		.orElseThrow(() -> new RestauranteNaoEncontradoException("Nenhum restaurante encontrado."));
 		
-		return this.restauranteDisAssembler.restauranteToRestauranteOut(restaurante);
+		return this.restauranteDisAssembler.toModel(restaurante);
 	}
 	
 	@Transactional
@@ -114,11 +115,9 @@ public class RestauranteService {
 		restauranteAtual.fechar();
 	}
 	
-	public List<RestauranteOut> listar(String nome, BigDecimal taxaFreteInicial, BigDecimal taxaFreteFinal){
+	public CollectionModel<RestauranteOut> listar(String nome, BigDecimal taxaFreteInicial, BigDecimal taxaFreteFinal){
 		List<Restaurante> restaurantes = restauranteRepoCustom.find(nome, taxaFreteInicial, taxaFreteFinal);
-		return restaurantes.stream()
-				.map(item -> this.restauranteDisAssembler.restauranteToRestauranteOut(item))
-				.collect(Collectors.toList());
+		return this.restauranteDisAssembler.toCollectionModel(restaurantes);
 	}
 	
 	@Transactional
@@ -133,14 +132,10 @@ public class RestauranteService {
 	}
 	
 	
-	public List<RestauranteOut> listar(){
+	public CollectionModel<RestauranteOut> listar(){
 		List<Restaurante> restaurantes = this.restauranteRepository.todas(Sort.by("nome"));
 		
-		List<RestauranteOut> restauranteOuts = restaurantes.stream()
-				.map(rest -> 
-				restauranteDisAssembler.restauranteToRestauranteOut(rest))
-				.collect(Collectors.toList());
-		return restauranteOuts;
+		return this.restauranteDisAssembler.toCollectionModel(restaurantes);
 	}
 
 	
@@ -158,7 +153,7 @@ public class RestauranteService {
 		restaurante.getEndereco().setCidade(cidade);
 		restaurante = this.restauranteRepository.save(restaurante);
 		
-		return this.restauranteDisAssembler.restauranteToRestauranteOut(restaurante);
+		return this.restauranteDisAssembler.toModel(restaurante);
 		
 	}
 	

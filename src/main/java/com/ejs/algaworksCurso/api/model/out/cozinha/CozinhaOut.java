@@ -1,6 +1,10 @@
 package com.ejs.algaworksCurso.api.model.out.cozinha;
 
-public class CozinhaOut {
+import org.springframework.hateoas.RepresentationModel;
+import org.springframework.hateoas.server.core.Relation;
+
+@Relation(collectionRelation = "cozinhas")
+public class CozinhaOut extends RepresentationModel<CozinhaOut> {
 
 	private Long id;
 	private String nome;

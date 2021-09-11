@@ -66,7 +66,7 @@ public class FotoProdutoService {
 		
 		this.armazenamentoFoto.substituir(nomeArquivoAntigo, foto);
 		
-		out = fotoProdutoDisAssembler.FotoProdutoToFotoProdutoOut(fp);
+		out = fotoProdutoDisAssembler.toModel(fp);
 		return out;
 	}
 	
@@ -84,7 +84,7 @@ public class FotoProdutoService {
 	public FotoProdutoOut recuperar( Long restauranteId, Long produtoId) {
 		FotoProduto fotoProduto = this.produtoRepository.findByRestauranteIdProdutoId(restauranteId, produtoId)
 				.orElseThrow( () -> new FotoProdutoNaoEncontradaException(restauranteId, produtoId));
-		return this.fotoProdutoDisAssembler.FotoProdutoToFotoProdutoOut(fotoProduto);
+		return this.fotoProdutoDisAssembler.toModel(fotoProduto);
 	}
 	
 	public ImagemOut recuperarFoto( Long restauranteId, Long produtoId, String acceptType) throws HttpMediaTypeNotAcceptableException {

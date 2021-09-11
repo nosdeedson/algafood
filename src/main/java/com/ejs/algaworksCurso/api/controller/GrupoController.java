@@ -1,10 +1,9 @@
 package com.ejs.algaworksCurso.api.controller;
 
-import java.util.List;
-
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -49,8 +48,8 @@ public class GrupoController implements GrupoControllerOpenApi {
 	
 	@Override
 	@GetMapping
-	public ResponseEntity<List<GrupoOut>> listar(){
-		List<GrupoOut> gruposOut = this.grupoService.listar();
+	public ResponseEntity<CollectionModel<GrupoOut>> listar(){
+		CollectionModel<GrupoOut> gruposOut = this.grupoService.listar();
 		return ResponseEntity.ok(gruposOut);
 	}
 	

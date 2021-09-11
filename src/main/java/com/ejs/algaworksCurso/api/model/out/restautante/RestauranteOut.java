@@ -2,10 +2,14 @@ package com.ejs.algaworksCurso.api.model.out.restautante;
 
 import java.math.BigDecimal;
 
+import org.springframework.hateoas.RepresentationModel;
+import org.springframework.hateoas.server.core.Relation;
+
 import com.ejs.algaworksCurso.api.model.in.cozinha.CozinhaResumidaIdDTO;
 import com.ejs.algaworksCurso.api.model.out.endereco.EnderecoOut;
 
-public class RestauranteOut {
+@Relation(collectionRelation = "restaurantes")
+public class RestauranteOut extends RepresentationModel<RestauranteOut> {
 
 	private Long id;
 	private String nome;

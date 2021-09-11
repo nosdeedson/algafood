@@ -2,7 +2,9 @@ package com.ejs.algaworksCurso.api.model.out.itemPedido;
 
 import java.math.BigDecimal;
 
-public class ItemPedidoOut {
+import org.springframework.hateoas.RepresentationModel;
+
+public class ItemPedidoOut extends RepresentationModel<ItemPedidoOut> {
 
 	private Long produtoId;
     private String produtoNome;

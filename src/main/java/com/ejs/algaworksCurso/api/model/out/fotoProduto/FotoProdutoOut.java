@@ -1,8 +1,12 @@
 package com.ejs.algaworksCurso.api.model.out.fotoProduto;
 
+import org.springframework.hateoas.RepresentationModel;
+import org.springframework.hateoas.server.core.Relation;
+
 import io.swagger.annotations.ApiModelProperty;
 
-public class FotoProdutoOut {
+@Relation(collectionRelation = "fotoProduto")
+public class FotoProdutoOut extends RepresentationModel<FotoProdutoOut>{
 	
 	@ApiModelProperty(value = "Nome do arquivo")
 	private String nomeArquivo;

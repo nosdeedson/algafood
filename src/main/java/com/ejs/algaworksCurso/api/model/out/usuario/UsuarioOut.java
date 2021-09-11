@@ -1,10 +1,19 @@
 package com.ejs.algaworksCurso.api.model.out.usuario;
 
-public class UsuarioOut {
+import java.util.List;
+
+import org.springframework.hateoas.RepresentationModel;
+import org.springframework.hateoas.server.core.Relation;
+
+import com.ejs.algaworksCurso.api.model.out.group.GrupoOut;
+
+@Relation(collectionRelation = "usuários")
+public class UsuarioOut extends RepresentationModel<UsuarioOut>{
 
 	private Long id;
 	private String email;
 	private String nome;
+	private List<GrupoOut> grupos;
 	/**
 	 * @return the id
 	 */
@@ -40,6 +49,18 @@ public class UsuarioOut {
 	 */
 	public void setNome(String nome) {
 		this.nome = nome;
+	}
+	/**
+	 * @return the grupos
+	 */
+	public List<GrupoOut> getGrupos() {
+		return grupos;
+	}
+	/**
+	 * @param grupos the grupos to set
+	 */
+	public void setGrupos(List<GrupoOut> grupos) {
+		this.grupos = grupos;
 	}
 	
 }

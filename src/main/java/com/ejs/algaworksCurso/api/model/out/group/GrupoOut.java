@@ -1,6 +1,11 @@
 package com.ejs.algaworksCurso.api.model.out.group;
 
-public class GrupoOut {
+import org.springframework.hateoas.RepresentationModel;
+
+import io.swagger.annotations.Api;
+
+@Api(tags = "grupos")
+public class GrupoOut extends RepresentationModel<GrupoOut>{
 	
 	private Long id;
 	private String nome;

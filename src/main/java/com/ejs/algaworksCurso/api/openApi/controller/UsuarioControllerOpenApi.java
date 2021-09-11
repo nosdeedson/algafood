@@ -1,7 +1,6 @@
 package com.ejs.algaworksCurso.api.openApi.controller;
 
-import java.util.List;
-
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.ResponseEntity;
 
 import com.ejs.algaworksCurso.api.model.in.senha.SenhaAtualizarIn;
@@ -22,7 +21,7 @@ public interface UsuarioControllerOpenApi {
 
 	ResponseEntity<UsuarioOut> buscar(Long usuarioId);
 
-	ResponseEntity<List<UsuarioOut>> listar();
+	ResponseEntity<CollectionModel<UsuarioOut>> listar();
 
 	void remover(Long usuarioId);
 

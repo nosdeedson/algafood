@@ -6,6 +6,7 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -38,15 +39,17 @@ public class RestauranteController implements RestauranteControllerOpenApin {
 	
 	@Override
 	@PutMapping("{restauranteId}/aberto")
-	public void abrir(@PathVariable Long restauranteId) {
+	public ResponseEntity<Void> abrir(@PathVariable Long restauranteId) {
 		this.restauranteService.abrir(restauranteId);
+		return ResponseEntity.noContent().build();
 	}
 	
 	@Override
 	@PutMapping("{restauranteId}/ativacao")
 	@ResponseStatus(value = HttpStatus.NO_CONTENT)
-	public void ativar(@PathVariable Long restauranteId){
+	public ResponseEntity<Void> ativar(@PathVariable Long restauranteId){
 		this.restauranteService.ativar(restauranteId);
+		return ResponseEntity.noContent().build();
 	}
 	
 	@Override
@@ -98,23 +101,18 @@ public class RestauranteController implements RestauranteControllerOpenApin {
 	@Override
 	@DeleteMapping("{restauranteId}/aberto")
 	@ResponseStatus(value = HttpStatus.NO_CONTENT)
-	public void fechar(@PathVariable Long restauranteId) {
+	public ResponseEntity<Void> fechar(@PathVariable Long restauranteId) {
 		this.restauranteService.fechar(restauranteId);
+		return ResponseEntity.noContent().build();
 	}
 	
-	@Override
-	@GetMapping("encontrar-como")
-	public ResponseEntity<List<RestauranteOut>> listar(@RequestParam(name = "nome", required = false) String nome,
-			@RequestParam(required = false) BigDecimal taxaFreteInicial,
-			@RequestParam(required = false) BigDecimal taxaFreteFinal){
-		return ResponseEntity.ok(this.restauranteService.listar(nome, taxaFreteInicial, taxaFreteFinal));
-	}
 	
 	@Override
 	@DeleteMapping("{restauranteId}/ativacao")
 	@ResponseStatus(value = HttpStatus.NO_CONTENT)
-	public void inativar(@PathVariable Long restauranteId){
+	public ResponseEntity<Void> inativar(@PathVariable Long restauranteId){
 		this.restauranteService.inativar(restauranteId);
+		return ResponseEntity.noContent().build();
 	}
 	
 	@Override
@@ -130,8 +128,17 @@ public class RestauranteController implements RestauranteControllerOpenApin {
 	
 	@Override
 	@GetMapping
-	public ResponseEntity<List<RestauranteOut>> listar(){
+	public ResponseEntity<CollectionModel<RestauranteOut>> listar(){
 		return ResponseEntity.ok(this.restauranteService.listar());
+	}
+	
+
+	@Override
+	@GetMapping("encontrar-como")
+	public ResponseEntity<CollectionModel<RestauranteOut>> listar(@RequestParam(name = "nome", required = false) String nome,
+			@RequestParam(required = false) BigDecimal taxaFreteInicial,
+			@RequestParam(required = false) BigDecimal taxaFreteFinal){
+		return ResponseEntity.ok(this.restauranteService.listar(nome, taxaFreteInicial, taxaFreteFinal));
 	}
 		
 	@Override

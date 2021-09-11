@@ -1,16 +1,14 @@
 package com.ejs.algaworksCurso.api.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ejs.algaworksCurso.api.model.out.usuario.UsuarioOut;
@@ -18,7 +16,7 @@ import com.ejs.algaworksCurso.api.openApi.controller.RestauranteUsuarioControlle
 import com.ejs.algaworksCurso.domain.services.RestauranteUsuarioService;
 
 @RestController
-@RequestMapping("restaurantes/{restauranteId}/usuarios")
+@RequestMapping("restaurantes/{restauranteId}/responsaveis")
 public class RestauranteUsuarioController implements RestauranteUsuarioControllerOpenApi {
 	
 	@Autowired
@@ -26,23 +24,25 @@ public class RestauranteUsuarioController implements RestauranteUsuarioControlle
 	
 	@Override
 	@PutMapping("{usuarioId}")
-	public ResponseEntity<?> associarResponsavel(@PathVariable Long restauranteId, @PathVariable Long usuarioId) {
+	public ResponseEntity<Void> associarResponsavel(@PathVariable Long restauranteId, @PathVariable Long usuarioId) {
 		this.restauranteUsuarioService.associarResponsavel(restauranteId, usuarioId);
 		return ResponseEntity.noContent().build();
 	}
 	
 	@Override
 	@DeleteMapping("{usuarioId}")
-	public ResponseEntity<?> desassociarResponsavel(@PathVariable Long restauranteId, @PathVariable Long usuarioId){
+	public ResponseEntity<Void> desassociarResponsavel(@PathVariable Long restauranteId, @PathVariable Long usuarioId){
 		this.restauranteUsuarioService.desassociarResponsavel(restauranteId, usuarioId);
 		return ResponseEntity.noContent().build();
 	}
 	
 	@Override
 	@GetMapping
-	@ResponseStatus(code = HttpStatus.NO_CONTENT)
-	public ResponseEntity<List<UsuarioOut>> listarResponsaveis(@PathVariable Long restauranteId){
-		List<UsuarioOut> usuarios = this.restauranteUsuarioService.listarResponsaveis(restauranteId);
+	public ResponseEntity<CollectionModel<UsuarioOut>> listarResponsaveis(@PathVariable Long restauranteId){
+		CollectionModel<UsuarioOut> usuarios = this.restauranteUsuarioService.listarResponsaveis(restauranteId);
+		usuarios.removeLinks();
+		usuarios.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(RestauranteUsuarioController.class)
+				.listarResponsaveis(restauranteId)).withSelfRel());
 		return ResponseEntity.ok(usuarios);
 	}
 

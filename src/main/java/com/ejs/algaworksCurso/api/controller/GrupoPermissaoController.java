@@ -1,8 +1,8 @@
 package com.ejs.algaworksCurso.api.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -27,22 +27,32 @@ public class GrupoPermissaoController implements GrupoPermissaoControllerOpenApi
 	@Override
 	@PutMapping("{permissaoId}")
 	@ResponseStatus(code = HttpStatus.NO_CONTENT)
-	public void associar(@PathVariable Long grupoId, @PathVariable Long permissaoId){
+	public ResponseEntity<Void> associar(@PathVariable Long grupoId, @PathVariable Long permissaoId){
 		this.grupoPermissaoService.associar(grupoId, permissaoId);
+		return ResponseEntity.noContent().build();
 	}
 	
 	@Override
 	@DeleteMapping("{permissaoId}")
 	@ResponseStatus(code = HttpStatus.NO_CONTENT)
-	public void desassociar(@PathVariable Long grupoId, @PathVariable Long permissaoId){
+	public ResponseEntity<Void> desassociar(@PathVariable Long grupoId, @PathVariable Long permissaoId){
 		this.grupoPermissaoService.desassociar(grupoId, permissaoId);
+		return ResponseEntity.noContent().build();
 	}
 	
 	
 	@Override
 	@GetMapping
-	public ResponseEntity<List<PermissaoOut>> listar(@PathVariable Long grupoId){
-		List<PermissaoOut> permissoes = this.grupoPermissaoService.listar(grupoId);
+	public ResponseEntity<CollectionModel<PermissaoOut>> listar(@PathVariable Long grupoId){
+		CollectionModel<PermissaoOut> permissoes = this.grupoPermissaoService.listar(grupoId);
+		permissoes.removeLinks();
+		permissoes.getContent().stream().forEach(permissao ->{
+			permissao.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(GrupoPermissaoController.class)
+					.desassociar(grupoId, permissao.getId())).withRel("associar"));
+			permissao.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(GrupoPermissaoController.class)
+					.associar(grupoId, permissao.getId())).withRel("desassociar"));
+		});
+		permissoes.add(WebMvcLinkBuilder.linkTo(PermissaoController.class).withRel("permissoes"));
 		return ResponseEntity.ok(permissoes);
 	}
 	

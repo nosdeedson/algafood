@@ -1,9 +1,9 @@
 package com.ejs.algaworksCurso.api.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ejs.algaworksCurso.api.helper.ResourceUriHelper;
 import com.ejs.algaworksCurso.api.model.in.pedido.PedidoIn;
+import com.ejs.algaworksCurso.api.model.out.formaPagamento.FormaPagamentoOut;
 import com.ejs.algaworksCurso.api.model.out.pedido.PedidoOut;
 import com.ejs.algaworksCurso.api.model.out.pedido.PedidoResumidoDTO;
 import com.ejs.algaworksCurso.api.openApi.controller.PedidoControllerOpenApi;
@@ -33,36 +34,43 @@ public class PedidoController implements PedidoControllerOpenApi {
 
 	@Override
 	@DeleteMapping("{codigoPedido}/cancela")
-	public ResponseEntity<?> cancelarPedido(@PathVariable String codigoPedido) {
+	public ResponseEntity<Void> cancelarPedido(@PathVariable String codigoPedido) {
 		this.pedidoService.cancelarPedido(codigoPedido);
 		return ResponseEntity.noContent().build();
 	}
 	
 	@Override
 	@PutMapping("{codigoPedido}/confirmacao")
-	public ResponseEntity<?> confirmarPedido(@PathVariable String codigoPedido) {
+	public ResponseEntity<Void> confirmarPedido(@PathVariable String codigoPedido) {
 		this.pedidoService.confirmarPedido(codigoPedido);
 		return ResponseEntity.noContent().build();
 	}
 	
 	@Override
 	@GetMapping("{codigoPedido}")
-	public ResponseEntity<?> buscar(@PathVariable String codigoPedido){
+	public ResponseEntity<PedidoOut> buscar(@PathVariable String codigoPedido){
 		PedidoOut out = this.pedidoService.buscar(codigoPedido);
 		return ResponseEntity.ok(out);
 	}
 	
 	@Override
+	@GetMapping("/forma-pagamento/{codigoPedido}")
+	public ResponseEntity<FormaPagamentoOut> buscarFormaPagamento(@PathVariable String codigoPedido){
+		FormaPagamentoOut out = this.pedidoService.buscarFormaPagamento(codigoPedido);
+		return ResponseEntity.ok(out);
+	}
+	
+	@Override
 	@PutMapping("{codigoPedido}/entrega")
-	public ResponseEntity<?> entregarPedido(@PathVariable String codigoPedido) {
+	public ResponseEntity<Void> entregarPedido(@PathVariable String codigoPedido) {
 		this.pedidoService.entregarPedido(codigoPedido);
 		return ResponseEntity.noContent().build();
 	}
 
 	@Override
 	@GetMapping
-	public ResponseEntity<?> listar(@PageableDefault(size = 10) Pageable pageable,  PedidoFilter filtro){
-		Page<PedidoResumidoDTO> pedidos = this.pedidoService.listar(pageable, filtro);
+	public ResponseEntity<PagedModel<PedidoResumidoDTO>> listar(@PageableDefault(size = 10) Pageable pageable,  PedidoFilter filtro){
+		PagedModel<PedidoResumidoDTO> pedidos = this.pedidoService.listar(pageable, filtro);
 		return ResponseEntity.ok(pedidos);
 	}
 	

@@ -1,11 +1,13 @@
 package com.ejs.algaworksCurso.api.model.out.estado;
 
+import org.springframework.hateoas.RepresentationModel;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import io.swagger.annotations.ApiModel;
 
 @ApiModel(value = "estado")
-public class EstadoResumidoOut {
+public class EstadoResumidoOut extends RepresentationModel<EstadoResumidoOut> {
 	
 	
 	private Long id;

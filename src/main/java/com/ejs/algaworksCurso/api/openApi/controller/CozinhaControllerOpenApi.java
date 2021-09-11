@@ -1,7 +1,7 @@
 package com.ejs.algaworksCurso.api.openApi.controller;
 
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.http.ResponseEntity;
 
 import com.ejs.algaworksCurso.api.model.in.cozinha.CozinhaIn;
@@ -20,7 +20,7 @@ public interface CozinhaControllerOpenApi {
 	@ApiOperation(value = "Busca a primeira cozinha no Banco de dados")
 	ResponseEntity<CozinhaOut> buscarPrimeira();
 
-	Page<CozinhaOut> listar(Pageable pageable);
+	PagedModel<CozinhaOut> listar(Pageable pageable);
 
 	void remover(Long cozinhaId);
 

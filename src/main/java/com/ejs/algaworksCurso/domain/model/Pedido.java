@@ -128,6 +128,18 @@ public class Pedido extends AbstractAggregateRoot<Pedido> implements Serializabl
 		this.setDataEntrega(OffsetDateTime.now());
 	}
 	
+	public boolean podeCancelar() {
+		return this.status.podeMudarStatusPara(StatusPedido.CANCELADO);
+	}
+	
+	public boolean podeConfirmar() {
+		return this.status.podeMudarStatusPara(StatusPedido.CONFIRMADO);
+	}
+	
+	public boolean podeEntregar() {
+		return this.status.podeMudarStatusPara(StatusPedido.ENTREGUE);
+	}
+	
 	
 	/**
 	 * Getters and Setters 

@@ -1,11 +1,11 @@
 package com.ejs.algaworksCurso.domain.services;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,20 +35,18 @@ public class FormaPagamentoService {
 		FormaPagamento formaPagamento = this.buscarOuFalhar(formaPagamentoId);
 		this.assembler.formaPagamentoInToFormaPagamento(formaPagamentoIn, formaPagamento);
 		formaPagamento = this.formaPagamentoRespository.save(formaPagamento);
-		return disAssembler.formaPagamentoToFormaPagamentoOut(formaPagamento);
+		return disAssembler.toModel(formaPagamento);
 	}
 	
 	public FormaPagamentoOut buscar( Long formaPagamentoId) {
 		FormaPagamento fp = this.buscarOuFalhar(formaPagamentoId);
-		return this.disAssembler.formaPagamentoToFormaPagamentoOut(fp);
+		return this.disAssembler.toModel(fp);
 	}
 	
-	public List<FormaPagamentoOut> listar(){
+	public CollectionModel<FormaPagamentoOut> listar(){
 				
 		List<FormaPagamento> formasPagamento = this.formaPagamentoRespository.findAll();
-		return formasPagamento.stream()
-				.map(fp -> this.disAssembler.formaPagamentoToFormaPagamentoOut(fp))
-				.collect(Collectors.toList());
+		return this.disAssembler.toCollectionModel(formasPagamento);
 	}
 	
 	
@@ -71,7 +69,7 @@ public class FormaPagamentoService {
 	public FormaPagamentoOut salvar(FormaPagamentoIn formaPagamentoIn) {
 		FormaPagamento formaPagamento = this.assembler.formaPagamentoInToFormaPagamento(formaPagamentoIn);
 		formaPagamento = this.formaPagamentoRespository.save(formaPagamento);
-		return this.disAssembler.formaPagamentoToFormaPagamentoOut(formaPagamento);
+		return this.disAssembler.toModel(formaPagamento);
 	}
 	
 	public FormaPagamento buscarOuFalhar(Long formaPagamentoId) {

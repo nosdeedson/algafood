@@ -1,10 +1,9 @@
 package com.ejs.algaworksCurso.api.controller;
 
-import java.util.List;
-
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -48,13 +47,22 @@ public class CidadeController implements CidadeControllerOpenApi {
 	@GetMapping("{id}")
 	public ResponseEntity<CidadeOut> buscar(@PathVariable Long id){
 		CidadeOut cidade = this.cidadeService.buscar(id);
+//		// criei o método em ResourceUriHelper que devolve a uri
+//		cidade.add(Link.of(ResourceUriHelper.uriRequest(null)));
+//		
+//		// usa classe do próprio hateos do spring
+//		cidade.add(WebMvcLinkBuilder.linkTo(CidadeController.class).withRel("cidades"));
+//		cidade.getEstado().add(Link.of(ResourceUriHelper.uriRequest(null)));
 		return ResponseEntity.ok(cidade);
 	}
 	
 	@Override
-	@GetMapping()
-	public List<CidadeOut> listar(){
-		return this.cidadeService.listar();
+	@GetMapping
+	public CollectionModel<CidadeOut> listar(){
+				
+		CollectionModel<CidadeOut> cidadesModel = this.cidadeService.listar();
+		
+		return cidadesModel;
 	}
 	
 	@Override

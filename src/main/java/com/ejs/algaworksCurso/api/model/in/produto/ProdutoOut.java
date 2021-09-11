@@ -2,7 +2,12 @@ package com.ejs.algaworksCurso.api.model.in.produto;
 
 import java.math.BigDecimal;
 
-public class ProdutoOut {
+import org.springframework.hateoas.RepresentationModel;
+import org.springframework.hateoas.server.core.Relation;
+
+
+@Relation(collectionRelation = "produtos")
+public class ProdutoOut extends RepresentationModel<ProdutoOut>{
 
 	private Long id;
 	private Boolean ativo;

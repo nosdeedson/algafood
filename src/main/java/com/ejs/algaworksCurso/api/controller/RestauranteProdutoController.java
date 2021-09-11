@@ -1,10 +1,9 @@
 package com.ejs.algaworksCurso.api.controller;
 
-import java.util.List;
-
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -50,9 +49,9 @@ public class RestauranteProdutoController implements RestauranteProdutoControlle
 	
 	@Override
 	@GetMapping()
-	public ResponseEntity<List<ProdutoOut>> listarProduto(@PathVariable Long restauranteId, 
-			@RequestParam(required = false) boolean incluirInativos){
-		List<ProdutoOut> produtos = this.restauranteProdutoService.listarProduto(restauranteId, incluirInativos);
+	public ResponseEntity<CollectionModel<ProdutoOut>> listarProduto(@PathVariable Long restauranteId, 
+			@RequestParam(required = false) Boolean incluirInativos){
+		CollectionModel<ProdutoOut> produtos = this.restauranteProdutoService.listarProduto(restauranteId, incluirInativos);
 		return ResponseEntity.ok(produtos);
 	}
 	

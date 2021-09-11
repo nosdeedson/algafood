@@ -3,11 +3,15 @@ package com.ejs.algaworksCurso.api.model.out.pedido;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 
+import org.springframework.hateoas.RepresentationModel;
+import org.springframework.hateoas.server.core.Relation;
+
 import com.ejs.algaworksCurso.api.model.out.restautante.RestauranteResumidoDTO;
 import com.ejs.algaworksCurso.api.model.out.usuario.UsuarioOut;
 
 //@JsonFilter("pedidosFilter") usar com a getmapping 2
-public class PedidoResumidoDTO {
+@Relation(collectionRelation = "pedidos")
+public class PedidoResumidoDTO extends RepresentationModel<PedidoResumidoDTO> {
 
 	private String codigo;
 	private BigDecimal subTotal;

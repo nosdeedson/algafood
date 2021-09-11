@@ -1,16 +1,14 @@
 package com.ejs.algaworksCurso.api.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ejs.algaworksCurso.api.model.out.group.GrupoOut;
@@ -26,22 +24,28 @@ public class UsuarioGrupoController implements UsuarioGrupoControllerOpenApi {
 	
 	@Override
 	@PutMapping("{grupoId}")
-	@ResponseStatus(code = HttpStatus.NO_CONTENT)
-	public void associarGrupo(@PathVariable Long usuarioId, @PathVariable Long grupoId){
+	public ResponseEntity<Void> associarGrupo(@PathVariable Long usuarioId, @PathVariable Long grupoId){
 		this.userGrupoService.associar(usuarioId, grupoId);
+		return ResponseEntity.noContent().build();
 	}
 	
 	@Override
 	@DeleteMapping("{grupoId}")
-	@ResponseStatus(code = HttpStatus.NO_CONTENT)
-	public void desassociarGrupo(@PathVariable Long usuarioId, @PathVariable Long grupoId){
+	public ResponseEntity<Void> desassociarGrupo(@PathVariable Long usuarioId, @PathVariable Long grupoId){
 		this.userGrupoService.desassociar(usuarioId, grupoId);
+		return ResponseEntity.noContent().build();
 	}
 	
 	@Override
 	@GetMapping
-	public ResponseEntity<List<GrupoOut> > listar(@PathVariable Long usuarioId){
-		List<GrupoOut> grupos = this.userGrupoService.listar(usuarioId);
+	public ResponseEntity<CollectionModel<GrupoOut>> listar(@PathVariable Long usuarioId){
+		CollectionModel<GrupoOut> grupos = this.userGrupoService.listar(usuarioId);
+		grupos.getContent().stream().forEach( grupo ->{
+			grupo.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(UsuarioGrupoController.class)
+					.desassociarGrupo(usuarioId, grupo.getId())).withRel("desassociar"));
+			grupo.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(UsuarioGrupoController.class)
+					.associarGrupo(usuarioId, null)).withRel("associar"));
+		});
 		return ResponseEntity.ok(grupos);
 	}
 
