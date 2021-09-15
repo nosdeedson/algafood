@@ -1,6 +1,10 @@
 package com.ejs.algaworksCurso.api.model.out.estado;
 
-public class EstadoOut {
+import org.springframework.hateoas.RepresentationModel;
+import org.springframework.hateoas.server.core.Relation;
+
+@Relation(collectionRelation = "estados")
+public class EstadoOut extends RepresentationModel<EstadoOut> {
 	
 	private Long id;
 	private String nome;

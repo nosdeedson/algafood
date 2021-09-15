@@ -25,6 +25,7 @@ public class RootEntryPontController {
 		root.add(WebMvcLinkBuilder.linkTo(PermissaoController.class).withRel("permissoes"));
 		root.add(WebMvcLinkBuilder.linkTo(RestauranteController.class).withRel("restaurantes"));
 		root.add(WebMvcLinkBuilder.linkTo(UsuarioController.class).withRel("usuarios"));
+		root.add(WebMvcLinkBuilder.linkTo(EstatisticaController.class).withRel("estatisticas"));
 		return root;
 	}
 	

@@ -3,7 +3,10 @@ package com.ejs.algaworksCurso.api.model.dto;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 
-public class VendaDiariaDTO {
+import org.springframework.hateoas.RepresentationModel;
+
+
+public class VendaDiariaDTO extends RepresentationModel<VendaDiariaDTO>{
 	
 	private OffsetDateTime data;
 	private Long quantidadeVendas;

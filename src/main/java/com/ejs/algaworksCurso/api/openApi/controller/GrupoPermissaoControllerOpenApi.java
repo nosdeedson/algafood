@@ -4,6 +4,7 @@ import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.ResponseEntity;
 
 import com.ejs.algaworksCurso.api.model.out.permissao.PermissaoOut;
+import com.ejs.algaworksCurso.api.openApi.model.PermissoesModelOpenApi;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -17,6 +18,7 @@ public interface GrupoPermissaoControllerOpenApi {
 	@ApiOperation(value = "Desassocia grupo de permissão")
 	ResponseEntity<Void> desassociar(Long grupoId, Long permissaoId);
 
+	@ApiOperation(value = "Lista as permissões por grupo", response = PermissoesModelOpenApi.class)
 	ResponseEntity<CollectionModel<PermissaoOut>> listar(Long grupoId);
 
 }

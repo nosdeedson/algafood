@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 
 import com.ejs.algaworksCurso.api.model.in.restaurante.RestauranteIn;
 import com.ejs.algaworksCurso.api.model.out.restautante.RestauranteOut;
+import com.ejs.algaworksCurso.api.openApi.model.RestaurantesModelOpenApi;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -45,6 +46,7 @@ public interface RestauranteControllerOpenApin {
 	@ApiOperation(value = "Inativa vários restaurantes")
 	void inativarMultiplos(List<Long> restauranteIds);
 
+	@ApiOperation(value = "Lista os restaurantes", response = RestaurantesModelOpenApi.class)
 	ResponseEntity<CollectionModel<RestauranteOut>> listar();
 
 	ResponseEntity<RestauranteOut> salvar(RestauranteIn restauranteIn);

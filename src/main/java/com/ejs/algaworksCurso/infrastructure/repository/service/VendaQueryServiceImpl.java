@@ -9,8 +9,15 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import org.springframework.hateoas.Link;
+import org.springframework.hateoas.TemplateVariable;
+import org.springframework.hateoas.TemplateVariable.VariableType;
+import org.springframework.hateoas.TemplateVariables;
+import org.springframework.hateoas.UriTemplate;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.stereotype.Repository;
 
+import com.ejs.algaworksCurso.api.controller.EstatisticaController;
 import com.ejs.algaworksCurso.api.model.dto.VendaDiariaDTO;
 import com.ejs.algaworksCurso.domain.model.Pedido;
 import com.ejs.algaworksCurso.domain.model.StatusPedido;
@@ -45,8 +52,22 @@ public class VendaQueryServiceImpl  implements VendaQueryService {
 		query.select(selection);
 		query.groupBy(root.get("dataCriacao"));
 		var result = manager.createQuery(query);
+		List<VendaDiariaDTO> vendas = result.getResultList();
 		
-		return result.getResultList();
+		TemplateVariables filtros = new TemplateVariables(
+					new TemplateVariable("restauranteId", VariableType.REQUEST_PARAM),
+					new TemplateVariable("dataCriacaoInicio", VariableType.REQUEST_PARAM),
+					new TemplateVariable("dataCriacaoFim", VariableType.REQUEST_PARAM)
+				);
+		String url = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(EstatisticaController.class)
+				.buscarVendasDiarias(filtro)).toUri().toString();
+		Link link = Link.of(UriTemplate.of(url, filtros), "venda-diaria");
+		
+		vendas.forEach(venda ->{
+			venda.add(link);
+		});
+		
+		return vendas;
 	}
 
 	private void gerarFiltros( List<Predicate> predicates, CriteriaBuilder builder, Root<?> root, VendaDiariaFilter filtro) {

@@ -8,6 +8,7 @@ import com.ejs.algaworksCurso.api.model.in.pedido.PedidoIn;
 import com.ejs.algaworksCurso.api.model.out.formaPagamento.FormaPagamentoOut;
 import com.ejs.algaworksCurso.api.model.out.pedido.PedidoOut;
 import com.ejs.algaworksCurso.api.model.out.pedido.PedidoResumidoDTO;
+import com.ejs.algaworksCurso.api.openApi.model.PedidosModelHateoasOpenApi;
 import com.ejs.algaworksCurso.domain.model.filter.PedidoFilter;
 
 import io.swagger.annotations.Api;
@@ -39,6 +40,8 @@ public interface PedidoControllerOpenApi {
 		@ApiImplicitParam(name = "campos", value = "Atributos a serem devolvidos na resposta.",
 				paramType = "query", type = "String")
 	})
+	
+	@ApiOperation(value = "Lista os pedidos", response = PedidosModelHateoasOpenApi.class)
 	ResponseEntity<PagedModel<PedidoResumidoDTO>> listar(Pageable pageable, PedidoFilter filtro);
 
 	ResponseEntity<PedidoOut> salvar(PedidoIn pedidoIn);

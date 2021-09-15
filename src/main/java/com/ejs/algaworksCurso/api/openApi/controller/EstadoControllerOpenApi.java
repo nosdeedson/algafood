@@ -1,7 +1,6 @@
 package com.ejs.algaworksCurso.api.openApi.controller;
 
-import java.util.List;
-
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.ResponseEntity;
 
 import com.ejs.algaworksCurso.api.model.in.estado.EstadoIn;
@@ -16,7 +15,7 @@ public interface EstadoControllerOpenApi {
 
 	ResponseEntity<EstadoOut> buscar(Long id);
 
-	List<EstadoOut> listar();
+	CollectionModel<EstadoOut> listar();
 
 	void remover(Long id);
 

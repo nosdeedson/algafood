@@ -9,8 +9,11 @@ import org.springframework.hateoas.server.core.Relation;
 import com.ejs.algaworksCurso.api.model.out.restautante.RestauranteResumidoDTO;
 import com.ejs.algaworksCurso.api.model.out.usuario.UsuarioOut;
 
+import io.swagger.annotations.ApiModel;
+
 //@JsonFilter("pedidosFilter") usar com a getmapping 2
 @Relation(collectionRelation = "pedidos")
+@ApiModel("PedidoResumido")
 public class PedidoResumidoDTO extends RepresentationModel<PedidoResumidoDTO> {
 
 	private String codigo;

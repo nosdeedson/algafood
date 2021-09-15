@@ -8,7 +8,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import io.swagger.annotations.Api;
 
-@Api(tags = "HOme")
+@Api(tags = "Home")
 @RestController
 @ResponseBody
 @RequestMapping("/")

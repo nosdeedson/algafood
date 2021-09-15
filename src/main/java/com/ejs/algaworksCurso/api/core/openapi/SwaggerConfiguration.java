@@ -7,9 +7,16 @@ import java.util.List;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.Link;
+import org.springframework.hateoas.LinkRelation;
+import org.springframework.hateoas.Links;
+import org.springframework.hateoas.PagedModel;
+import org.springframework.hateoas.PagedModel.PageMetadata;
+import org.springframework.hateoas.UriTemplate;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.servlet.ModelAndView;
@@ -17,9 +24,22 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import com.ejs.algaworksCurso.api.exceptionHandler.Problem;
+import com.ejs.algaworksCurso.api.model.out.cidade.CidadeOut;
 import com.ejs.algaworksCurso.api.model.out.cozinha.CozinhaOut;
-import com.ejs.algaworksCurso.api.openApi.model.CozinhasModelOpenApi;
+import com.ejs.algaworksCurso.api.model.out.estado.EstadoOut;
+import com.ejs.algaworksCurso.api.model.out.pedido.PedidoOut;
+import com.ejs.algaworksCurso.api.openApi.model.CidadesModelOpenapi;
+import com.ejs.algaworksCurso.api.openApi.model.CozinhaModelHateoasOpenApi;
+import com.ejs.algaworksCurso.api.openApi.model.EstadosModelOpenApi;
+import com.ejs.algaworksCurso.api.openApi.model.FormasPagamentoModelOpenApi;
+import com.ejs.algaworksCurso.api.openApi.model.GruposModelOpenApi;
+import com.ejs.algaworksCurso.api.openApi.model.LinksModelOpenApi;
 import com.ejs.algaworksCurso.api.openApi.model.PageableModelOpenApi;
+import com.ejs.algaworksCurso.api.openApi.model.PedidosModelHateoasOpenApi;
+import com.ejs.algaworksCurso.api.openApi.model.PermissoesModelOpenApi;
+import com.ejs.algaworksCurso.api.openApi.model.ProdutosModelOpenApin;
+import com.ejs.algaworksCurso.api.openApi.model.RestaurantesModelOpenApi;
+import com.ejs.algaworksCurso.api.openApi.model.UsuariosModelOpenApi;
 import com.fasterxml.classmate.TypeResolver;
 
 import springfox.bean.validators.configuration.BeanValidatorPluginsConfiguration;
@@ -63,10 +83,45 @@ public class SwaggerConfiguration implements WebMvcConfigurer {
 //										.modelRef(new ModelRef("Strig"))
 //										.build()))
 				.apiInfo(this.apiInfo())
-				.ignoredParameterTypes(ServletWebRequest.class, URI.class, ModelAndView.class)
+				.ignoredParameterTypes(ServletWebRequest.class, URI.class, ModelAndView.class, UriTemplate.class, Link.class, LinkRelation.class, 
+						PageMetadata.class)
 				.directModelSubstitute(Pageable.class, PageableModelOpenApi.class)
+				.directModelSubstitute(Links.class, LinksModelOpenApi.class)
+// 				.alternateTypeRules(AlternateTypeRules usado para corrigir a documentação sem o Hateoas
+//						.newRule(typeResolver.resolve(Page.class, CozinhaOut.class), CozinhasModelOpenApi.class))
+				
+				
+				.alternateTypeRules(AlternateTypeRules 
+						.newRule(typeResolver.resolve(PagedModel.class, CozinhaOut.class), CozinhaModelHateoasOpenApi.class))
+				
+				.alternateTypeRules(AlternateTypeRules 
+						.newRule(typeResolver.resolve(ResponseEntity.class, CollectionModel.class), ProdutosModelOpenApin.class))
+	
+				
+				.alternateTypeRules(AlternateTypeRules 
+						.newRule(typeResolver.resolve(PagedModel.class, PedidoOut.class), PedidosModelHateoasOpenApi.class))
+				
 				.alternateTypeRules(AlternateTypeRules
-						.newRule(typeResolver.resolve(Page.class, CozinhaOut.class), CozinhasModelOpenApi.class))
+						.newRule(typeResolver.resolve(CollectionModel.class, CidadeOut.class), CidadesModelOpenapi.class))
+				
+				.alternateTypeRules(AlternateTypeRules
+						.newRule(typeResolver.resolve(CollectionModel.class, EstadoOut.class), EstadosModelOpenApi.class))
+				
+				.alternateTypeRules(AlternateTypeRules
+						.newRule(typeResolver.resolve(ResponseEntity.class, CollectionModel.class), UsuariosModelOpenApi.class))
+				
+				.alternateTypeRules(AlternateTypeRules
+						.newRule(typeResolver.resolve(ResponseEntity.class, CollectionModel.class), RestaurantesModelOpenApi.class))
+				
+				.alternateTypeRules(AlternateTypeRules
+						.newRule(typeResolver.resolve(ResponseEntity.class, CollectionModel.class), FormasPagamentoModelOpenApi.class))
+				
+				.alternateTypeRules(AlternateTypeRules
+						.newRule(typeResolver.resolve(ResponseEntity.class, CollectionModel.class), GruposModelOpenApi.class))
+				
+				.alternateTypeRules(AlternateTypeRules
+						.newRule(typeResolver.resolve(ResponseEntity.class, CollectionModel.class), PermissoesModelOpenApi.class))
+				
 				.tags( 
 						new Tag("Cidades", "Gerencia cidades"), 
 						new Tag("Grupos", "Gerencia grupos"),

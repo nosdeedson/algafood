@@ -7,6 +7,7 @@ import com.ejs.algaworksCurso.api.model.in.senha.SenhaAtualizarIn;
 import com.ejs.algaworksCurso.api.model.in.usuario.UsuarioAtualizarIn;
 import com.ejs.algaworksCurso.api.model.in.usuario.UsuarioIn;
 import com.ejs.algaworksCurso.api.model.out.usuario.UsuarioOut;
+import com.ejs.algaworksCurso.api.openApi.model.UsuariosModelOpenApi;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -21,6 +22,7 @@ public interface UsuarioControllerOpenApi {
 
 	ResponseEntity<UsuarioOut> buscar(Long usuarioId);
 
+	@ApiOperation(value = "Lista os usuários", response = UsuariosModelOpenApi.class)
 	ResponseEntity<CollectionModel<UsuarioOut>> listar();
 
 	void remover(Long usuarioId);

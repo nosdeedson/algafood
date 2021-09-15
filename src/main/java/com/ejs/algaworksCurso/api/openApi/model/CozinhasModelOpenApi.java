@@ -6,5 +6,7 @@ import io.swagger.annotations.ApiModel;
 
 @ApiModel(value = "CozinhasModel")
 public class CozinhasModelOpenApi extends PagedModelOpenApi<CozinhaOut> {
-	
+	/**
+	 * Usada sem o Hateoas 
+	 */
 }

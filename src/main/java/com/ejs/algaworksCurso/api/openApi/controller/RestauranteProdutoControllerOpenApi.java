@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 
 import com.ejs.algaworksCurso.api.model.in.produto.ProdutoIn;
 import com.ejs.algaworksCurso.api.model.in.produto.ProdutoOut;
+import com.ejs.algaworksCurso.api.openApi.model.ProdutosModelOpenApin;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -18,7 +19,7 @@ public interface RestauranteProdutoControllerOpenApi {
 	@ApiOperation(value = "Busca produto")
 	ResponseEntity<ProdutoOut> buscarProduto(Long restauranteId, Long produtoId);
 
-	@ApiOperation(value = "Lista produto")
+	@ApiOperation(value = "Lista produtos", response = ProdutosModelOpenApin.class)
 	ResponseEntity<CollectionModel<ProdutoOut>> listarProduto(Long restauranteId, Boolean incluirInativos);
 
 	void remover(Long restauranteId, Long produtoId);
