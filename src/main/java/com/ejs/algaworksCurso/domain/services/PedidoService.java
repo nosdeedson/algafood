@@ -15,12 +15,12 @@ import org.springframework.hateoas.PagedModel;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.ejs.algaworksCurso.api.core.PageableWrapper;
-import com.ejs.algaworksCurso.api.model.in.itensPedido.ItensPedidoIn;
-import com.ejs.algaworksCurso.api.model.in.pedido.PedidoIn;
-import com.ejs.algaworksCurso.api.model.out.formaPagamento.FormaPagamentoOut;
-import com.ejs.algaworksCurso.api.model.out.pedido.PedidoOut;
-import com.ejs.algaworksCurso.api.model.out.pedido.PedidoResumidoDTO;
+import com.ejs.algaworksCurso.api.v1.core.PageableWrapper;
+import com.ejs.algaworksCurso.api.v1.model.in.itensPedido.ItensPedidoIn;
+import com.ejs.algaworksCurso.api.v1.model.in.pedido.PedidoIn;
+import com.ejs.algaworksCurso.api.v1.model.out.formaPagamento.FormaPagamentoOut;
+import com.ejs.algaworksCurso.api.v1.model.out.pedido.PedidoOut;
+import com.ejs.algaworksCurso.api.v1.model.out.pedido.PedidoResumidoDTO;
 import com.ejs.algaworksCurso.domain.exception.NegocioException;
 import com.ejs.algaworksCurso.domain.exception.PedidoNaoEncontradaException;
 import com.ejs.algaworksCurso.domain.exception.RestauranteNaoEncontradoException;

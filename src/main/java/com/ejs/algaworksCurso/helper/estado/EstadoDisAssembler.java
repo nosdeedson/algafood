@@ -7,8 +7,8 @@ import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSuppor
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.stereotype.Component;
 
-import com.ejs.algaworksCurso.api.controller.EstadoController;
-import com.ejs.algaworksCurso.api.model.out.estado.EstadoOut;
+import com.ejs.algaworksCurso.api.v1.controller.EstadoController;
+import com.ejs.algaworksCurso.api.v1.model.out.estado.EstadoOut;
 import com.ejs.algaworksCurso.domain.model.Estado;
 
 @Component

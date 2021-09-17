@@ -17,8 +17,8 @@ import org.springframework.hateoas.UriTemplate;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.stereotype.Repository;
 
-import com.ejs.algaworksCurso.api.controller.EstatisticaController;
-import com.ejs.algaworksCurso.api.model.dto.VendaDiariaDTO;
+import com.ejs.algaworksCurso.api.v1.controller.EstatisticaController;
+import com.ejs.algaworksCurso.api.v1.model.dto.VendaDiariaDTO;
 import com.ejs.algaworksCurso.domain.model.Pedido;
 import com.ejs.algaworksCurso.domain.model.StatusPedido;
 import com.ejs.algaworksCurso.domain.model.filter.VendaDiariaFilter;

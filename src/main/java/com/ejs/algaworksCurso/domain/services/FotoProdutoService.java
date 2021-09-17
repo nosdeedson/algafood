@@ -10,9 +10,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.HttpMediaTypeNotAcceptableException;
 
-import com.ejs.algaworksCurso.api.model.in.produto.FotoProdutoIn;
-import com.ejs.algaworksCurso.api.model.out.fotoProduto.FotoProdutoOut;
-import com.ejs.algaworksCurso.api.model.out.fotoProduto.ImagemOut;
+import com.ejs.algaworksCurso.api.v1.model.in.produto.FotoProdutoIn;
+import com.ejs.algaworksCurso.api.v1.model.out.fotoProduto.FotoProdutoOut;
+import com.ejs.algaworksCurso.api.v1.model.out.fotoProduto.ImagemOut;
 import com.ejs.algaworksCurso.domain.exception.FotoProdutoNaoEncontradaException;
 import com.ejs.algaworksCurso.domain.exception.ProdutoNaoEncontradoException;
 import com.ejs.algaworksCurso.domain.model.FotoProduto;

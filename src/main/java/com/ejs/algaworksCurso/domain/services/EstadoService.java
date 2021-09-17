@@ -10,8 +10,8 @@ import org.springframework.hateoas.CollectionModel;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.ejs.algaworksCurso.api.model.in.estado.EstadoIn;
-import com.ejs.algaworksCurso.api.model.out.estado.EstadoOut;
+import com.ejs.algaworksCurso.api.v1.model.in.estado.EstadoIn;
+import com.ejs.algaworksCurso.api.v1.model.out.estado.EstadoOut;
 import com.ejs.algaworksCurso.domain.exception.EntidadeEmUsoException;
 import com.ejs.algaworksCurso.domain.exception.EstadoNaoEncontradoException;
 import com.ejs.algaworksCurso.domain.model.Estado;

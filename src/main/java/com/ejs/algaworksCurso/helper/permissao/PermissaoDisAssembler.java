@@ -7,8 +7,8 @@ import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSuppor
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.stereotype.Component;
 
-import com.ejs.algaworksCurso.api.controller.PermissaoController;
-import com.ejs.algaworksCurso.api.model.out.permissao.PermissaoOut;
+import com.ejs.algaworksCurso.api.v1.controller.PermissaoController;
+import com.ejs.algaworksCurso.api.v1.model.out.permissao.PermissaoOut;
 import com.ejs.algaworksCurso.domain.model.Permissao;
 
 @Component

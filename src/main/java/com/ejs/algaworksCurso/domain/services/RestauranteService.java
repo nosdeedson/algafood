@@ -13,8 +13,8 @@ import org.springframework.hateoas.CollectionModel;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.ejs.algaworksCurso.api.model.in.restaurante.RestauranteIn;
-import com.ejs.algaworksCurso.api.model.out.restautante.RestauranteOut;
+import com.ejs.algaworksCurso.api.v1.model.in.restaurante.RestauranteIn;
+import com.ejs.algaworksCurso.api.v1.model.out.restautante.RestauranteOut;
 import com.ejs.algaworksCurso.domain.exception.RestauranteNaoEncontradoException;
 import com.ejs.algaworksCurso.domain.model.Cidade;
 import com.ejs.algaworksCurso.domain.model.Cozinha;

@@ -7,8 +7,8 @@ import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.HttpMediaTypeNotAcceptableException;
 
-import com.ejs.algaworksCurso.api.controller.RestauranteFotoProdutoContoller;
-import com.ejs.algaworksCurso.api.model.out.fotoProduto.FotoProdutoOut;
+import com.ejs.algaworksCurso.api.v1.controller.RestauranteFotoProdutoContoller;
+import com.ejs.algaworksCurso.api.v1.model.out.fotoProduto.FotoProdutoOut;
 import com.ejs.algaworksCurso.domain.model.FotoProduto;
 
 @Component

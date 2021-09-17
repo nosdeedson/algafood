@@ -6,11 +6,11 @@ import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSuppor
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.stereotype.Component;
 
-import com.ejs.algaworksCurso.api.controller.GrupoController;
-import com.ejs.algaworksCurso.api.controller.PedidoController;
-import com.ejs.algaworksCurso.api.controller.RestauranteController;
-import com.ejs.algaworksCurso.api.controller.UsuarioController;
-import com.ejs.algaworksCurso.api.model.out.pedido.PedidoResumidoDTO;
+import com.ejs.algaworksCurso.api.v1.controller.GrupoController;
+import com.ejs.algaworksCurso.api.v1.controller.PedidoController;
+import com.ejs.algaworksCurso.api.v1.controller.RestauranteController;
+import com.ejs.algaworksCurso.api.v1.controller.UsuarioController;
+import com.ejs.algaworksCurso.api.v1.model.out.pedido.PedidoResumidoDTO;
 import com.ejs.algaworksCurso.domain.model.Pedido;
 
 @Component

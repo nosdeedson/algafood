@@ -5,7 +5,7 @@ import org.springframework.hateoas.CollectionModel;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.ejs.algaworksCurso.api.model.out.permissao.PermissaoOut;
+import com.ejs.algaworksCurso.api.v1.model.out.permissao.PermissaoOut;
 import com.ejs.algaworksCurso.domain.exception.GrupoNaoEncontradoException;
 import com.ejs.algaworksCurso.domain.exception.NegocioException;
 import com.ejs.algaworksCurso.domain.exception.PermissaoNaoEncontradaException;

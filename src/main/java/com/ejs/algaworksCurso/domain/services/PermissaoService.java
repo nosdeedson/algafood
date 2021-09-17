@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.stereotype.Service;
 
-import com.ejs.algaworksCurso.api.model.out.permissao.PermissaoOut;
+import com.ejs.algaworksCurso.api.v1.model.out.permissao.PermissaoOut;
 import com.ejs.algaworksCurso.domain.exception.PermissaoNaoEncontradaException;
 import com.ejs.algaworksCurso.domain.model.Permissao;
 import com.ejs.algaworksCurso.domain.repository.PermissaoRepository;

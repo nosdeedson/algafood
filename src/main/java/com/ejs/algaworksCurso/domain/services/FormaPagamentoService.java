@@ -9,8 +9,8 @@ import org.springframework.hateoas.CollectionModel;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.ejs.algaworksCurso.api.model.in.formaPagamento.FormaPagamentoIn;
-import com.ejs.algaworksCurso.api.model.out.formaPagamento.FormaPagamentoOut;
+import com.ejs.algaworksCurso.api.v1.model.in.formaPagamento.FormaPagamentoIn;
+import com.ejs.algaworksCurso.api.v1.model.out.formaPagamento.FormaPagamentoOut;
 import com.ejs.algaworksCurso.domain.exception.EntidadeEmUsoException;
 import com.ejs.algaworksCurso.domain.exception.FormaPagamentoNaoEncontradoException;
 import com.ejs.algaworksCurso.domain.model.FormaPagamento;

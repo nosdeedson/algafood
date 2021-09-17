@@ -6,8 +6,8 @@ import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSuppor
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.stereotype.Component;
 
-import com.ejs.algaworksCurso.api.controller.CozinhaController;
-import com.ejs.algaworksCurso.api.model.out.cozinha.CozinhaOut;
+import com.ejs.algaworksCurso.api.v1.controller.CozinhaController;
+import com.ejs.algaworksCurso.api.v1.model.out.cozinha.CozinhaOut;
 import com.ejs.algaworksCurso.domain.model.Cozinha;
 
 @Component

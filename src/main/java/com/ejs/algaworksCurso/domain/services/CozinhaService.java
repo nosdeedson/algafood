@@ -10,8 +10,8 @@ import org.springframework.hateoas.PagedModel;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.ejs.algaworksCurso.api.model.in.cozinha.CozinhaIn;
-import com.ejs.algaworksCurso.api.model.out.cozinha.CozinhaOut;
+import com.ejs.algaworksCurso.api.v1.model.in.cozinha.CozinhaIn;
+import com.ejs.algaworksCurso.api.v1.model.out.cozinha.CozinhaOut;
 import com.ejs.algaworksCurso.domain.exception.CozinhaNaoEncontradaException;
 import com.ejs.algaworksCurso.domain.exception.EntidadeEmUsoException;
 import com.ejs.algaworksCurso.domain.model.Cozinha;

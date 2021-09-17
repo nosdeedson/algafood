@@ -7,9 +7,9 @@ import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSuppor
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.stereotype.Component;
 
-import com.ejs.algaworksCurso.api.controller.UsuarioController;
-import com.ejs.algaworksCurso.api.controller.UsuarioGrupoController;
-import com.ejs.algaworksCurso.api.model.out.usuario.UsuarioOut;
+import com.ejs.algaworksCurso.api.v1.controller.UsuarioController;
+import com.ejs.algaworksCurso.api.v1.controller.UsuarioGrupoController;
+import com.ejs.algaworksCurso.api.v1.model.out.usuario.UsuarioOut;
 import com.ejs.algaworksCurso.domain.model.Usuario;
 
 @Component

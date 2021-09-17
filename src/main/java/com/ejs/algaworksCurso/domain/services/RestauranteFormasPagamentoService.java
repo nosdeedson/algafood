@@ -6,8 +6,8 @@ import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.ejs.algaworksCurso.api.controller.RestauranteFormasPagamentoController;
-import com.ejs.algaworksCurso.api.model.out.formaPagamento.FormaPagamentoOut;
+import com.ejs.algaworksCurso.api.v1.controller.RestauranteFormasPagamentoController;
+import com.ejs.algaworksCurso.api.v1.model.out.formaPagamento.FormaPagamentoOut;
 import com.ejs.algaworksCurso.domain.model.FormaPagamento;
 import com.ejs.algaworksCurso.domain.model.Restaurante;
 import com.ejs.algaworksCurso.domain.repository.RestauranteRepository;

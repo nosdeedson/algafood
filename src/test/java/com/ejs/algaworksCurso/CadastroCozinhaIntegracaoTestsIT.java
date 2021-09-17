@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import com.ejs.algaworksCurso.api.model.in.cozinha.CozinhaIn;
+import com.ejs.algaworksCurso.api.v1.model.in.cozinha.CozinhaIn;
 import com.ejs.algaworksCurso.domain.exception.EntidadeEmUsoException;
 import com.ejs.algaworksCurso.domain.exception.EntidadeNaoEncontradaException;
 import com.ejs.algaworksCurso.domain.model.Cozinha;

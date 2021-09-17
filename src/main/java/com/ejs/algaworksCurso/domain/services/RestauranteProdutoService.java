@@ -9,8 +9,8 @@ import org.springframework.hateoas.CollectionModel;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.ejs.algaworksCurso.api.model.in.produto.ProdutoIn;
-import com.ejs.algaworksCurso.api.model.in.produto.ProdutoOut;
+import com.ejs.algaworksCurso.api.v1.model.in.produto.ProdutoIn;
+import com.ejs.algaworksCurso.api.v1.model.in.produto.ProdutoOut;
 import com.ejs.algaworksCurso.domain.exception.ProdutoNaoEncontradoException;
 import com.ejs.algaworksCurso.domain.model.Produto;
 import com.ejs.algaworksCurso.domain.model.Restaurante;
