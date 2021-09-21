@@ -40,7 +40,6 @@ import com.ejs.algaworksCurso.api.v1.openApi.model.PermissoesModelOpenApi;
 import com.ejs.algaworksCurso.api.v1.openApi.model.ProdutosModelOpenApin;
 import com.ejs.algaworksCurso.api.v1.openApi.model.RestaurantesModelOpenApi;
 import com.ejs.algaworksCurso.api.v1.openApi.model.UsuariosModelOpenApi;
-import com.ejs.algaworksCurso.api.v2.model.out.cidade.CidadeOutV2;
 import com.fasterxml.classmate.TypeResolver;
 
 import springfox.bean.validators.configuration.BeanValidatorPluginsConfiguration;

@@ -2,6 +2,8 @@ package com.ejs.algaworksCurso.api.v1.controller;
 
 import javax.validation.Valid;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
@@ -28,6 +30,8 @@ import com.ejs.algaworksCurso.domain.services.CidadeService;
 @RequestMapping(path = "cidades", produces = AlgaMediaType.V1_APLICATION_JSON_VALUE)
 public class CidadeController implements CidadeControllerOpenApi {
 
+	private final Logger logger = LoggerFactory.getLogger(CozinhaController.class);
+	
 	@Autowired
 	private CidadeService cidadeService;
 	
@@ -56,7 +60,8 @@ public class CidadeController implements CidadeControllerOpenApi {
 	@Override
 	@GetMapping
 	public CollectionModel<CidadeOut> listar(){
-				
+		logger.info("listanto cozinhas");
+		
 		CollectionModel<CidadeOut> cidadesModel = this.cidadeService.listar();
 		
 		return cidadesModel;
