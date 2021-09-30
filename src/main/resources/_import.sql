@@ -116,6 +116,12 @@ values ('9f10c133-fef4-4aee-aed2-8ffc4e3a44b8', 2, 2, 2, 1, '38400-111', 'Rua Ac
 'CRIADO', (now() at time zone 'utc'), 79, 0, 79);
 
 
+insert into pedido (codigo, restaurante_id, usuario_cliente_id, forma_pagamento_id, endereco_cidade_id, endereco_cep, 
+	endereco_logradouro, endereco_numero, endereco_complemento, endereco_bairro,
+	status, data_criacao, sub_total, taxa_frete, valor_total)
+values ('beabbb87-0c28-4bb7-aea0-3d4d7796c2b9, 2, 2, 2, 1, '38400-111', 'Rua Acre', '300', 'Casa 2', 'Centro',
+'CRIADO', (now() at time zone 'utc'), 79, 0, 79);
+
 
 
 
