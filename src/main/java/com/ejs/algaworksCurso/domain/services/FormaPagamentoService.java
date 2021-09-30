@@ -1,16 +1,16 @@
 package com.ejs.algaworksCurso.domain.services;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.ejs.algaworksCurso.api.model.in.formaPagamento.FormaPagamentoIn;
-import com.ejs.algaworksCurso.api.model.out.formaPagamento.FormaPagamentoOut;
+import com.ejs.algaworksCurso.api.v1.model.in.formaPagamento.FormaPagamentoIn;
+import com.ejs.algaworksCurso.api.v1.model.out.formaPagamento.FormaPagamentoOut;
 import com.ejs.algaworksCurso.domain.exception.EntidadeEmUsoException;
 import com.ejs.algaworksCurso.domain.exception.FormaPagamentoNaoEncontradoException;
 import com.ejs.algaworksCurso.domain.model.FormaPagamento;
@@ -31,23 +31,22 @@ public class FormaPagamentoService {
 	private FormaPagamentoDisAssembler disAssembler;
 	
 	@Transactional
-	public void atualizar( FormaPagamentoIn formaPagamentoIn, Long formaPagamentoId) {
+	public FormaPagamentoOut atualizar( FormaPagamentoIn formaPagamentoIn, Long formaPagamentoId) {
 		FormaPagamento formaPagamento = this.buscarOuFalhar(formaPagamentoId);
 		this.assembler.formaPagamentoInToFormaPagamento(formaPagamentoIn, formaPagamento);
 		formaPagamento = this.formaPagamentoRespository.save(formaPagamento);
+		return disAssembler.toModel(formaPagamento);
 	}
 	
 	public FormaPagamentoOut buscar( Long formaPagamentoId) {
 		FormaPagamento fp = this.buscarOuFalhar(formaPagamentoId);
-		return this.disAssembler.formaPagamentoToFormaPagamentoOut(fp);
+		return this.disAssembler.toModel(fp);
 	}
 	
-	public List<FormaPagamentoOut> listar(){
+	public CollectionModel<FormaPagamentoOut> listar(){
 				
 		List<FormaPagamento> formasPagamento = this.formaPagamentoRespository.findAll();
-		return formasPagamento.stream()
-				.map(fp -> this.disAssembler.formaPagamentoToFormaPagamentoOut(fp))
-				.collect(Collectors.toList());
+		return this.disAssembler.toCollectionModel(formasPagamento);
 	}
 	
 	
@@ -70,7 +69,7 @@ public class FormaPagamentoService {
 	public FormaPagamentoOut salvar(FormaPagamentoIn formaPagamentoIn) {
 		FormaPagamento formaPagamento = this.assembler.formaPagamentoInToFormaPagamento(formaPagamentoIn);
 		formaPagamento = this.formaPagamentoRespository.save(formaPagamento);
-		return this.disAssembler.formaPagamentoToFormaPagamentoOut(formaPagamento);
+		return this.disAssembler.toModel(formaPagamento);
 	}
 	
 	public FormaPagamento buscarOuFalhar(Long formaPagamentoId) {

@@ -1,13 +1,11 @@
 package com.ejs.algaworksCurso.domain.services;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.ejs.algaworksCurso.api.model.out.permissao.PermissaoOut;
+import com.ejs.algaworksCurso.api.v1.model.out.permissao.PermissaoOut;
 import com.ejs.algaworksCurso.domain.exception.GrupoNaoEncontradoException;
 import com.ejs.algaworksCurso.domain.exception.NegocioException;
 import com.ejs.algaworksCurso.domain.exception.PermissaoNaoEncontradaException;
@@ -57,10 +55,8 @@ public class GrupoPermissaoService {
 		} 
 	}
 	
-	public List<PermissaoOut> listar(Long grupoId){
+	public CollectionModel<PermissaoOut> listar(Long grupoId){
 		Grupo grupo = this.grupoService.buscarOuFalhar(grupoId);
-		return grupo.getPermissoes().stream()
-					.map(permissao -> this.permissaoDisAssembler.permissaoToPermissaoOUt(permissao))
-					.collect(Collectors.toList());
+		return this.permissaoDisAssembler.toCollectionModel(grupo.getPermissoes());
 	}
 }

@@ -9,8 +9,8 @@ import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
-import com.ejs.algaworksCurso.api.core.storage.ArmazenamentoProperties;
-import com.ejs.algaworksCurso.api.core.storage.ArmazenamentoProperties.TipoArmazenamento;
+import com.ejs.algaworksCurso.api.v1.core.storage.ArmazenamentoProperties;
+import com.ejs.algaworksCurso.api.v1.core.storage.ArmazenamentoProperties.TipoArmazenamento;
 import com.ejs.algaworksCurso.domain.services.ArmazenamentoFoto;
 
 @Configuration

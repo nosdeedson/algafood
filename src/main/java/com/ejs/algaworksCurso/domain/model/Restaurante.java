@@ -113,6 +113,7 @@ public class Restaurante implements Serializable  {
 		this.aberto = false;
 	}
 	
+	
 	public void associarFormaPagamento(FormaPagamento formaPagamento) {
 		this.getFormasPagamento().add(formaPagamento);
 	}

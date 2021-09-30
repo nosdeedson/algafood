@@ -9,7 +9,7 @@ import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
-import com.ejs.algaworksCurso.api.core.storage.ArmazenamentoProperties;
+import com.ejs.algaworksCurso.api.v1.core.storage.ArmazenamentoProperties;
 import com.ejs.algaworksCurso.domain.services.ArmazenamentoFoto;
 import com.ejs.algaworksCurso.helper.foto.FotoRecuperada;
 import com.ejs.algaworksCurso.helper.foto.NovaFoto;

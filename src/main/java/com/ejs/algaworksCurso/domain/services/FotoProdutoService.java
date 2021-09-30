@@ -10,9 +10,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.HttpMediaTypeNotAcceptableException;
 
-import com.ejs.algaworksCurso.api.model.in.produto.FotoProdutoIn;
-import com.ejs.algaworksCurso.api.model.out.fotoProduto.FotoProdutoOut;
-import com.ejs.algaworksCurso.api.model.out.fotoProduto.ImagemOut;
+import com.ejs.algaworksCurso.api.v1.model.in.produto.FotoProdutoIn;
+import com.ejs.algaworksCurso.api.v1.model.out.fotoProduto.FotoProdutoOut;
+import com.ejs.algaworksCurso.api.v1.model.out.fotoProduto.ImagemOut;
 import com.ejs.algaworksCurso.domain.exception.FotoProdutoNaoEncontradaException;
 import com.ejs.algaworksCurso.domain.exception.ProdutoNaoEncontradoException;
 import com.ejs.algaworksCurso.domain.model.FotoProduto;
@@ -66,7 +66,7 @@ public class FotoProdutoService {
 		
 		this.armazenamentoFoto.substituir(nomeArquivoAntigo, foto);
 		
-		out = fotoProdutoDisAssembler.FotoProdutoToFotoProdutoOut(fp);
+		out = fotoProdutoDisAssembler.toModel(fp);
 		return out;
 	}
 	
@@ -84,7 +84,7 @@ public class FotoProdutoService {
 	public FotoProdutoOut recuperar( Long restauranteId, Long produtoId) {
 		FotoProduto fotoProduto = this.produtoRepository.findByRestauranteIdProdutoId(restauranteId, produtoId)
 				.orElseThrow( () -> new FotoProdutoNaoEncontradaException(restauranteId, produtoId));
-		return this.fotoProdutoDisAssembler.FotoProdutoToFotoProdutoOut(fotoProduto);
+		return this.fotoProdutoDisAssembler.toModel(fotoProduto);
 	}
 	
 	public ImagemOut recuperarFoto( Long restauranteId, Long produtoId, String acceptType) throws HttpMediaTypeNotAcceptableException {

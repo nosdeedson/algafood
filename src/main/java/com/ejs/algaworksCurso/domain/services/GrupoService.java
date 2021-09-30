@@ -1,16 +1,16 @@
 package com.ejs.algaworksCurso.domain.services;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.ejs.algaworksCurso.api.model.in.grupo.GrupoIn;
-import com.ejs.algaworksCurso.api.model.out.group.GrupoOut;
+import com.ejs.algaworksCurso.api.v1.model.in.grupo.GrupoIn;
+import com.ejs.algaworksCurso.api.v1.model.out.group.GrupoOut;
 import com.ejs.algaworksCurso.domain.exception.EntidadeEmUsoException;
 import com.ejs.algaworksCurso.domain.exception.GrupoNaoEncontradoException;
 import com.ejs.algaworksCurso.domain.model.Grupo;
@@ -38,20 +38,19 @@ public class GrupoService {
 		
 		grupo = this.grupoRepository.save(grupo);
 		
-		return this.grupoDisAssembler.grupoToGrupoOut(grupo);
+		return this.grupoDisAssembler.toModel(grupo);
 		
 	}
 	
 	public GrupoOut buscar(Long grupoId) {
 		Grupo grupo = this.buscarOuFalhar(grupoId);
-		return this.grupoDisAssembler.grupoToGrupoOut(grupo);
+		return this.grupoDisAssembler.toModel(grupo);
 	}
 	
-	public List<GrupoOut> listar(){
+	public CollectionModel<GrupoOut> listar(){
 		List<Grupo> grupos = this.grupoRepository.findAll();
-		return grupos.stream()
-				.map(grupo -> this.grupoDisAssembler.grupoToGrupoOut(grupo))
-				.collect(Collectors.toList());
+		CollectionModel<GrupoOut> grupoOuts = this.grupoDisAssembler.toCollectionModel(grupos);
+		return grupoOuts;
 	}
 	
 	@Transactional
@@ -73,7 +72,7 @@ public class GrupoService {
 		
 		grupo = this.grupoRepository.save(grupo);
 		
-		return this.grupoDisAssembler.grupoToGrupoOut(grupo);
+		return this.grupoDisAssembler.toModel(grupo);
 	}
 	
 	/**

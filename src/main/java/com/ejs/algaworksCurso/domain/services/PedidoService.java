@@ -2,23 +2,25 @@ package com.ejs.algaworksCurso.domain.services;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.ejs.algaworksCurso.api.model.in.itensPedido.ItensPedidoIn;
-import com.ejs.algaworksCurso.api.model.in.pedido.PedidoIn;
-import com.ejs.algaworksCurso.api.model.out.pedido.PedidoOut;
-import com.ejs.algaworksCurso.api.model.out.pedido.PedidoResumidoDTO;
+import com.ejs.algaworksCurso.api.v1.core.PageableWrapper;
+import com.ejs.algaworksCurso.api.v1.model.in.itensPedido.ItensPedidoIn;
+import com.ejs.algaworksCurso.api.v1.model.in.pedido.PedidoIn;
+import com.ejs.algaworksCurso.api.v1.model.out.formaPagamento.FormaPagamentoOut;
+import com.ejs.algaworksCurso.api.v1.model.out.pedido.PedidoOut;
+import com.ejs.algaworksCurso.api.v1.model.out.pedido.PedidoResumidoDTO;
 import com.ejs.algaworksCurso.domain.exception.NegocioException;
 import com.ejs.algaworksCurso.domain.exception.PedidoNaoEncontradaException;
 import com.ejs.algaworksCurso.domain.exception.RestauranteNaoEncontradoException;
@@ -31,8 +33,10 @@ import com.ejs.algaworksCurso.domain.model.Restaurante;
 import com.ejs.algaworksCurso.domain.model.Usuario;
 import com.ejs.algaworksCurso.domain.model.filter.PedidoFilter;
 import com.ejs.algaworksCurso.domain.repository.PedidoRepository;
+import com.ejs.algaworksCurso.helper.formaPagamento.FormaPagamentoDisAssembler;
 import com.ejs.algaworksCurso.helper.pedido.PedidoAssembler;
 import com.ejs.algaworksCurso.helper.pedido.PedidoDisAssembler;
+import com.ejs.algaworksCurso.helper.pedido.PedidoResumidoDisAssembler;
 import com.ejs.algaworksCurso.infrastructure.email.EmailException;
 import com.ejs.algaworksCurso.infrastructure.repository.spec.PedidoSpecs;
 
@@ -58,7 +62,16 @@ public class PedidoService {
 	private RestauranteService restauranteService;
 	
 	@Autowired 
-	FormaPagamentoService formaPagamentoService;
+	private FormaPagamentoService formaPagamentoService;
+	
+	@Autowired
+	private FormaPagamentoDisAssembler formaPagamentoDisassembler;
+	
+	@Autowired
+	private PagedResourcesAssembler<Pedido> pagedResourcesAssembler;
+	
+	@Autowired
+	private PedidoResumidoDisAssembler pedidoResumidoDisAssembler;
 	
 	@Transactional
 	public void cancelarPedido( String codigoPedido) {
@@ -80,7 +93,12 @@ public class PedidoService {
 	
 	public PedidoOut buscar(String codigoPedido) {
 		Pedido pedido = this.buscarOuFalhar(codigoPedido);
-		return this.pedidoDisAssembler.pedidoToPedidoOut(pedido);
+		return this.pedidoDisAssembler.toModel(pedido);
+	}
+	
+	public FormaPagamentoOut buscarFormaPagamento(String codigoPedido) {
+		Pedido pedido = this.buscarOuFalhar(codigoPedido);
+		return this.formaPagamentoDisassembler.toModel(pedido.getFormaPagamento());
 	}
 	
 	@Transactional
@@ -89,15 +107,14 @@ public class PedidoService {
 		pedido.entregar();
 	}
 	
-	public Page<PedidoResumidoDTO> listar(Pageable pageable, PedidoFilter filtro){
-		pageable = this.deParaPageable(pageable);
-		Page<Pedido> pedidos = this.pedidoRepository.findAll(PedidoSpecs.usandoFiltor(filtro), pageable);
-		List<PedidoResumidoDTO> pedidosOut = pedidos.stream()
-				.map(pedido -> this.pedidoDisAssembler.pedidoToPedidoResumidoDTO(pedido))
-				.collect(Collectors.toList());
+	public PagedModel<PedidoResumidoDTO> listar(Pageable pageable, PedidoFilter filtro){
+		Pageable pageableTraduzido = this.deParaPageable(pageable);
+		Page<Pedido> pedidos = this.pedidoRepository.findAll(PedidoSpecs.usandoFiltor(filtro), pageableTraduzido);
+	
+		pedidos = new PageableWrapper<>(pedidos, pageable);
 		
-		Page<PedidoResumidoDTO> pedidosPage = new PageImpl<PedidoResumidoDTO>(pedidosOut, pageable, pedidos.getTotalElements());
-		
+		PagedModel<PedidoResumidoDTO> pedidosPage =
+				this.pagedResourcesAssembler.toModel(pedidos, pedidoResumidoDisAssembler);	
 		return pedidosPage;
 	}
 	
@@ -123,7 +140,7 @@ public class PedidoService {
 			pedido.setTaxaFrete(restaurante.getTaxaFrete());
 			pedido.criar();
 			pedido = this.pedidoRepository.save(pedido);
-			return this.pedidoDisAssembler.pedidoToPedidoOut(pedido);
+			return this.pedidoDisAssembler.toModel(pedido);
 		} catch (RestauranteNaoEncontradoException e) {
 			throw new NegocioException(String.format("Restaurante de código %d não existe", pedidoIn.getRestaurante().getId()));
 		} catch (UsuarioNaoEncontradoException e) {
@@ -181,15 +198,5 @@ public class PedidoService {
 		
 		return PageRequest.of( pageable.getPageNumber(), pageable.getPageSize(), Sort.by(orders));
 	}
-		
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 }

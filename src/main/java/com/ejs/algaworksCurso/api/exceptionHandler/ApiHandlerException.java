@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.ConversionNotSupportedException;
 import org.springframework.beans.TypeMismatchException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,8 +38,11 @@ public class ApiHandlerException extends ResponseEntityExceptionHandler {
 	
 	private static final String MSG_GENERICA_SISTEMA = "Ocorreu um erro inesperado no sistema. Tente novamente se o erro persistir, entre em contato com o administrador do sistema.";
 
+	private final Logger logger = LoggerFactory.getLogger(ApiHandlerException.class);
+	
 	@Autowired
 	private MessageSource messageSource;
+	
 	
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<?> capturaExceptionsNaoTratadas(Exception ex, WebRequest resquest ){
@@ -47,6 +52,7 @@ public class ApiHandlerException extends ResponseEntityExceptionHandler {
 				.userMessage(MSG_GENERICA_SISTEMA)
 				.timeStamp()
 				.build();
+		logger.error(problem.getType(), ex);
 		return this.handleExceptionInternal(ex, problem, new HttpHeaders(), status, resquest);		
 	}
 
@@ -92,7 +98,7 @@ public class ApiHandlerException extends ResponseEntityExceptionHandler {
 			.userMessage(ex.getMessage()).build();
 		return this.handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);
 	}
-	
+		
 	@Override
 	protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
 			HttpHeaders headers, HttpStatus status, WebRequest request) {

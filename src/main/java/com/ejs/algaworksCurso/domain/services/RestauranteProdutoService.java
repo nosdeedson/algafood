@@ -2,14 +2,15 @@ package com.ejs.algaworksCurso.domain.services;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.ejs.algaworksCurso.api.model.in.produto.ProdutoIn;
-import com.ejs.algaworksCurso.api.model.in.produto.ProdutoOut;
+import com.ejs.algaworksCurso.api.v1.model.in.produto.ProdutoIn;
+import com.ejs.algaworksCurso.api.v1.model.in.produto.ProdutoOut;
 import com.ejs.algaworksCurso.domain.exception.ProdutoNaoEncontradoException;
 import com.ejs.algaworksCurso.domain.model.Produto;
 import com.ejs.algaworksCurso.domain.model.Restaurante;
@@ -34,32 +35,33 @@ public class RestauranteProdutoService {
 	
 		
 	@Transactional
-	public void atualizarProduto( Long restauranteId, Long ProdutoId, ProdutoIn produtoIn) {
+	public ProdutoOut atualizarProduto( Long restauranteId, Long ProdutoId, ProdutoIn produtoIn) {
 		this.restauranteService.buscarOuFalhar(restauranteId);
-		Produto prpduto = this.produtoRepository.findByIdAndRestaurante_Id(ProdutoId, restauranteId)
+		Produto produto = this.produtoRepository.findByIdAndRestaurante_Id(ProdutoId, restauranteId)
 				.orElseThrow( () -> new ProdutoNaoEncontradoException(ProdutoId, restauranteId) );
 		
-		this.produtoAssembler.produtoInToProduto(produtoIn, prpduto);
-		this.produtoRepository.save(prpduto);		
+		this.produtoAssembler.produtoInToProduto(produtoIn, produto);
+		produto = this.produtoRepository.save(produto);		
+		return this.produtoDisAssembler.toModel(produto);
 	}
 	
 	public ProdutoOut buscarProduto(Long restauranteId, Long produtoId) {
 		Produto produto = this.produtoRepository.findByIdAndRestaurante_Id(produtoId, restauranteId)
 				.orElseThrow(() -> new ProdutoNaoEncontradoException(produtoId, restauranteId));
-		return this.produtoDisAssembler.produtoToProdutoOUt(produto);
+		return this.produtoDisAssembler.toModel(produto);
 	}
 	
-	public List<ProdutoOut> listarProduto(Long restauranteId, boolean incluirInativos){
+	public CollectionModel<ProdutoOut> listarProduto(Long restauranteId, Boolean incluirInativos){
 		Restaurante restaurante = this.restauranteService.buscarOuFalhar(restauranteId);
 		List<Produto> produtos = null;
-		if ( incluirInativos) {
+		if ( Optional.ofNullable(incluirInativos).isPresent()) {
 			produtos = this.produtoRepository.findByRestauranteId(restaurante.getId());
 		}else {
 			produtos = this.produtoRepository.findByRestauranteIdAndAtivo(restaurante.getId(), true);
 		}
-		return produtos.stream()
-					.map(produto -> this.produtoDisAssembler.produtoToProdutoOUt(produto))
-					.collect(Collectors.toList());
+		
+		CollectionModel<ProdutoOut> produtosOut = this.produtoDisAssembler.toCollectionModel(produtos);
+		return produtosOut;
 	}
 	
 	@Transactional
@@ -78,6 +80,6 @@ public class RestauranteProdutoService {
 		produto.setRestaurante(restaurante);
 		produto = this.produtoRepository.save(produto);
 		restaurante.setProdutos(Arrays.asList(produto));
-		return this.produtoDisAssembler.produtoToProdutoOUt(produto);
+		return this.produtoDisAssembler.toModel(produto);
 	}
 }

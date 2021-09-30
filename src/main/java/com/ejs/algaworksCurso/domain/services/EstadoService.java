@@ -1,17 +1,17 @@
 package com.ejs.algaworksCurso.domain.services;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Sort;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.ejs.algaworksCurso.api.model.in.estado.EstadoIn;
-import com.ejs.algaworksCurso.api.model.out.estado.EstadoOut;
+import com.ejs.algaworksCurso.api.v1.model.in.estado.EstadoIn;
+import com.ejs.algaworksCurso.api.v1.model.out.estado.EstadoOut;
 import com.ejs.algaworksCurso.domain.exception.EntidadeEmUsoException;
 import com.ejs.algaworksCurso.domain.exception.EstadoNaoEncontradoException;
 import com.ejs.algaworksCurso.domain.model.Estado;
@@ -36,19 +36,17 @@ public class EstadoService {
 		Estado estadoAtual = this.buscarOuFalhar(id);
 		this.estadoAssembler.estadoInToEstado(estadoAtual, estadoIn);
 		estadoAtual = this.estadoRepository.save(estadoAtual);
-		return estadoDisAssembler.estadoToEstadoOut(estadoAtual);
+		return estadoDisAssembler.toModel(estadoAtual);
 	}
 	
 	public EstadoOut buscar(Long estadoId) {
 		Estado estado = this.buscarOuFalhar(estadoId);
-		return estadoDisAssembler.estadoToEstadoOut(estado);
+		return estadoDisAssembler.toModel(estado);
 	}
 	
-	public List<EstadoOut> listar(){
+	public CollectionModel<EstadoOut> listar(){
 		List<Estado> estados = this.estadoRepository.findAll(Sort.by("nome"));
-		return estados.stream()
-				.map(estado -> this.estadoDisAssembler.estadoToEstadoOut(estado))
-				.collect(Collectors.toList());
+		return this.estadoDisAssembler.toCollectionModel(estados);
 	}
 	
 	@Transactional
@@ -65,9 +63,10 @@ public class EstadoService {
 	}
 	
 	@Transactional
-	public Estado salvar(EstadoIn estadoIn) {
+	public EstadoOut salvar(EstadoIn estadoIn) {
 		Estado estado = this.estadoAssembler.estadoInToEstado(estadoIn);
-		return this.estadoRepository.save(estado);
+		estado = this.estadoRepository.save(estado);
+		return estadoDisAssembler.toModel(estado);
 	}
 	
 	/*

@@ -2,18 +2,18 @@ package com.ejs.algaworksCurso.domain.services;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.ejs.algaworksCurso.api.model.in.senha.SenhaAtualizarIn;
-import com.ejs.algaworksCurso.api.model.in.usuario.UsuarioAtualizarIn;
-import com.ejs.algaworksCurso.api.model.in.usuario.UsuarioIn;
-import com.ejs.algaworksCurso.api.model.out.usuario.UsuarioOut;
+import com.ejs.algaworksCurso.api.v1.model.in.senha.SenhaAtualizarIn;
+import com.ejs.algaworksCurso.api.v1.model.in.usuario.UsuarioAtualizarIn;
+import com.ejs.algaworksCurso.api.v1.model.in.usuario.UsuarioIn;
+import com.ejs.algaworksCurso.api.v1.model.out.usuario.UsuarioOut;
 import com.ejs.algaworksCurso.domain.exception.EntidadeEmUsoException;
 import com.ejs.algaworksCurso.domain.exception.NegocioException;
 import com.ejs.algaworksCurso.domain.exception.SenhaNaoEncontradoException;
@@ -47,7 +47,7 @@ public class UsuarioService {
 		}
 		usuarioAssembler.usuarioAtualizarInToUsuario(usuarioAtualizarIn, user);
 		user = this.usuarioRepository.save(user);
-		return this.usuarioDisAssembler.usuarioToUsuarioOut(user);
+		return this.usuarioDisAssembler.toModel(user);
 	}
 	
 	@Transactional
@@ -66,14 +66,12 @@ public class UsuarioService {
 	
 	public UsuarioOut buscar(Long usuarioId) {
 		Usuario user = this.buscarOuFalhar(usuarioId);
-		return this.usuarioDisAssembler.usuarioToUsuarioOut(user);
+		return this.usuarioDisAssembler.toModel(user);
 	}
 	
-	public List<UsuarioOut> listar(){
+	public CollectionModel<UsuarioOut> listar(){
 		List<Usuario> users = this.usuarioRepository.findAll();
-		return users.stream()
-				.map(user -> this.usuarioDisAssembler.usuarioToUsuarioOut(user))
-				.collect(Collectors.toList());
+		return this.usuarioDisAssembler.toCollectionModel(users);
 	}
 	
 	@Transactional
@@ -96,7 +94,7 @@ public class UsuarioService {
 		}
 		Usuario user = this.usuarioAssembler.usuarioInToUsuario(usuarioIn);
 		user = this.usuarioRepository.save(user);
-		return this.usuarioDisAssembler.usuarioToUsuarioOut(user);
+		return this.usuarioDisAssembler.toModel(user);
 	}
 
 	/*

@@ -1,16 +1,16 @@
 package com.ejs.algaworksCurso.domain.services;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Sort;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.ejs.algaworksCurso.api.model.in.cidade.CidadeIn;
-import com.ejs.algaworksCurso.api.model.out.cidade.CidadeOut;
+import com.ejs.algaworksCurso.api.v1.model.in.cidade.CidadeIn;
+import com.ejs.algaworksCurso.api.v1.model.out.cidade.CidadeOut;
 import com.ejs.algaworksCurso.domain.exception.CidadeNaoEncontradaException;
 import com.ejs.algaworksCurso.domain.exception.EntidadeEmUsoException;
 import com.ejs.algaworksCurso.domain.exception.NegocioException;
@@ -44,20 +44,18 @@ public class CidadeService {
 		this.cidadeAssembler.cidadeIntoCidade(cidadeAtual, cidadeIn);
 		
 		cidadeAtual = this.cidadeRepository.save(cidadeAtual);	
-		return this.cidadeDisAssembler.cidadeToCidadeOut(cidadeAtual);
+		return this.cidadeDisAssembler.toModel(cidadeAtual);
 	}
 	
 	public CidadeOut buscar( Long id) {
 		Cidade cidade = this.buscarOuFalhar(id);
-		return this.cidadeDisAssembler.cidadeToCidadeOut(cidade);
+		return this.cidadeDisAssembler.toModel(cidade);
 	}
 	
-	public List<CidadeOut> listar(){
+	public CollectionModel<CidadeOut>listar(){
 		Sort sort = Sort.by("nome");
 		List<Cidade> cidades = this.cidadeRepository.findAll(sort);
-		return cidades.stream()
-				.map(cidade -> this.cidadeDisAssembler.cidadeToCidadeOut(cidade))
-				.collect(Collectors.toList());
+		return this.cidadeDisAssembler.toCollectionModel(cidades);
 	}
 	
 	@Transactional(rollbackFor = {NegocioException.class, EmptyResultDataAccessException.class})
@@ -78,7 +76,7 @@ public class CidadeService {
 		Cidade cidade = this.cidadeAssembler.cidadeInToCidade(cidadeIn);
 		
 		cidade = this.cidadeRepository.save(cidade);
-		return this.cidadeDisAssembler.cidadeToCidadeOut(cidade);
+		return this.cidadeDisAssembler.toModel(cidade);
 	}
 	
 	public Cidade buscarOuFalhar( Long cidadeId) {
