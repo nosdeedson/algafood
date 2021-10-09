@@ -109,7 +109,7 @@ create table usuario(
     data_cadastro timestamp(6) not null,
     email varchar(150) not null,
     nome varchar(100) not null,
-    senha varchar(30) not null,
+    senha varchar(250) not null,
     primary key(id)
 );
 

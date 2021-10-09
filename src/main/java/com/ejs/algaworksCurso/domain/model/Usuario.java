@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -15,6 +16,8 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 @Entity
 public class Usuario implements Serializable {
@@ -32,7 +35,7 @@ public class Usuario implements Serializable {
 	private String nome;
 	private String senha;
 	
-	@ManyToMany(targetEntity = Grupo.class)
+	@ManyToMany(targetEntity = Grupo.class, fetch = FetchType.EAGER)
 	@JoinTable(name = "usuario_grupo",
 			joinColumns = @JoinColumn(name = "usuario_id"), foreignKey = @ForeignKey(name = "fk_usuario_id"),
 			inverseJoinColumns = @JoinColumn(name = "grupo_id"), inverseForeignKey = @ForeignKey(name = "fk_grupo"))

@@ -43,16 +43,16 @@ insert into cidade (nome, estado_id) values('Itajuba', 1) ON CONFLICT DO NOTHING
 
 /* inseri usuario */
 insert into usuario (data_cadastro, email, nome, senha) 
-values((now() at time zone 'utc'), 'josemariazumira+lucianeia@gmail.com', 'Lucineia Souza', '1234') ON CONFLICT DO NOTHING;;
+values((now() at time zone 'utc'), 'josemariazumira+lucianeia@gmail.com', 'Lucineia Souza', '$2a$10$V.lGMurz93DI/c.3ijf/2Oilfe.BRqMtaMWBHppEYn22cEM0eaQT6') ON CONFLICT DO NOTHING;;
 
 insert into usuario (data_cadastro, email, nome, senha) 
-values((now() at time zone 'utc'), 'josemariazumira+jose@gmail.com', 'Jose Souza', '1234') ON CONFLICT DO NOTHING;;
+values((now() at time zone 'utc'), 'josemariazumira+jose@gmail.com', 'Jose Souza', '$2a$10$V.lGMurz93DI/c.3ijf/2Oilfe.BRqMtaMWBHppEYn22cEM0eaQT6') ON CONFLICT DO NOTHING;;
 
 insert into usuario (data_cadastro, email, nome, senha) 
-values((now() at time zone 'utc'), 'josemariazumira+Edson@gmail.com', 'Edson Souza', '1234') ON CONFLICT DO NOTHING;;
+values((now() at time zone 'utc'), 'josemariazumira+Edson@gmail.com', 'Edson Souza', '$2a$10$V.lGMurz93DI/c.3ijf/2Oilfe.BRqMtaMWBHppEYn22cEM0eaQT6') ON CONFLICT DO NOTHING;;
 
 insert into usuario (data_cadastro, email, nome, senha) 
-values((now() at time zone 'utc'), 'josemariazumira+joao@gmail.com', 'joao Souza', '1234') ON CONFLICT DO NOTHING;
+values((now() at time zone 'utc'), 'josemariazumira+joao@gmail.com', 'joao Souza', '$2a$10$V.lGMurz93DI/c.3ijf/2Oilfe.BRqMtaMWBHppEYn22cEM0eaQT6') ON CONFLICT DO NOTHING;
 
 /* inseri grupos */
 insert into grupo (nome) values ('gerente'), ('vendedor'), ('secretária'), ('cadastrador');
@@ -119,9 +119,8 @@ values ('9f10c133-fef4-4aee-aed2-8ffc4e3a44b8', 2, 2, 2, 1, '38400-111', 'Rua Ac
 insert into pedido (codigo, restaurante_id, usuario_cliente_id, forma_pagamento_id, endereco_cidade_id, endereco_cep, 
 	endereco_logradouro, endereco_numero, endereco_complemento, endereco_bairro,
 	status, data_criacao, sub_total, taxa_frete, valor_total)
-values ('beabbb87-0c28-4bb7-aea0-3d4d7796c2b9, 2, 2, 2, 1, '38400-111', 'Rua Acre', '300', 'Casa 2', 'Centro',
+values ('beabbb87-0c28-4bb7-aea0-3d4d7796c2b9', 2, 2, 2, 1, '38400-111', 'Rua Acre', '300', 'Casa 2', 'Centro',
 'CRIADO', (now() at time zone 'utc'), 79, 0, 79);
-
 
 
 

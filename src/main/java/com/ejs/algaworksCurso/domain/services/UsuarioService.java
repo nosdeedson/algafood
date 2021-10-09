@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.hateoas.CollectionModel;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,6 +38,9 @@ public class UsuarioService {
 	@Autowired
 	private UsuarioDisAssembler usuarioDisAssembler;
 	
+	@Autowired
+	private BCryptPasswordEncoder passWordEncoder;
+	
 	@Transactional
 	public UsuarioOut atualizar(UsuarioAtualizarIn usuarioAtualizarIn, Long usuarioId) {
 		Usuario user = this.buscarOuFalhar(usuarioId);
@@ -57,8 +61,7 @@ public class UsuarioService {
 		this.usuarioRepository.findSenhaByIdAndSenha(usuarioId, senhaIn.getSenhaAtual())
 			.orElseThrow( () -> new SenhaNaoEncontradoException(
 					String.format("Esta senha %s não corresponde a sua senha atual.", senhaIn.getSenhaAtual()) ));
-		user.setSenha(senhaIn.getNovaSenha());
-		
+		user.setSenha(passWordEncoder.encode(senhaIn.getNovaSenha()));
 		this.usuarioRepository.save(user);
 		
 		
@@ -93,6 +96,7 @@ public class UsuarioService {
 			throw new NegocioException(String.format(USUARIO_EXISTENTE , usuarioIn.getEmail()));
 		}
 		Usuario user = this.usuarioAssembler.usuarioInToUsuario(usuarioIn);
+		user.setSenha(passWordEncoder.encode(user.getSenha()));
 		user = this.usuarioRepository.save(user);
 		return this.usuarioDisAssembler.toModel(user);
 	}
