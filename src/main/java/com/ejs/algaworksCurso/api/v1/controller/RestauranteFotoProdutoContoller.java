@@ -26,6 +26,7 @@ import com.ejs.algaworksCurso.api.v1.model.in.produto.FotoProdutoIn;
 import com.ejs.algaworksCurso.api.v1.model.out.fotoProduto.FotoProdutoOut;
 import com.ejs.algaworksCurso.api.v1.model.out.fotoProduto.ImagemOut;
 import com.ejs.algaworksCurso.api.v1.openApi.controller.RestauranteFotoProdutoControllerOpenApi;
+import com.ejs.algaworksCurso.core.security.CheckSecurity;
 import com.ejs.algaworksCurso.domain.exception.EntidadeNaoEncontradaException;
 import com.ejs.algaworksCurso.domain.exception.NegocioException;
 import com.ejs.algaworksCurso.domain.services.FotoProdutoService;
@@ -37,6 +38,7 @@ public class RestauranteFotoProdutoContoller implements RestauranteFotoProdutoCo
 	@Autowired
 	FotoProdutoService fotoProdutoService;
 	
+	@CheckSecurity.Restaurantes.PodeEditar
 	@Override
 	@PutMapping(consumes = MediaType.ALL_VALUE)
 	public ResponseEntity<FotoProdutoOut> atualizarFoto(@PathVariable("restauranteId") Long restauranteId,
@@ -50,6 +52,7 @@ public class RestauranteFotoProdutoContoller implements RestauranteFotoProdutoCo
 		}
 	}
 	
+	@CheckSecurity.Restaurantes.PodeConsultar
 	@Override
 	@GetMapping
 	public ResponseEntity<FotoProdutoOut> buscarDadosFoto(@PathVariable("restauranteId") Long restauranteId,
@@ -58,6 +61,7 @@ public class RestauranteFotoProdutoContoller implements RestauranteFotoProdutoCo
 		return ResponseEntity.ok(out);
 	}
 	
+	@CheckSecurity.Restaurantes.PodeConsultar
 	@Override
 	@GetMapping( path = "imagem" )
 	public ResponseEntity<?> buscarFoto(@PathVariable("restauranteId") Long restauranteId,
@@ -82,7 +86,7 @@ public class RestauranteFotoProdutoContoller implements RestauranteFotoProdutoCo
 		}
 	}
 	
-	
+	@CheckSecurity.Restaurantes.PodeEditar
 	@Override
 	@DeleteMapping
 	@ResponseStatus(code = HttpStatus.NO_CONTENT)

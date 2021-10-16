@@ -26,6 +26,7 @@ import com.ejs.algaworksCurso.api.helper.ResourceUriHelper;
 import com.ejs.algaworksCurso.api.v1.model.in.formaPagamento.FormaPagamentoIn;
 import com.ejs.algaworksCurso.api.v1.model.out.formaPagamento.FormaPagamentoOut;
 import com.ejs.algaworksCurso.api.v1.openApi.controller.FormaPagamentoControllerOpenApi;
+import com.ejs.algaworksCurso.core.security.CheckSecurity;
 import com.ejs.algaworksCurso.domain.repository.FormaPagamentoRepository;
 import com.ejs.algaworksCurso.domain.services.FormaPagamentoService;
 
@@ -39,6 +40,7 @@ public class FormaPagamentoController implements FormaPagamentoControllerOpenApi
 	@Autowired
 	private FormaPagamentoRepository formaPagamentoRepository;
 	
+	@CheckSecurity.FormasPagamento.PodeEditar
 	@Override
 	@PutMapping("{formaPagamentoId}")
 	public ResponseEntity<FormaPagamentoOut> autalizar(@RequestBody @Valid FormaPagamentoIn formaPagamentoIn,
@@ -47,6 +49,7 @@ public class FormaPagamentoController implements FormaPagamentoControllerOpenApi
 		return ResponseEntity.ok(out);
 	}
 	
+	@CheckSecurity.FormasPagamento.PodeConsultar
 	@Override
 	@GetMapping("{formaPagamentoId}")
 	public ResponseEntity<FormaPagamentoOut> buscar(@PathVariable Long formaPagamentoId, ServletWebRequest request) {
@@ -69,6 +72,7 @@ public class FormaPagamentoController implements FormaPagamentoControllerOpenApi
 				.body(out);
 	}
 	
+	@CheckSecurity.FormasPagamento.PodeConsultar
 	@Override
 	@GetMapping
 	public ResponseEntity<CollectionModel<FormaPagamentoOut>> listar( ServletWebRequest request ){
@@ -92,7 +96,7 @@ public class FormaPagamentoController implements FormaPagamentoControllerOpenApi
 				.body(formasPagamentos);
 	}
 	
-	
+	@CheckSecurity.FormasPagamento.PodeEditar
 	@Override
 	@DeleteMapping("{formaPagamentoId}")
 	@ResponseStatus(code = HttpStatus.NO_CONTENT)
@@ -100,6 +104,7 @@ public class FormaPagamentoController implements FormaPagamentoControllerOpenApi
 		this.formaPagamentoService.remover(formaPagamentoId);
 	}
 	
+	@CheckSecurity.FormasPagamento.PodeEditar
 	@Override
 	@PostMapping
 	public ResponseEntity<FormaPagamentoOut> salvar(@RequestBody @Valid FormaPagamentoIn formaPagamentoIn){

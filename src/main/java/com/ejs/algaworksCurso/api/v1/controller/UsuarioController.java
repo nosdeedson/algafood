@@ -22,6 +22,7 @@ import com.ejs.algaworksCurso.api.v1.model.in.usuario.UsuarioAtualizarIn;
 import com.ejs.algaworksCurso.api.v1.model.in.usuario.UsuarioIn;
 import com.ejs.algaworksCurso.api.v1.model.out.usuario.UsuarioOut;
 import com.ejs.algaworksCurso.api.v1.openApi.controller.UsuarioControllerOpenApi;
+import com.ejs.algaworksCurso.core.security.CheckSecurity;
 import com.ejs.algaworksCurso.domain.services.UsuarioService;
 
 @RestController
@@ -31,6 +32,7 @@ public class UsuarioController implements UsuarioControllerOpenApi {
 	@Autowired
 	private UsuarioService usuarioService;
 	
+	@CheckSecurity.GruposPermissoesUsuarios.PodeEditarUsuario
 	@Override
 	@PutMapping("{usuarioId}")
 	public ResponseEntity<UsuarioOut> atualizar(@PathVariable("usuarioId") Long usuarioId, 
@@ -40,6 +42,7 @@ public class UsuarioController implements UsuarioControllerOpenApi {
 		return ResponseEntity.ok(out);
 	}
 	
+	@CheckSecurity.GruposPermissoesUsuarios.PodeAlterarSenha
 	@Override
 	@PutMapping("atualizar-senha/{usuarioId}")
 	@ResponseStatus(code= HttpStatus.NO_CONTENT)
@@ -48,6 +51,7 @@ public class UsuarioController implements UsuarioControllerOpenApi {
 		this.usuarioService.atualizarSenha(senhaIn, usuarioId);
 	}
 	
+	@CheckSecurity.GruposPermissoesUsuarios.PodeAlterarSenha
 	@Override
 	@GetMapping("{usuarioId}")
 	public ResponseEntity<UsuarioOut> buscar(@PathVariable("usuarioId") Long usuarioId){
@@ -55,6 +59,7 @@ public class UsuarioController implements UsuarioControllerOpenApi {
 		return ResponseEntity.ok(usuarioOut);
 	}
 	
+	@CheckSecurity.GruposPermissoesUsuarios.PodeConsultar
 	@Override
 	@GetMapping
 	public ResponseEntity<CollectionModel<UsuarioOut>> listar(){
@@ -62,6 +67,7 @@ public class UsuarioController implements UsuarioControllerOpenApi {
 		return ResponseEntity.ok(usuarios);
 	}
 	
+	@CheckSecurity.GruposPermissoesUsuarios.PodeEditar
 	@Override
 	@DeleteMapping("{usuarioId}")
 	@ResponseStatus(code= HttpStatus.NO_CONTENT)
@@ -69,6 +75,7 @@ public class UsuarioController implements UsuarioControllerOpenApi {
 		this.usuarioService.remover(usuarioId);
 	}
 	
+	@CheckSecurity.GruposPermissoesUsuarios.PodeEditarUsuario
 	@Override
 	@PostMapping
 	public ResponseEntity<UsuarioOut> salvar(@RequestBody @Valid UsuarioIn usuarioIn){

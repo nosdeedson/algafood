@@ -1,5 +1,6 @@
 package com.ejs.algaworksCurso.api.exceptionHandler;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -15,6 +16,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.HttpMediaTypeNotAcceptableException;
@@ -42,6 +44,23 @@ public class ApiHandlerException extends ResponseEntityExceptionHandler {
 	
 	@Autowired
 	private MessageSource messageSource;
+	
+	@ExceptionHandler(AccessDeniedException .class)
+	public ResponseEntity<?> trataAcessoNegado(AccessDeniedException ex, WebRequest request) {
+		
+		HttpStatus status = HttpStatus.FORBIDDEN;
+		CampoComErro erro = new CampoComErro();
+		erro.setMenssagem(ex.getMessage());
+		erro.setNome("Permissão de Acesso usuário");
+		
+		Problem problem = this.createProblem(status, "Usuário não tem acesso ao método solicitado", ProblemType.ACESSO_NEGADO_AO_RECURSO)
+							.timeStamp()
+							.camposComErro(Arrays.asList(erro))
+							.userMessage("acesso negodo")
+							.build();
+		return this.handleExceptionInternal(ex, problem,new HttpHeaders(), status, request);			
+
+	}
 	
 	
 	@ExceptionHandler(Exception.class)

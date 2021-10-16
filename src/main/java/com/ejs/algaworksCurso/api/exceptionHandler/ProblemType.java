@@ -8,7 +8,8 @@ public enum ProblemType {
 	REQUISICAO_MAL_FORMADA("Requisição mal formada", "/requisicao-mal-formada"),
 	RECURSO_NAO_ENCONTRADO("Recurso não encontrado", "/recurso-nao-encontrado"),
 	ENTIDADE_EM_USO("Entidade em uso", "/entidade-em-uso"),
-	ERRO_NEGOCIO("violação de regra de negócio", "/erro-negocio");
+	ERRO_NEGOCIO("violação de regra de negócio", "/erro-negocio"),
+	ACESSO_NEGADO_AO_RECURSO("Usuário não tem acesso ao recurdo solicitado", "/acesso-negado-recurso");
 	
 	private String title;
 	private String uri;

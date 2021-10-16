@@ -20,6 +20,7 @@ import com.ejs.algaworksCurso.api.helper.ResourceUriHelper;
 import com.ejs.algaworksCurso.api.v1.model.in.estado.EstadoIn;
 import com.ejs.algaworksCurso.api.v1.model.out.estado.EstadoOut;
 import com.ejs.algaworksCurso.api.v1.openApi.controller.EstadoControllerOpenApi;
+import com.ejs.algaworksCurso.core.security.CheckSecurity;
 import com.ejs.algaworksCurso.domain.services.EstadoService;
 
 @RestController
@@ -29,6 +30,7 @@ public class EstadoController implements EstadoControllerOpenApi {
 	@Autowired
 	private EstadoService estadoService;
 	
+	@CheckSecurity.Estados.PodeEditar
 	@Override
 	@PutMapping("{id}")
 	public ResponseEntity<EstadoOut> atualizar(@PathVariable Long id,
@@ -38,6 +40,7 @@ public class EstadoController implements EstadoControllerOpenApi {
 			return ResponseEntity.ok(out);
 	}
 	
+	@CheckSecurity.Estados.PodeConsultar
 	@Override
 	@GetMapping("{id}")
 	public ResponseEntity<EstadoOut> buscar(@PathVariable Long id){
@@ -45,6 +48,7 @@ public class EstadoController implements EstadoControllerOpenApi {
 		return ResponseEntity.ok(estado);
 	}
 	
+	@CheckSecurity.Estados.PodeConsultar
 	@Override
 	@GetMapping
 	@ResponseStatus(code = HttpStatus.OK)
@@ -53,6 +57,7 @@ public class EstadoController implements EstadoControllerOpenApi {
 		return estados;
 	}
 	
+	@CheckSecurity.Estados.PodeEditar
 	@Override
 	@DeleteMapping("{id}")
 	@ResponseStatus(code = HttpStatus.NO_CONTENT)
@@ -60,6 +65,7 @@ public class EstadoController implements EstadoControllerOpenApi {
 		this.estadoService.remover(id);
 	}
 	
+	@CheckSecurity.Estados.PodeEditar
 	@Override
 	@PostMapping
 	public ResponseEntity<EstadoOut> salvar(@RequestBody @Valid EstadoIn estadoIn){

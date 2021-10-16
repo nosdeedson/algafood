@@ -21,6 +21,7 @@ import com.ejs.algaworksCurso.api.helper.ResourceUriHelper;
 import com.ejs.algaworksCurso.api.v1.model.in.grupo.GrupoIn;
 import com.ejs.algaworksCurso.api.v1.model.out.group.GrupoOut;
 import com.ejs.algaworksCurso.api.v1.openApi.controller.GrupoControllerOpenApi;
+import com.ejs.algaworksCurso.core.security.CheckSecurity;
 import com.ejs.algaworksCurso.domain.services.GrupoService;
 
 @RestController
@@ -30,6 +31,7 @@ public class GrupoController implements GrupoControllerOpenApi {
 	@Autowired
 	private GrupoService grupoService;
 	
+	@CheckSecurity.GruposPermissoesUsuarios.PodeEditar
 	@Override
 	@PutMapping("{grupoId}")
 	public ResponseEntity<GrupoOut> atualizar(@RequestBody @Valid GrupoIn grupoIn,
@@ -39,6 +41,7 @@ public class GrupoController implements GrupoControllerOpenApi {
 		return ResponseEntity.ok(out);
 	}
 	
+	@CheckSecurity.GruposPermissoesUsuarios.PodeConsultar
 	@Override
 	@GetMapping("{grupoId}")
 	public ResponseEntity<GrupoOut> buscar(@PathVariable("grupoId") Long grupoId){
@@ -46,6 +49,7 @@ public class GrupoController implements GrupoControllerOpenApi {
 		return ResponseEntity.ok(grupoOut);
 	}
 	
+	@CheckSecurity.GruposPermissoesUsuarios.PodeConsultar
 	@Override
 	@GetMapping
 	public ResponseEntity<CollectionModel<GrupoOut>> listar(){
@@ -53,6 +57,7 @@ public class GrupoController implements GrupoControllerOpenApi {
 		return ResponseEntity.ok(gruposOut);
 	}
 	
+	@CheckSecurity.GruposPermissoesUsuarios.PodeEditar
 	@Override
 	@DeleteMapping("{grupoId}")
 	@ResponseStatus(code = HttpStatus.NO_CONTENT)
@@ -60,6 +65,7 @@ public class GrupoController implements GrupoControllerOpenApi {
 		this.grupoService.remover(grupoId);
 	}
 	
+	@CheckSecurity.GruposPermissoesUsuarios.PodeEditar
 	@Override
 	@PostMapping
 	public ResponseEntity<GrupoOut> salvar(@RequestBody @Valid GrupoIn grupoIn){

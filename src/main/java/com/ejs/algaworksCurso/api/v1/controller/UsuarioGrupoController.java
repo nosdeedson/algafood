@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ejs.algaworksCurso.api.v1.model.out.group.GrupoOut;
 import com.ejs.algaworksCurso.api.v1.openApi.controller.UsuarioGrupoControllerOpenApi;
+import com.ejs.algaworksCurso.core.security.CheckSecurity;
 import com.ejs.algaworksCurso.domain.services.UsuarioGrupoService;
 
 @RestController
@@ -22,6 +23,7 @@ public class UsuarioGrupoController implements UsuarioGrupoControllerOpenApi {
 	@Autowired
 	private UsuarioGrupoService userGrupoService;
 	
+	@CheckSecurity.GruposPermissoesUsuarios.PodeEditarUsuario
 	@Override
 	@PutMapping("{grupoId}")
 	public ResponseEntity<Void> associarGrupo(@PathVariable Long usuarioId, @PathVariable Long grupoId){
@@ -29,6 +31,7 @@ public class UsuarioGrupoController implements UsuarioGrupoControllerOpenApi {
 		return ResponseEntity.noContent().build();
 	}
 	
+	@CheckSecurity.GruposPermissoesUsuarios.PodeEditarUsuario
 	@Override
 	@DeleteMapping("{grupoId}")
 	public ResponseEntity<Void> desassociarGrupo(@PathVariable Long usuarioId, @PathVariable Long grupoId){
@@ -36,6 +39,7 @@ public class UsuarioGrupoController implements UsuarioGrupoControllerOpenApi {
 		return ResponseEntity.noContent().build();
 	}
 	
+	@CheckSecurity.GruposPermissoesUsuarios.PodeEditarUsuario
 	@Override
 	@GetMapping
 	public ResponseEntity<CollectionModel<GrupoOut>> listar(@PathVariable Long usuarioId){

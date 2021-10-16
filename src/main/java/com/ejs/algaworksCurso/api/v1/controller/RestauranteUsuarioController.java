@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ejs.algaworksCurso.api.v1.model.out.usuario.UsuarioOut;
 import com.ejs.algaworksCurso.api.v1.openApi.controller.RestauranteUsuarioControllerOpenApi;
+import com.ejs.algaworksCurso.core.security.CheckSecurity;
 import com.ejs.algaworksCurso.domain.services.RestauranteUsuarioService;
 
 @RestController
@@ -22,6 +23,7 @@ public class RestauranteUsuarioController implements RestauranteUsuarioControlle
 	@Autowired
 	private RestauranteUsuarioService restauranteUsuarioService;
 	
+	@CheckSecurity.Restaurantes.PodeEditar
 	@Override
 	@PutMapping("{usuarioId}")
 	public ResponseEntity<Void> associarResponsavel(@PathVariable Long restauranteId, @PathVariable Long usuarioId) {
@@ -29,6 +31,7 @@ public class RestauranteUsuarioController implements RestauranteUsuarioControlle
 		return ResponseEntity.noContent().build();
 	}
 	
+	@CheckSecurity.Restaurantes.PodeEditar
 	@Override
 	@DeleteMapping("{usuarioId}")
 	public ResponseEntity<Void> desassociarResponsavel(@PathVariable Long restauranteId, @PathVariable Long usuarioId){
@@ -36,6 +39,7 @@ public class RestauranteUsuarioController implements RestauranteUsuarioControlle
 		return ResponseEntity.noContent().build();
 	}
 	
+	@CheckSecurity.Restaurantes.PodeConsultar
 	@Override
 	@GetMapping
 	public ResponseEntity<CollectionModel<UsuarioOut>> listarResponsaveis(@PathVariable Long restauranteId){

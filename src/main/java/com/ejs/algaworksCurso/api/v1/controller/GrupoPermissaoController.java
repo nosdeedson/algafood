@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ejs.algaworksCurso.api.v1.model.out.permissao.PermissaoOut;
 import com.ejs.algaworksCurso.api.v1.openApi.controller.GrupoPermissaoControllerOpenApi;
+import com.ejs.algaworksCurso.core.security.CheckSecurity;
 import com.ejs.algaworksCurso.domain.services.GrupoPermissaoService;
 
 @RestController
@@ -24,6 +25,7 @@ public class GrupoPermissaoController implements GrupoPermissaoControllerOpenApi
 	@Autowired
 	private GrupoPermissaoService grupoPermissaoService;
 
+	@CheckSecurity.GruposPermissoesUsuarios.PodeEditar
 	@Override
 	@PutMapping("{permissaoId}")
 	@ResponseStatus(code = HttpStatus.NO_CONTENT)
@@ -32,6 +34,7 @@ public class GrupoPermissaoController implements GrupoPermissaoControllerOpenApi
 		return ResponseEntity.noContent().build();
 	}
 	
+	@CheckSecurity.GruposPermissoesUsuarios.PodeEditar
 	@Override
 	@DeleteMapping("{permissaoId}")
 	@ResponseStatus(code = HttpStatus.NO_CONTENT)
@@ -40,7 +43,7 @@ public class GrupoPermissaoController implements GrupoPermissaoControllerOpenApi
 		return ResponseEntity.noContent().build();
 	}
 	
-	
+	@CheckSecurity.GruposPermissoesUsuarios.PodeConsultar
 	@Override
 	@GetMapping
 	public ResponseEntity<CollectionModel<PermissaoOut>> listar(@PathVariable Long grupoId){

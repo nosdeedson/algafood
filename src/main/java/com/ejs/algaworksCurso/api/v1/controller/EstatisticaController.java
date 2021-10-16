@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ejs.algaworksCurso.api.v1.model.dto.VendaDiariaDTO;
+import com.ejs.algaworksCurso.core.security.CheckSecurity;
 import com.ejs.algaworksCurso.domain.model.filter.VendaDiariaFilter;
 import com.ejs.algaworksCurso.domain.services.VendaQueryService;
 
@@ -24,6 +25,7 @@ public class EstatisticaController {
 	@Autowired
 	private VendaQueryService vendaQueryService;
 
+	@CheckSecurity.Estatisticas.PodeConsular
 	@ApiOperation(value = "Vendas diárias")
 	@GetMapping("venda-diaria")
 	@ResponseStatus(code = HttpStatus.OK)

@@ -51,12 +51,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		
 		http.cors().and().csrf().disable();
 		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-		http.sessionManagement().maximumSessions(1).maxSessionsPreventsLogin(true);
 		http.authorizeRequests()
-			.antMatchers(HttpMethod.GET).permitAll()
 			.antMatchers(PUBLIC_MATCHERS).permitAll()
 			.antMatchers(HttpMethod.POST, PUBLIC_MATCHERS_POST).permitAll()
-			.anyRequest().authenticated();
+			.anyRequest().permitAll();
 		
 		http.addFilter(new JWTAuthenticationFilter(super.authenticationManagerBean(), jwtUtil, usuarioRepository));
 		http.addFilter(new JWTAuthorizationFilter(super.authenticationManager(), jwtUtil, userDetailsService));

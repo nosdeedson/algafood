@@ -21,6 +21,7 @@ import com.ejs.algaworksCurso.api.helper.ResourceUriHelper;
 import com.ejs.algaworksCurso.api.v1.model.in.produto.ProdutoIn;
 import com.ejs.algaworksCurso.api.v1.model.in.produto.ProdutoOut;
 import com.ejs.algaworksCurso.api.v1.openApi.controller.RestauranteProdutoControllerOpenApi;
+import com.ejs.algaworksCurso.core.security.CheckSecurity;
 import com.ejs.algaworksCurso.domain.services.RestauranteProdutoService;
 
 @RestController
@@ -30,6 +31,7 @@ public class RestauranteProdutoController implements RestauranteProdutoControlle
 	@Autowired
 	private RestauranteProdutoService restauranteProdutoService;
 	
+	@CheckSecurity.Restaurantes.PodeEditar
 	@Override
 	@PutMapping("{produtoId}")
 	public ResponseEntity<ProdutoOut> atualizarProduto(@PathVariable Long restauranteId, 
@@ -39,6 +41,7 @@ public class RestauranteProdutoController implements RestauranteProdutoControlle
 		return ResponseEntity.ok(out);
 	}
 	
+	@CheckSecurity.Restaurantes.PodeConsultar
 	@Override
 	@GetMapping("{produtoId}")
 	public ResponseEntity<ProdutoOut> buscarProduto(@PathVariable Long restauranteId,
@@ -47,6 +50,7 @@ public class RestauranteProdutoController implements RestauranteProdutoControlle
 		return ResponseEntity.ok(out);
 	}
 	
+	@CheckSecurity.Restaurantes.PodeConsultar
 	@Override
 	@GetMapping()
 	public ResponseEntity<CollectionModel<ProdutoOut>> listarProduto(@PathVariable Long restauranteId, 
@@ -55,6 +59,7 @@ public class RestauranteProdutoController implements RestauranteProdutoControlle
 		return ResponseEntity.ok(produtos);
 	}
 	
+	@CheckSecurity.Restaurantes.PodeEditar
 	@Override
 	@DeleteMapping("{produtoId}")
 	@ResponseStatus(code = HttpStatus.NO_CONTENT)
@@ -63,6 +68,7 @@ public class RestauranteProdutoController implements RestauranteProdutoControlle
 		this.restauranteProdutoService.removerProduto(restauranteId, produtoId);
 	}
 	
+	@CheckSecurity.Restaurantes.PodeEditar
 	@Override
 	@PostMapping
 	public ResponseEntity<ProdutoOut> salvar(@PathVariable Long restauranteId,

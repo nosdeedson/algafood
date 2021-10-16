@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ejs.algaworksCurso.api.v1.model.out.permissao.PermissaoOut;
 import com.ejs.algaworksCurso.api.v1.openApi.controller.PermissaoControllerOpenApi;
+import com.ejs.algaworksCurso.core.security.CheckSecurity;
 import com.ejs.algaworksCurso.domain.services.PermissaoService;
 
 @RestController
@@ -19,6 +20,7 @@ public class PermissaoController implements PermissaoControllerOpenApi {
 	@Autowired
 	PermissaoService permissaoService;
 
+	@CheckSecurity.GruposPermissoesUsuarios.PodeConsultar
 	@Override
 	@GetMapping
 	@ResponseStatus(code = HttpStatus.OK)

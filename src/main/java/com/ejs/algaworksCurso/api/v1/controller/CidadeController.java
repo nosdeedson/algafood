@@ -22,6 +22,7 @@ import com.ejs.algaworksCurso.api.helper.ResourceUriHelper;
 import com.ejs.algaworksCurso.api.v1.model.in.cidade.CidadeIn;
 import com.ejs.algaworksCurso.api.v1.model.out.cidade.CidadeOut;
 import com.ejs.algaworksCurso.api.v1.openApi.controller.CidadeControllerOpenApi;
+import com.ejs.algaworksCurso.core.security.CheckSecurity;
 import com.ejs.algaworksCurso.core.web.AlgaMediaType;
 import com.ejs.algaworksCurso.domain.services.CidadeService;
 
@@ -35,6 +36,7 @@ public class CidadeController implements CidadeControllerOpenApi {
 	@Autowired
 	private CidadeService cidadeService;
 	
+	@CheckSecurity.Cidades.PodeEditar
 	@Override
 	@PutMapping("{id}")
 	public ResponseEntity<CidadeOut> atualizar(@PathVariable Long id, 
@@ -44,6 +46,7 @@ public class CidadeController implements CidadeControllerOpenApi {
 		return ResponseEntity.status(HttpStatus.CREATED).body(out);
 	}
 	
+	@CheckSecurity.Cidades.PodeConsultar
 	@Override
 	@GetMapping("{id}")
 	public ResponseEntity<CidadeOut> buscar(@PathVariable Long id){
@@ -56,7 +59,8 @@ public class CidadeController implements CidadeControllerOpenApi {
 //		cidade.getEstado().add(Link.of(ResourceUriHelper.uriRequest(null)));
 		return ResponseEntity.ok(cidade);
 	}
-	
+
+	@CheckSecurity.Cidades.PodeConsultar
 	@Override
 	@GetMapping
 	public CollectionModel<CidadeOut> listar(){
@@ -67,6 +71,7 @@ public class CidadeController implements CidadeControllerOpenApi {
 		return cidadesModel;
 	}
 	
+	@CheckSecurity.Cidades.PodeEditar
 	@Override
 	@DeleteMapping("{id}")
 	@ResponseStatus(code = HttpStatus.NO_CONTENT)
@@ -74,6 +79,7 @@ public class CidadeController implements CidadeControllerOpenApi {
 		this.cidadeService.remover(id);	
 	}
 	
+	@CheckSecurity.Cidades.PodeEditar
 	@Override
 	@PostMapping
 	public ResponseEntity<CidadeOut> salvar( @RequestBody @Valid CidadeIn cidadeIn){

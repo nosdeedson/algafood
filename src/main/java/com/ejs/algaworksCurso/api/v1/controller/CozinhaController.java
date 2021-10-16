@@ -8,6 +8,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,6 +23,7 @@ import com.ejs.algaworksCurso.api.helper.ResourceUriHelper;
 import com.ejs.algaworksCurso.api.v1.model.in.cozinha.CozinhaIn;
 import com.ejs.algaworksCurso.api.v1.model.out.cozinha.CozinhaOut;
 import com.ejs.algaworksCurso.api.v1.openApi.controller.CozinhaControllerOpenApi;
+import com.ejs.algaworksCurso.core.security.CheckSecurity;
 import com.ejs.algaworksCurso.domain.services.CozinhaService;
 
 @RestController
@@ -31,6 +33,7 @@ public class CozinhaController implements CozinhaControllerOpenApi {
 	@Autowired
 	private CozinhaService cozinhaService;
 
+	@CheckSecurity.Cozinhas.PodeEditar
 	@Override
 	@PutMapping("{cozinhaId}")
 	public ResponseEntity<CozinhaOut> atualizar(@RequestBody
@@ -42,6 +45,7 @@ public class CozinhaController implements CozinhaControllerOpenApi {
 		return ResponseEntity.ok(out);
 	}
 
+	@CheckSecurity.Cozinhas.PodeConsultar
 	@Override
 	@GetMapping("{id}")
 	public ResponseEntity<CozinhaOut> buscar(@PathVariable("id") Long id) {
@@ -49,18 +53,22 @@ public class CozinhaController implements CozinhaControllerOpenApi {
 		return ResponseEntity.ok(cozinha);					
 	}
 	
+	@CheckSecurity.Cozinhas.PodeConsultar
 	@Override
 	@GetMapping("buscar-primeira")
 	public ResponseEntity<CozinhaOut> buscarPrimeira(){
 		return ResponseEntity.ok(this.cozinhaService.buscarPrimeira());
 	}
 
+	@CheckSecurity.Cozinhas.PodeConsultar
 	@Override
 	@GetMapping
 	public PagedModel<CozinhaOut> listar(@PageableDefault(size = 10) Pageable pageable) {
+		System.out.println(SecurityContextHolder.getContext().getAuthentication().isAuthenticated());
 		return this.cozinhaService.listar(pageable);
 	}
 	
+	@CheckSecurity.Cozinhas.PodeEditar
 	@Override
 	@DeleteMapping("{cozinhaId}")
 	@ResponseStatus(code = HttpStatus.NO_CONTENT)
@@ -68,6 +76,7 @@ public class CozinhaController implements CozinhaControllerOpenApi {
 			this.cozinhaService.remover(cozinhaId);
 	}
 
+	@CheckSecurity.Cozinhas.PodeEditar
 	@Override
 	@PostMapping
 	public ResponseEntity<CozinhaOut> salvar(@RequestBody @Valid CozinhaIn cozinhaIn) {

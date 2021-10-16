@@ -21,6 +21,7 @@ import com.ejs.algaworksCurso.api.v1.model.out.formaPagamento.FormaPagamentoOut;
 import com.ejs.algaworksCurso.api.v1.model.out.pedido.PedidoOut;
 import com.ejs.algaworksCurso.api.v1.model.out.pedido.PedidoResumidoDTO;
 import com.ejs.algaworksCurso.api.v1.openApi.controller.PedidoControllerOpenApi;
+import com.ejs.algaworksCurso.core.security.CheckSecurity;
 import com.ejs.algaworksCurso.domain.model.filter.PedidoFilter;
 import com.ejs.algaworksCurso.domain.services.PedidoService;
 
@@ -31,7 +32,7 @@ public class PedidoController implements PedidoControllerOpenApi {
 	@Autowired
 	private PedidoService pedidoService;
 	
-
+	@CheckSecurity.Pedidos.GerenciarPedido
 	@Override
 	@DeleteMapping("{codigoPedido}/cancela")
 	public ResponseEntity<Void> cancelarPedido(@PathVariable String codigoPedido) {
@@ -39,6 +40,7 @@ public class PedidoController implements PedidoControllerOpenApi {
 		return ResponseEntity.noContent().build();
 	}
 	
+	@CheckSecurity.Pedidos.GerenciarPedido
 	@Override
 	@PutMapping("{codigoPedido}/confirmacao")
 	public ResponseEntity<Void> confirmarPedido(@PathVariable String codigoPedido) {
@@ -46,6 +48,7 @@ public class PedidoController implements PedidoControllerOpenApi {
 		return ResponseEntity.noContent().build();
 	}
 	
+	@CheckSecurity.Pedidos.PodeBuscar
 	@Override
 	@GetMapping("{codigoPedido}")
 	public ResponseEntity<PedidoOut> buscar(@PathVariable String codigoPedido){
@@ -53,6 +56,7 @@ public class PedidoController implements PedidoControllerOpenApi {
 		return ResponseEntity.ok(out);
 	}
 	
+	@CheckSecurity.Pedidos.PodeConsultar
 	@Override
 	@GetMapping("/forma-pagamento/{codigoPedido}")
 	public ResponseEntity<FormaPagamentoOut> buscarFormaPagamento(@PathVariable String codigoPedido){
@@ -60,6 +64,7 @@ public class PedidoController implements PedidoControllerOpenApi {
 		return ResponseEntity.ok(out);
 	}
 	
+	@CheckSecurity.Pedidos.GerenciarPedido
 	@Override
 	@PutMapping("{codigoPedido}/entrega")
 	public ResponseEntity<Void> entregarPedido(@PathVariable String codigoPedido) {
@@ -67,6 +72,7 @@ public class PedidoController implements PedidoControllerOpenApi {
 		return ResponseEntity.noContent().build();
 	}
 
+	@CheckSecurity.Pedidos.PodeListar
 	@Override
 	@GetMapping
 	public ResponseEntity<PagedModel<PedidoResumidoDTO>> listar(@PageableDefault(size = 10) Pageable pageable,  PedidoFilter filtro){
@@ -74,6 +80,7 @@ public class PedidoController implements PedidoControllerOpenApi {
 		return ResponseEntity.ok(pedidos);
 	}
 	
+	@CheckSecurity.Pedidos.PodeConsultar
 	@Override
 	@PostMapping
 	public ResponseEntity<PedidoOut> salvar(@RequestBody PedidoIn pedidoIn){

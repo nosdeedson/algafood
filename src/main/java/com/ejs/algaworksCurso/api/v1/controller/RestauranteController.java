@@ -24,6 +24,7 @@ import com.ejs.algaworksCurso.api.helper.ResourceUriHelper;
 import com.ejs.algaworksCurso.api.v1.model.in.restaurante.RestauranteIn;
 import com.ejs.algaworksCurso.api.v1.model.out.restautante.RestauranteOut;
 import com.ejs.algaworksCurso.api.v1.openApi.controller.RestauranteControllerOpenApin;
+import com.ejs.algaworksCurso.core.security.CheckSecurity;
 import com.ejs.algaworksCurso.domain.exception.CidadeNaoEncontradaException;
 import com.ejs.algaworksCurso.domain.exception.CozinhaNaoEncontradaException;
 import com.ejs.algaworksCurso.domain.exception.NegocioException;
@@ -37,6 +38,7 @@ public class RestauranteController implements RestauranteControllerOpenApin {
 	@Autowired
 	private RestauranteService restauranteService;
 	
+	@CheckSecurity.Restaurantes.UserPodeEditar
 	@Override
 	@PutMapping("{restauranteId}/aberto")
 	public ResponseEntity<Void> abrir(@PathVariable Long restauranteId) {
@@ -44,6 +46,7 @@ public class RestauranteController implements RestauranteControllerOpenApin {
 		return ResponseEntity.noContent().build();
 	}
 	
+	@CheckSecurity.Restaurantes.UserPodeEditar
 	@Override
 	@PutMapping("{restauranteId}/ativacao")
 	@ResponseStatus(value = HttpStatus.NO_CONTENT)
@@ -52,6 +55,7 @@ public class RestauranteController implements RestauranteControllerOpenApin {
 		return ResponseEntity.noContent().build();
 	}
 	
+	@CheckSecurity.Restaurantes.UserPodeEditar
 	@Override
 	@PutMapping("ativacoes")
 	@ResponseStatus(code = HttpStatus.NO_CONTENT)
@@ -63,6 +67,7 @@ public class RestauranteController implements RestauranteControllerOpenApin {
 		}
 	}
 	
+	@CheckSecurity.Restaurantes.UserPodeEditar
 	@Override
 	@PutMapping("{restauranteId}")
 	public ResponseEntity<RestauranteOut> atualizar(@PathVariable Long restauranteId,
@@ -76,12 +81,14 @@ public class RestauranteController implements RestauranteControllerOpenApin {
 		}
 	}
 	
+	@CheckSecurity.Restaurantes.UserPodeEditar
 	@Override
 	@GetMapping("/{restauranteId}")
 	public ResponseEntity<RestauranteOut> buscar(@PathVariable Long restauranteId){
 		return ResponseEntity.ok(this.restauranteService.buscar(restauranteId));
 	}
 	
+	@CheckSecurity.Restaurantes.UserPodeEditar
 	@Override
 	@GetMapping("com-frete-gratis")
 	public ResponseEntity<List<RestauranteOut>> encontrarComFreteGratis(@RequestParam(name = "nome", required = true) String nome){
@@ -92,12 +99,14 @@ public class RestauranteController implements RestauranteControllerOpenApin {
 		return ResponseEntity.ok(this.restauranteService.encontrarComFreteGratis(nome));
 	}
 	
+	@CheckSecurity.Restaurantes.PodeEditar
 	@Override
 	@GetMapping("encocntrar-primeiro")
 	public ResponseEntity<RestauranteOut> encontrarPrimeiro(){
 		return ResponseEntity.ok(this.restauranteService.encontrarPrimeiro());
 	}
 	
+	@CheckSecurity.Restaurantes.UserPodeEditar
 	@Override
 	@DeleteMapping("{restauranteId}/aberto")
 	@ResponseStatus(value = HttpStatus.NO_CONTENT)
@@ -106,7 +115,7 @@ public class RestauranteController implements RestauranteControllerOpenApin {
 		return ResponseEntity.noContent().build();
 	}
 	
-	
+	@CheckSecurity.Restaurantes.UserPodeEditar
 	@Override
 	@DeleteMapping("{restauranteId}/ativacao")
 	@ResponseStatus(value = HttpStatus.NO_CONTENT)
@@ -115,6 +124,7 @@ public class RestauranteController implements RestauranteControllerOpenApin {
 		return ResponseEntity.noContent().build();
 	}
 	
+	@CheckSecurity.Restaurantes.UserPodeEditar
 	@Override
 	@DeleteMapping("inativacoes")
 	@ResponseStatus(code = HttpStatus.NO_CONTENT)
@@ -126,13 +136,14 @@ public class RestauranteController implements RestauranteControllerOpenApin {
 		}
 	}
 	
+	@CheckSecurity.Restaurantes.PodeConsultar
 	@Override
 	@GetMapping
 	public ResponseEntity<CollectionModel<RestauranteOut>> listar(){
 		return ResponseEntity.ok(this.restauranteService.listar());
 	}
 	
-
+	@CheckSecurity.Restaurantes.PodeConsultar
 	@Override
 	@GetMapping("encontrar-como")
 	public ResponseEntity<CollectionModel<RestauranteOut>> listar(@RequestParam(name = "nome", required = false) String nome,
@@ -141,6 +152,7 @@ public class RestauranteController implements RestauranteControllerOpenApin {
 		return ResponseEntity.ok(this.restauranteService.listar(nome, taxaFreteInicial, taxaFreteFinal));
 	}
 		
+	@CheckSecurity.Restaurantes.UserPodeEditar
 	@Override
 	@PostMapping
 	public ResponseEntity<RestauranteOut> salvar(@RequestBody @Valid RestauranteIn restauranteIn){

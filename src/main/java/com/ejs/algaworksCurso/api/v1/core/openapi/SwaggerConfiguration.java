@@ -1,6 +1,8 @@
 package com.ejs.algaworksCurso.api.v1.core.openapi;
 
 import java.net.URI;
+import java.net.http.HttpHeaders;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -41,18 +43,30 @@ import com.ejs.algaworksCurso.api.v1.openApi.model.ProdutosModelOpenApin;
 import com.ejs.algaworksCurso.api.v1.openApi.model.RestaurantesModelOpenApi;
 import com.ejs.algaworksCurso.api.v1.openApi.model.UsuariosModelOpenApi;
 import com.fasterxml.classmate.TypeResolver;
+import com.fasterxml.jackson.databind.JsonMappingException.Reference;
 
+import io.swagger.models.auth.In;
 import springfox.bean.validators.configuration.BeanValidatorPluginsConfiguration;
 import springfox.documentation.builders.ApiInfoBuilder;
+import springfox.documentation.builders.OAuthBuilder;
+import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.builders.ResponseMessageBuilder;
 import springfox.documentation.schema.AlternateTypeRules;
 import springfox.documentation.schema.ModelRef;
 import springfox.documentation.service.ApiInfo;
+import springfox.documentation.service.ApiKey;
+import springfox.documentation.service.AuthorizationScope;
+import springfox.documentation.service.BasicAuth;
 import springfox.documentation.service.Contact;
+import springfox.documentation.service.GrantType;
+import springfox.documentation.service.ResourceOwnerPasswordCredentialsGrant;
 import springfox.documentation.service.ResponseMessage;
+import springfox.documentation.service.SecurityReference;
+import springfox.documentation.service.SecurityScheme;
 import springfox.documentation.service.Tag;
 import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spi.service.contexts.SecurityContext;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
@@ -63,6 +77,7 @@ public class SwaggerConfiguration implements WebMvcConfigurer {
 	
 	TypeResolver typeResolver = new TypeResolver();
 	
+		
 	@Bean
 	public Docket apiV1() {
 		return new Docket(DocumentationType.SWAGGER_2)
@@ -90,8 +105,7 @@ public class SwaggerConfiguration implements WebMvcConfigurer {
 				.directModelSubstitute(Links.class, LinksModelOpenApi.class)
 // 				.alternateTypeRules(AlternateTypeRules usado para corrigir a documentação sem o Hateoas
 //						.newRule(typeResolver.resolve(Page.class, CozinhaOut.class), CozinhasModelOpenApi.class))
-				
-				
+					
 				.alternateTypeRules(AlternateTypeRules 
 						.newRule(typeResolver.resolve(PagedModel.class, CozinhaOut.class), CozinhaModelHateoasOpenApi.class))
 				
@@ -123,6 +137,9 @@ public class SwaggerConfiguration implements WebMvcConfigurer {
 				.alternateTypeRules(AlternateTypeRules
 						.newRule(typeResolver.resolve(ResponseEntity.class, CollectionModel.class), PermissoesModelOpenApi.class))
 				
+				.securitySchemes(Arrays.asList(securityScheme()))
+				.securityContexts(Arrays.asList(securityContext()))
+				
 				.tags( 
 						new Tag("Cidades", "Gerencia cidades"), 
 						new Tag("Grupos", "Gerencia grupos"),
@@ -145,6 +162,23 @@ public class SwaggerConfiguration implements WebMvcConfigurer {
 					)
 				.additionalModels(typeResolver.resolve(Problem.class));
 	}
+	
+	private SecurityScheme securityScheme() {
+		return new BasicAuth("AlgaFood");
+	}
+	
+	private SecurityContext securityContext() {
+		SecurityReference securityReference = SecurityReference.builder()
+				.reference("AlgaFood")
+				.scopes(new AuthorizationScope[0])
+				.build();
+		
+		return SecurityContext.builder()
+				.securityReferences(Arrays.asList(securityReference))
+				.forPaths(PathSelectors.any())
+				.build();
+	}
+	
 	
 	private List<ResponseMessage> globalGetResponseMessage(){
 		return Arrays.asList(
