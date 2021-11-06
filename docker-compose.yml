@@ -1,0 +1,26 @@
+version: "3.9"
+networks:
+  algafood-network:
+    driver: bridge
+
+services:
+  algafood-postgresql:
+    image: postgres:14.0
+    ports:
+      - "5432:5432"
+    networks:
+      - algafood-network
+    environment:
+      - POSTGRES_DB=algafood
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=root
+  algafood-api:
+    image: algafood
+    environment:
+      DB_HOST: algafood-postgresql
+    ports: 
+      - "8080:8080"
+    networks:
+      - algafood-network
+    depends_on:
+      - algafood-postgresql

@@ -3,6 +3,7 @@ package com.ejs.algaworksCurso.core.security;
 import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -19,11 +20,13 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import com.ejs.algaworksCurso.domain.repository.UsuarioRepository;
+import com.ejs.algaworksCurso.infrastructure.repository.UserSecurityRepository;
 
-@Configuration
-@EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true)
-public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+ @Configuration
+ @EnableWebSecurity
+ @EnableAutoConfiguration
+ @EnableGlobalMethodSecurity(prePostEnabled = true)
+public class WebSecurity extends WebSecurityConfigurerAdapter {
 	
 	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
@@ -37,13 +40,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
 	private UsuarioRepository usuarioRepository;
 	
+	@Autowired
+	private UserSecurityRepository userSecurityRepository;
 	
 	private static final String[] PUBLIC_MATCHERS = {
 		"/swagger-ui.html", "/"
 	};
 	
 	private static final String[] PUBLIC_MATCHERS_POST = {
-		"/login" , "usuarios"
+		"/login" , "/usuarios/**"
 	};
 
 	@Override
@@ -54,11 +59,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		http.authorizeRequests()
 			.antMatchers(PUBLIC_MATCHERS).permitAll()
 			.antMatchers(HttpMethod.POST, PUBLIC_MATCHERS_POST).permitAll()
-			.anyRequest().permitAll();
+			.anyRequest().authenticated();
 		
-		http.addFilter(new JWTAuthenticationFilter(super.authenticationManagerBean(), jwtUtil, usuarioRepository));
-		http.addFilter(new JWTAuthorizationFilter(super.authenticationManager(), jwtUtil, userDetailsService));
-		
+		http.addFilter(new JWTAuthenticationFilter(super.authenticationManager(), jwtUtil, usuarioRepository)); //corrigir
+		http.addFilter(new JWTAuthorizationFilter(super.authenticationManager(), jwtUtil, userSecurityRepository));
 		
 	}
 	
@@ -75,5 +79,5 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		source.registerCorsConfiguration("/**", cors);
 		return source;
 	}
-	
+		
 }

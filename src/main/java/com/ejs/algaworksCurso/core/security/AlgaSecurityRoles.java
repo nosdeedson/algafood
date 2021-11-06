@@ -13,42 +13,42 @@ import com.ejs.algaworksCurso.domain.repository.UsuarioRepository;
 @Component
 public class AlgaSecurityRoles {
 
-	@Autowired
-	private UsuarioRepository usuarioRepository;
+	 @Autowired
+	 private UsuarioRepository usuarioRepository;
 	
-	@Autowired PedidoRepository pedidoRepository;
+	 @Autowired PedidoRepository pedidoRepository;
 	
-	public boolean ehResponsavelPeloRestaurante(Long restauranteId) {
-		User principal = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+	 public boolean ehResponsavelPeloRestaurante(Long restauranteId) {
+	 	User principal = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		
-		boolean ehResponsavel = this.usuarioRepository.existsResponsavel(principal.getUsername(), restauranteId); 
-		return ehResponsavel;
-	}
+	 	boolean ehResponsavel = this.usuarioRepository.existsResponsavel(principal.getUsername(), restauranteId); 
+	 	return ehResponsavel;
+	 }
 	
-	public Long getUsuarioId() {
-		User principal = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		Usuario user = this.usuarioRepository.findByEmail(principal.getUsername())
-				.orElseThrow(() -> new UsuarioNaoEncontradoException("Usuário não encontrado."));
-		return user.getId();
-	}
+	 public Long getUsuarioId() {
+	 	User principal = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+	 	Usuario user = this.usuarioRepository.findByEmail(principal.getUsername())
+	 			.orElseThrow(() -> new UsuarioNaoEncontradoException("Usuário não encontrado."));
+	 	return user.getId();
+	 }
 	
-	public boolean podeConfirmarEntregarPedido(String codigoPedido) {
-		User principal = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		Usuario user = this.usuarioRepository.findByEmail(principal.getUsername())
-				.orElseThrow(() -> new UsuarioNaoEncontradoException("Usuário não encontrado."));
-		boolean pedido = this.pedidoRepository.findByCodigoAndResponsavelId(codigoPedido, user.getId());
+	 public boolean podeConfirmarEntregarPedido(String codigoPedido) {
+	 	User principal = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+	 	Usuario user = this.usuarioRepository.findByEmail(principal.getUsername())
+	 			.orElseThrow(() -> new UsuarioNaoEncontradoException("Usuário não encontrado."));
+	 	boolean pedido = this.pedidoRepository.findByCodigoAndResponsavelId(codigoPedido, user.getId());
 		
-		return pedido;
-	}
+	 	return pedido;
+	 }
 	
-	public boolean podeCancelarPedido(String codigoPedido) {
-		User principal = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		Usuario user = this.usuarioRepository.findByEmail(principal.getUsername())
-				.orElseThrow(() -> new UsuarioNaoEncontradoException("Usuário não encontrado."));
-		boolean pedido = this.pedidoRepository.findByCodigoAndUsuarioId(codigoPedido, user.getId());
+	 public boolean podeCancelarPedido(String codigoPedido) {
+	 	User principal = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+	 	Usuario user = this.usuarioRepository.findByEmail(principal.getUsername())
+	 			.orElseThrow(() -> new UsuarioNaoEncontradoException("Usuário não encontrado."));
+	 	boolean pedido = this.pedidoRepository.findByCodigoAndUsuarioId(codigoPedido, user.getId());
 		
-		return pedido;
-	}
+	 	return pedido;
+	 }
 	
 	
 	

@@ -16,7 +16,7 @@ import com.ejs.algaworksCurso.domain.model.Usuario;
 import com.ejs.algaworksCurso.domain.repository.UsuarioRepository;
 
 @Service
-public class UserSecurityRepository implements UserDetailsService{
+public class UserSecurityRepository  implements UserDetailsService{
 	
 	@Autowired
 	private UsuarioRepository usuarioRepository;
