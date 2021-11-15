@@ -79,25 +79,17 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
  			AuthenticationException failed) throws IOException, ServletException {
  		response.setStatus(401);
  		response.setContentType("application/json");
- 		try {
- 			response.getWriter().append(json());
- 		} catch (IOException | JSONException e) {
- 			// TODO Auto-generated catch block
- 			e.printStackTrace();
- 		}
+ 		
+ 		response.getWriter().append(json());
+ 		
  	}
 	
-	private String json() throws JSONException {
-		long date = new Date().getTime();
-		
-		JSONObject json = new JSONObject();
-		json.put("timestamp", date);
-		json.put("status", 401);
-		json.put("error", "Não autorizado");
-		json.put("message", "Senha ou usuário inválido");
-		json.put("path", "/login");
-		return json.toString();
-
-	}
-	
+ 	 private String json() {
+         long date = new Date().getTime();
+         return "{\"timestamp\": " + date + ", "
+             + "\"status\": 401, "
+             + "\"error\": \"Não autorizado\", "
+             + "\"message\": \"Email ou senha inválidos\", "
+             + "\"path\": \"/login\"}";
+     }
 }

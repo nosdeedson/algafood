@@ -59,7 +59,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
 		http.authorizeRequests()
 			.antMatchers(PUBLIC_MATCHERS).permitAll()
 			.antMatchers(HttpMethod.POST, PUBLIC_MATCHERS_POST).permitAll()
-			.anyRequest().authenticated();
+			.anyRequest().permitAll();
 		
 		http.addFilter(new JWTAuthenticationFilter(super.authenticationManager(), jwtUtil, usuarioRepository)); //corrigir
 		http.addFilter(new JWTAuthorizationFilter(super.authenticationManager(), jwtUtil, userSecurityRepository));
