@@ -12,8 +12,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.boot.configurationprocessor.json.JSONException;
-import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -84,12 +82,12 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
  		
  	}
 	
- 	 private String json() {
-         long date = new Date().getTime();
-         return "{\"timestamp\": " + date + ", "
-             + "\"status\": 401, "
-             + "\"error\": \"Não autorizado\", "
-             + "\"message\": \"Email ou senha inválidos\", "
-             + "\"path\": \"/login\"}";
+	private String json() {
+		long date = new Date().getTime();
+		return "{\"timestamp\": " + date + ", "
+			+ "\"status\": 401, "
+			+ "\"error\": \"Não autorizado\", "
+			+ "\"message\": \"Email ou senha inválidos\", "
+			+ "\"path\": \"/login\"}";
      }
 }

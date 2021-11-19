@@ -35,7 +35,7 @@ public class UserSecurityRepository  implements UserDetailsService{
 			});
 			
 			return new User(usuario.getEmail(), usuario.getSenha(), authorities);
-		} catch (BadCredentialsException e) {
+		} catch (BadCredentialsException | UsernameNotFoundException e) {
 			throw new BadCredentialsException("Usuário ou senha inválidos");
 		}
 	}

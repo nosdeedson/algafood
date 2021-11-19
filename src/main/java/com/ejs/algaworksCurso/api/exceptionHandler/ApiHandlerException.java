@@ -17,6 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.HttpMediaTypeNotAcceptableException;
@@ -53,15 +54,29 @@ public class ApiHandlerException extends ResponseEntityExceptionHandler {
 		erro.setMenssagem(ex.getMessage());
 		erro.setNome("Permissão de Acesso usuário");
 		
-		Problem problem = this.createProblem(status, "Usuário não tem acesso ao método solicitado", ProblemType.ACESSO_NEGADO_AO_RECURSO)
+		Problem problem = this.createProblem(status, "Usuário não tem acesso ao método solicitado",
+							ProblemType.ACESSO_NEGADO_AO_RECURSO)
 							.timeStamp()
 							.camposComErro(Arrays.asList(erro))
 							.userMessage("acesso negodo")
 							.build();
-		return this.handleExceptionInternal(ex, problem,new HttpHeaders(), status, request);			
-
+		return this.handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);			
+ 
 	}
 	
+	@ExceptionHandler( BadCredentialsException.class)
+	public ResponseEntity<?> badCredentialsException(Exception ex, WebRequest request){
+		HttpStatus status = HttpStatus.CONFLICT;
+		CampoComErro erro = new CampoComErro();
+		erro.setMenssagem(ex.getMessage());
+		erro.setNome("Credenciais inválidas.");
+		Problem problem = this.createProblem(status, "Credenciais inválidas", ProblemType.DADOS_INVALIDOS)
+							.timeStamp()
+							.camposComErro(Arrays.asList(erro))
+							.userMessage("Credenciais usadas inválidas.")
+							.build();
+		return this.handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);
+	}
 	
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<?> capturaExceptionsNaoTratadas(Exception ex, WebRequest resquest ){

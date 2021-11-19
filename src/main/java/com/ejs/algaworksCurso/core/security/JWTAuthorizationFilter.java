@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -44,9 +45,13 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter{
 	 private UsernamePasswordAuthenticationToken getAuthentication(String token) {
 		
 	 	if ( jwtUtil.tokenIsValid(token)) {
-	 		String userName = jwtUtil.getUserName(token);
-	 		UserDetails user = userSecurityRepository.loadUserByUsername(userName);
-	 		return new UsernamePasswordAuthenticationToken(user,null, user.getAuthorities());
+	 		try {
+				String userName = jwtUtil.getUserName(token);
+				UserDetails user = userSecurityRepository.loadUserByUsername(userName);
+				return new UsernamePasswordAuthenticationToken(user,null, user.getAuthorities());
+			} catch (BadCredentialsException e) {
+				throw new BadCredentialsException("Usuário ou senha inválidos");
+			}
 	 	}
 		
 	 	return null;

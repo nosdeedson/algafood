@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.hateoas.CollectionModel;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 //import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,8 +39,8 @@ public class UsuarioService {
 	@Autowired
 	private UsuarioDisAssembler usuarioDisAssembler;
 	
-//	@Autowired
-//	private BCryptPasswordEncoder passWordEncoder;
+	@Autowired
+	private BCryptPasswordEncoder passWordEncoder;
 	
 	@Transactional
 	public UsuarioOut atualizar(UsuarioAtualizarIn usuarioAtualizarIn, Long usuarioId) {
@@ -96,7 +97,7 @@ public class UsuarioService {
 			throw new NegocioException(String.format(USUARIO_EXISTENTE , usuarioIn.getEmail()));
 		}
 		Usuario user = this.usuarioAssembler.usuarioInToUsuario(usuarioIn);
-//		user.setSenha(passWordEncoder.encode(user.getSenha()));
+		user.setSenha(passWordEncoder.encode(user.getSenha()));
 		user = this.usuarioRepository.save(user);
 		return this.usuarioDisAssembler.toModel(user);
 	}

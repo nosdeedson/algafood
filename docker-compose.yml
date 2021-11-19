@@ -18,9 +18,17 @@ services:
     image: algafood
     environment:
       DB_HOST: algafood-postgresql
+      SPRING_SESSION_STORE_TYPE: redis
+      SPRING_REDIS_HOST: algafood-redis
     ports: 
       - "8080:8080"
     networks:
       - algafood-network
     depends_on:
       - algafood-postgresql
+  algafood-redis:
+    image: redis:6.2.1-alpine
+    ports:
+      - "6379:6379"
+    networks:
+      - algafood-network

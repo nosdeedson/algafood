@@ -75,7 +75,6 @@ public class UsuarioController implements UsuarioControllerOpenApi {
 		this.usuarioService.remover(usuarioId);
 	}
 	
-	@CheckSecurity.GruposPermissoesUsuarios.PodeEditarUsuario
 	@Override
 	@PostMapping
 	public ResponseEntity<UsuarioOut> salvar(@RequestBody @Valid UsuarioIn usuarioIn){
