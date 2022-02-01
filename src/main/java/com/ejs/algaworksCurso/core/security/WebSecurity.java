@@ -18,6 +18,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import com.ejs.algaworksCurso.domain.repository.UsuarioRepository;
 import com.ejs.algaworksCurso.infrastructure.repository.UserSecurityRepository;
@@ -26,7 +28,7 @@ import com.ejs.algaworksCurso.infrastructure.repository.UserSecurityRepository;
  @EnableWebSecurity
  @EnableAutoConfiguration
  @EnableGlobalMethodSecurity(prePostEnabled = true)
-public class WebSecurity extends WebSecurityConfigurerAdapter {
+public class WebSecurity extends WebSecurityConfigurerAdapter implements WebMvcConfigurer  {
 	
 	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
@@ -69,6 +71,14 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 		auth.userDetailsService(userDetailsService).passwordEncoder( passwordEncoder);
+	}
+	
+	@Override
+	public void addCorsMappings(CorsRegistry registry) {
+		registry.addMapping("/**")
+			.allowedMethods("*")
+			.allowedHeaders("*")
+			.allowedOrigins("*");
 	}
 	
 	@Bean
