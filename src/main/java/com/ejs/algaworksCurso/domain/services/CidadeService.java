@@ -37,7 +37,7 @@ public class CidadeService {
 	@Transactional(rollbackFor = {NegocioException.class, Exception.class})
 	public CidadeOut atualizar(CidadeIn cidadeIn, Long id) {
 		
-		this.estadoService.buscar(id);
+		this.estadoService.buscar(cidadeIn.getEstado().getId());
 
 		Cidade cidadeAtual = this.buscarOuFalhar(id);
 		
