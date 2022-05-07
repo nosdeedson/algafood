@@ -3,6 +3,7 @@ package com.ejs.algaworksCurso.core.security;
 import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -45,6 +46,9 @@ public class WebSecurity extends WebSecurityConfigurerAdapter implements WebMvcC
 	@Autowired
 	private UserSecurityRepository userSecurityRepository;
 	
+	@Value("${appName.allowedApi}")
+	private String localHost;
+	
 	private static final String[] PUBLIC_MATCHERS = {
 		"/swagger-ui.html", "/"
 	};
@@ -78,7 +82,8 @@ public class WebSecurity extends WebSecurityConfigurerAdapter implements WebMvcC
 		registry.addMapping("/**")
 			.allowedMethods("*")
 			.allowedHeaders("*")
-			.allowedOrigins("*");
+			.allowedOrigins("*")
+			.allowedOrigins(localHost);
 	}
 	
 	@Bean
