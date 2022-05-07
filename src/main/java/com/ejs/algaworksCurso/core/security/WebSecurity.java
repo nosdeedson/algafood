@@ -90,6 +90,8 @@ public class WebSecurity extends WebSecurityConfigurerAdapter implements WebMvcC
 	public CorsConfigurationSource corsConfiguration() {
 		CorsConfiguration cors = new CorsConfiguration().applyPermitDefaultValues();
 		cors.setAllowedMethods(Arrays.asList("POST", "GET", "DELETE", "PUT", "OPTIONS", "HEAD", "PATCH"));
+		cors.setAllowedOrigins(Arrays.asList("http://localhost:4200", "*"));
+		cors.setAllowedHeaders(Arrays.asList("*"));
 		final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 		source.registerCorsConfiguration("/**", cors);
 		return source;
