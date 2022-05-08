@@ -19,6 +19,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.cors.reactive.CorsWebFilter;
+import org.springframework.web.filter.CorsFilter;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -87,10 +89,25 @@ public class WebSecurity extends WebSecurityConfigurerAdapter implements WebMvcC
 	}
 	
 	@Bean
+	public CorsFilter corsFiler() {
+		CorsConfiguration config = new CorsConfiguration();
+	    config.addAllowedOrigin("http://127.0.0.1:4200");
+	    config.addAllowedOrigin("http://localhost:4200");
+	    config.addAllowedOrigin("/*");
+	    config.addAllowedHeader("*");
+	    config.setAllowedMethods(Arrays.asList("OPTIONS", "GET"));
+
+	    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+	    source.registerCorsConfiguration("/**", config);
+
+	    return new CorsFilter(source);
+	}
+	
+	@Bean
 	public CorsConfigurationSource corsConfiguration() {
 		CorsConfiguration cors = new CorsConfiguration().applyPermitDefaultValues();
 		cors.setAllowedMethods(Arrays.asList("POST", "GET", "DELETE", "PUT", "OPTIONS", "HEAD", "PATCH"));
-		cors.setAllowedOrigins(Arrays.asList("http://localhost:4200", "*"));
+		cors.setAllowedOrigins(Arrays.asList("http://localhost:4200", "*")); 
 		cors.setAllowedHeaders(Arrays.asList("*"));
 		final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 		source.registerCorsConfiguration("/**", cors);
