@@ -1,7 +1,10 @@
 package com.ejs.algaworksCurso.api.v1.model.dto;
 
-public class CredencialDTO {
+import java.io.Serializable;
+
+public class CredencialDTO implements Serializable {
 	
+	private static final long serialVersionUID = 5182782794340132084L;
 	private String email;
 	private String senha;
 	

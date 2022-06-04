@@ -1,11 +1,7 @@
 package com.ejs.algaworksCurso.core.security;
 
-import java.util.Arrays;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -16,22 +12,15 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.cors.reactive.CorsWebFilter;
-import org.springframework.web.filter.CorsFilter;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import com.ejs.algaworksCurso.domain.repository.UsuarioRepository;
 import com.ejs.algaworksCurso.infrastructure.repository.UserSecurityRepository;
 
  @Configuration
  @EnableWebSecurity
- @EnableAutoConfiguration
+// @EnableAutoConfiguration
  @EnableGlobalMethodSecurity(prePostEnabled = true)
-public class WebSecurity extends WebSecurityConfigurerAdapter implements WebMvcConfigurer  {
+public class WebSecurity extends WebSecurityConfigurerAdapter {
 	
 	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
@@ -63,7 +52,9 @@ public class WebSecurity extends WebSecurityConfigurerAdapter implements WebMvcC
 	protected void configure(HttpSecurity http) throws Exception {
 		
 		http.cors().and().csrf().disable();
-		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+		http.sessionManagement()
+		.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+		
 		http.authorizeRequests()
 			.antMatchers(PUBLIC_MATCHERS).permitAll()
 			.antMatchers(HttpMethod.POST, PUBLIC_MATCHERS_POST).permitAll()
@@ -79,39 +70,39 @@ public class WebSecurity extends WebSecurityConfigurerAdapter implements WebMvcC
 		auth.userDetailsService(userDetailsService).passwordEncoder( passwordEncoder);
 	}
 	
-	@Override
-	public void addCorsMappings(CorsRegistry registry) {
-		registry.addMapping("/**")
-			.allowedMethods("*")
-			.allowedHeaders("*")
-			.allowedOrigins("*")
-			.allowedOrigins(localHost);
-	}
+//	@Override
+//	public void addCorsMappings(CorsRegistry registry) {
+//		registry.addMapping("/**")
+//			.allowedMethods("*")
+//			.allowedHeaders("*")
+//			.allowedOrigins("*")
+//			.allowedOrigins(localHost);
+//	}
 	
-	@Bean
-	public CorsFilter corsFiler() {
-		CorsConfiguration config = new CorsConfiguration();
-	    config.addAllowedOrigin("http://127.0.0.1:4200");
-	    config.addAllowedOrigin("http://localhost:4200");
-	    config.addAllowedOrigin("/*");
-	    config.addAllowedHeader("*");
-	    config.setAllowedMethods(Arrays.asList("OPTIONS", "GET"));
-
-	    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-	    source.registerCorsConfiguration("/**", config);
-
-	    return new CorsFilter(source);
-	}
+//	@Bean
+//	public CorsFilter corsFiler() {
+//		CorsConfiguration config = new CorsConfiguration();
+//	    config.addAllowedOrigin("http://127.0.0.1:4200");
+//	    config.addAllowedOrigin("http://localhost:4200");
+//	    config.addAllowedOrigin("/**");
+//	    config.addAllowedHeader("*");
+//	    config.setAllowedMethods(Arrays.asList("*"));
+//
+//	    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+//	    source.registerCorsConfiguration("/**", config);
+//
+//	    return new CorsFilter(source);
+//	}
 	
-	@Bean
-	public CorsConfigurationSource corsConfiguration() {
-		CorsConfiguration cors = new CorsConfiguration().applyPermitDefaultValues();
-		cors.setAllowedMethods(Arrays.asList("POST", "GET", "DELETE", "PUT", "OPTIONS", "HEAD", "PATCH"));
-		cors.setAllowedOrigins(Arrays.asList("http://localhost:4200", "*")); 
-		cors.setAllowedHeaders(Arrays.asList("*"));
-		final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-		source.registerCorsConfiguration("/**", cors);
-		return source;
-	}
+//	@Bean
+//	public CorsConfigurationSource corsConfiguration() {
+//		CorsConfiguration cors = new CorsConfiguration().applyPermitDefaultValues();
+//		cors.setAllowedMethods(Arrays.asList("*"));
+//		cors.setAllowedOrigins(Arrays.asList("*")); 
+//		cors.setAllowedHeaders(Arrays.asList("*"));
+//		final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+//		source.registerCorsConfiguration("/**", cors);
+//		return source;
+//	}
 		
 }

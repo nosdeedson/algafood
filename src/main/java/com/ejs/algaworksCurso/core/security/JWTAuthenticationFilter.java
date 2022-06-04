@@ -12,12 +12,14 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -46,11 +48,12 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
  	public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
  			throws AuthenticationException {
  		try {
+
  			CredencialDTO dto = new ObjectMapper()
  					.readValue(request.getInputStream(), CredencialDTO.class);
  			UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(dto.getEmail(), dto.getSenha(), new ArrayList<>());
  			Authentication auth = authenticationManager.authenticate(token);
-			
+ 			SecurityContextHolder.getContext().setAuthentication(auth);
  			return auth;
  		} catch (Exception e) {
  			throw new BadCredentialsException("Usuário ou senha inválido.");
@@ -66,6 +69,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
  //		response.addHeader("Authorization", "Bearer " + token);
  //		response.addHeader("access-control-expose-headers", "Authorization");
  		response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+ 		response.addHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, "*");
  		Map<String, Object> res = new HashMap<String, Object>();
  		res.put("token", token);
  		res.put("Authorities", user.getAuthorities());

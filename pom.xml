@@ -117,9 +117,9 @@
 
 		<!-- ModelMapper -->
 		<dependency>
-			<groupId>org.modelmapper</groupId>
-			<artifactId>modelmapper</artifactId>
-			<version>2.3.0</version>
+		  <groupId>org.modelmapper</groupId>
+		  <artifactId>modelmapper</artifactId>
+		  <version>3.0.0</version>
 		</dependency>
 
 		<!-- squiggly adiciona filtros as requisições -->
