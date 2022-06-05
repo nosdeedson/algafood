@@ -55,7 +55,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
  			UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(dto.getEmail(), dto.getSenha(), new ArrayList<>());
  			Authentication auth = authenticationManager.authenticate(token);
  			SecurityContextHolder.getContext().setAuthentication(auth);
- 			response.addHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, "*");
+// 			response.addHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, "*");
  			return auth;
  		} catch (Exception e) {
  			throw new BadCredentialsException("Usuário ou senha inválido.");
@@ -82,7 +82,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
  			AuthenticationException failed) throws IOException, ServletException {
  		response.setStatus(401);
  		response.setContentType("application/json");
- 		response.addHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, "*");
+// 		response.addHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, "*");
  		response.getWriter().append(json());
  	}
 	

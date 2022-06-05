@@ -1,8 +1,11 @@
 package com.ejs.algaworksCurso.core.security;
 
 
+import java.util.Arrays;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -13,6 +16,9 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import com.ejs.algaworksCurso.domain.repository.UsuarioRepository;
 import com.ejs.algaworksCurso.infrastructure.repository.UserSecurityRepository;
@@ -42,7 +48,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
 	private String localHost;
 	
 	private static final String[] PUBLIC_MATCHERS = {
-		"/swagger-ui.html", "/"
+		"/swagger-ui.html", "/", "/root"
 	};
 	
 	private static final String[] PUBLIC_MATCHERS_POST = {
@@ -54,13 +60,14 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
 		
 		http.csrf().disable();
 		http.cors().disable();
+		http.cors().configurationSource(corsConfiguration());
 		http.sessionManagement()
 		.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 		
 		http.authorizeRequests()
-			.antMatchers(PUBLIC_MATCHERS).permitAll()
+			.antMatchers(HttpMethod.GET, PUBLIC_MATCHERS).permitAll()
 			.antMatchers(HttpMethod.POST, PUBLIC_MATCHERS_POST).permitAll()
-			.anyRequest().permitAll();
+			.anyRequest().authenticated();
 		http.addFilter(new JWTAuthenticationFilter(super.authenticationManager(), jwtUtil, usuarioRepository)); //corrigir
 		http.addFilter(new JWTAuthorizationFilter(super.authenticationManager(), jwtUtil, userSecurityRepository));
 		
@@ -71,18 +78,18 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
 		auth.userDetailsService(userDetailsService).passwordEncoder( passwordEncoder);
 	}
 		
-//	@Bean desnecessário com corsFilterConfig class e http.cors.disable()
-//	public CorsConfigurationSource corsConfiguration() {
-//		CorsConfiguration cors = new CorsConfiguration().applyPermitDefaultValues();
-//		cors.addAllowedOrigin("*");
-//		cors.addAllowedHeader("*");
-//		cors.addAllowedMethod("*");
-//		cors.setAllowedMethods(Arrays.asList("*"));
-//		cors.setAllowedOrigins(Arrays.asList("*")); 
-//		cors.setAllowedHeaders(Arrays.asList("*"));
-//		final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-//		source.registerCorsConfiguration("/**", cors);
-//		return source;
-//	}
+	@Bean
+	public CorsConfigurationSource corsConfiguration() {
+		CorsConfiguration cors = new CorsConfiguration().applyPermitDefaultValues();
+		cors.addAllowedOrigin("*");
+		cors.addAllowedHeader("*");
+		cors.addAllowedMethod("*");
+		cors.setAllowedMethods(Arrays.asList("*"));
+		cors.setAllowedOrigins(Arrays.asList("*")); 
+		cors.setAllowedHeaders(Arrays.asList("*"));
+		final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+		source.registerCorsConfiguration("/**", cors);
+		return source;
+	}
 		
 }
