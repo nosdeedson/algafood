@@ -1,5 +1,6 @@
 package com.ejs.algaworksCurso.core.security;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
@@ -51,7 +52,8 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		
-		http.cors().and().csrf().disable();
+		http.csrf().disable();
+		http.cors().disable();
 		http.sessionManagement()
 		.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 		
@@ -59,7 +61,6 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
 			.antMatchers(PUBLIC_MATCHERS).permitAll()
 			.antMatchers(HttpMethod.POST, PUBLIC_MATCHERS_POST).permitAll()
 			.anyRequest().permitAll();
-		
 		http.addFilter(new JWTAuthenticationFilter(super.authenticationManager(), jwtUtil, usuarioRepository)); //corrigir
 		http.addFilter(new JWTAuthorizationFilter(super.authenticationManager(), jwtUtil, userSecurityRepository));
 		
@@ -69,34 +70,13 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 		auth.userDetailsService(userDetailsService).passwordEncoder( passwordEncoder);
 	}
-	
-//	@Override
-//	public void addCorsMappings(CorsRegistry registry) {
-//		registry.addMapping("/**")
-//			.allowedMethods("*")
-//			.allowedHeaders("*")
-//			.allowedOrigins("*")
-//			.allowedOrigins(localHost);
-//	}
-	
-//	@Bean
-//	public CorsFilter corsFiler() {
-//		CorsConfiguration config = new CorsConfiguration();
-//	    config.addAllowedOrigin("http://127.0.0.1:4200");
-//	    config.addAllowedOrigin("http://localhost:4200");
-//	    config.addAllowedOrigin("/**");
-//	    config.addAllowedHeader("*");
-//	    config.setAllowedMethods(Arrays.asList("*"));
-//
-//	    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-//	    source.registerCorsConfiguration("/**", config);
-//
-//	    return new CorsFilter(source);
-//	}
-	
-//	@Bean
+		
+//	@Bean desnecessário com corsFilterConfig class e http.cors.disable()
 //	public CorsConfigurationSource corsConfiguration() {
 //		CorsConfiguration cors = new CorsConfiguration().applyPermitDefaultValues();
+//		cors.addAllowedOrigin("*");
+//		cors.addAllowedHeader("*");
+//		cors.addAllowedMethod("*");
 //		cors.setAllowedMethods(Arrays.asList("*"));
 //		cors.setAllowedOrigins(Arrays.asList("*")); 
 //		cors.setAllowedHeaders(Arrays.asList("*"));

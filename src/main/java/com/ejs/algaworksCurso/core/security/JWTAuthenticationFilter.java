@@ -28,6 +28,7 @@ import com.ejs.algaworksCurso.domain.model.Usuario;
 import com.ejs.algaworksCurso.domain.repository.UsuarioRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+
 public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
  	private AuthenticationManager authenticationManager;
@@ -54,6 +55,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
  			UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(dto.getEmail(), dto.getSenha(), new ArrayList<>());
  			Authentication auth = authenticationManager.authenticate(token);
  			SecurityContextHolder.getContext().setAuthentication(auth);
+ 			response.addHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, "*");
  			return auth;
  		} catch (Exception e) {
  			throw new BadCredentialsException("Usuário ou senha inválido.");
@@ -69,7 +71,6 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
  //		response.addHeader("Authorization", "Bearer " + token);
  //		response.addHeader("access-control-expose-headers", "Authorization");
  		response.setContentType(MediaType.APPLICATION_JSON_VALUE);
- 		response.addHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, "*");
  		Map<String, Object> res = new HashMap<String, Object>();
  		res.put("token", token);
  		res.put("Authorities", user.getAuthorities());
@@ -81,9 +82,8 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
  			AuthenticationException failed) throws IOException, ServletException {
  		response.setStatus(401);
  		response.setContentType("application/json");
- 		
+ 		response.addHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, "*");
  		response.getWriter().append(json());
- 		
  	}
 	
 	private String json() {
