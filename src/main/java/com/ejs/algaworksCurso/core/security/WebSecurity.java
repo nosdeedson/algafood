@@ -48,7 +48,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
 	private String localHost;
 	
 	private static final String[] PUBLIC_MATCHERS = {
-		"/swagger-ui.html", "/", "/root"
+		"/swagger-ui.html", "/**", "/root", "/webjars/**", "/swagger-resources/**", "/null/**"
 	};
 	
 	private static final String[] PUBLIC_MATCHERS_POST = {
@@ -65,7 +65,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
 		.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 		
 		http.authorizeRequests()
-			.antMatchers(HttpMethod.GET, PUBLIC_MATCHERS).permitAll()
+			.antMatchers(PUBLIC_MATCHERS).permitAll()
 			.antMatchers(HttpMethod.POST, PUBLIC_MATCHERS_POST).permitAll()
 			.anyRequest().authenticated();
 		http.addFilter(new JWTAuthenticationFilter(super.authenticationManager(), jwtUtil, usuarioRepository)); //corrigir
