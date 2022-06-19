@@ -29,9 +29,11 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import com.ejs.algaworksCurso.core.security.JWTUtil;
 import com.ejs.algaworksCurso.domain.exception.EntidadeEmUsoException;
 import com.ejs.algaworksCurso.domain.exception.EntidadeNaoEncontradaException;
 import com.ejs.algaworksCurso.domain.exception.NegocioException;
+import com.ejs.algaworksCurso.domain.exception.TokenExpiradoException;
 import com.ejs.algaworksCurso.domain.exception.ValidacaoException;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.fasterxml.jackson.databind.exc.PropertyBindingException;
@@ -46,22 +48,54 @@ public class ApiHandlerException extends ResponseEntityExceptionHandler {
 	@Autowired
 	private MessageSource messageSource;
 	
+	@Autowired
+	private JWTUtil jwtUtil;
+	
 	@ExceptionHandler(AccessDeniedException .class)
 	public ResponseEntity<?> trataAcessoNegado(AccessDeniedException ex, WebRequest request) {
-		
 		HttpStatus status = HttpStatus.FORBIDDEN;
 		CampoComErro erro = new CampoComErro();
-		erro.setMenssagem(ex.getMessage());
-		erro.setNome("Permissão de Acesso usuário");
+		ProblemType type =  ProblemType.ACESSO_NEGADO_AO_RECURSO;
+		String motivo = "";
+		String header = request.getHeader("Authorization");
+	 	if ( header != null && header.startsWith("Bearer ")) {
+	 		if(!this.jwtUtil.tokenIsValid(header.substring(7))) {
+	 			status = HttpStatus.UNAUTHORIZED;
+	 			erro.setNome("Token Expirado");
+	 			type = ProblemType.TOKEN_EXPIRADO;
+	 			motivo = "Token expirado. Faça Login novamente";
+	 		}else {	 		
+		 		status = HttpStatus.FORBIDDEN;
+		 		erro.setNome("Permissão de Acesso usuário");
+		 		type = ProblemType.ACESSO_NEGADO_AO_RECURSO;
+		 		motivo = "Usuário não tem acesso ao método solicitado";
+		 	}
+	 	}
+	 	erro.setMenssagem(ex.getMessage());
 		
-		Problem problem = this.createProblem(status, "Usuário não tem acesso ao método solicitado",
-							ProblemType.ACESSO_NEGADO_AO_RECURSO)
+		
+		Problem problem = this.createProblem(status, motivo,
+							type)
 							.timeStamp()
 							.camposComErro(Arrays.asList(erro))
-							.userMessage("acesso negodo")
+							.userMessage("Acesso negado")
 							.build();
 		return this.handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);			
  
+	}
+	
+	@ExceptionHandler( TokenExpiradoException.class)
+	public ResponseEntity<?> tokenExpiradoException(Exception ex, WebRequest request){
+		HttpStatus status = HttpStatus.CONFLICT;
+		CampoComErro erro = new CampoComErro();
+		erro.setMenssagem(ex.getMessage());
+		erro.setNome("Token inválido.");
+		Problem problem = this.createProblem(status, "Token Expirado", ProblemType.TOKEN_EXPIRADO)
+							.timeStamp()
+							.camposComErro(Arrays.asList(erro))
+							.userMessage("Token Expirado.")
+							.build();
+		return this.handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);
 	}
 	
 	@ExceptionHandler( BadCredentialsException.class)

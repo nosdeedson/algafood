@@ -31,7 +31,7 @@ import com.ejs.algaworksCurso.domain.services.CidadeService;
 @RequestMapping(path = "cidades", produces = AlgaMediaType.V1_APLICATION_JSON_VALUE)
 public class CidadeController implements CidadeControllerOpenApi {
 
-	private final Logger logger = LoggerFactory.getLogger(CozinhaController.class);
+	private final Logger logger = LoggerFactory.getLogger(CidadeController.class);
 	
 	@Autowired
 	private CidadeService cidadeService;

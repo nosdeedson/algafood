@@ -48,12 +48,12 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter{
 	 		try {
 				String userName = jwtUtil.getUserName(token);
 				UserDetails user = userSecurityRepository.loadUserByUsername(userName);
-				return new UsernamePasswordAuthenticationToken(user,null, user.getAuthorities());
+				return new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
 			} catch (BadCredentialsException e) {
 				throw new BadCredentialsException("Usuário ou senha inválidos");
 			}
 	 	}
-		
+	 	
 	 	return null;
 	 }
 }

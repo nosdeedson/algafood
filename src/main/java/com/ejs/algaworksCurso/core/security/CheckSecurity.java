@@ -32,7 +32,7 @@ public @interface CheckSecurity {
 		@Target(ElementType.METHOD)
 		public @interface PodeConsultar{}
 		
-		@PreAuthorize("hasAuthority('EDITAR_COZINHA')")
+		@PreAuthorize("hasAuthority('EDITAR_COZINHAS')")
 		@Retention(RetentionPolicy.RUNTIME)
 		@Target(ElementType.METHOD)
 		public @interface PodeEditar{}
