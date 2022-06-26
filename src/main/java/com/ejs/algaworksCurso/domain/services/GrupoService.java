@@ -11,12 +11,17 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.ejs.algaworksCurso.api.v1.model.in.grupo.GrupoIn;
 import com.ejs.algaworksCurso.api.v1.model.out.group.GrupoOut;
+import com.ejs.algaworksCurso.api.v1.model.out.usuario.UsuarioOut;
 import com.ejs.algaworksCurso.domain.exception.EntidadeEmUsoException;
 import com.ejs.algaworksCurso.domain.exception.GrupoNaoEncontradoException;
+import com.ejs.algaworksCurso.domain.exception.UsuarioNaoEncontradoException;
 import com.ejs.algaworksCurso.domain.model.Grupo;
+import com.ejs.algaworksCurso.domain.model.Usuario;
 import com.ejs.algaworksCurso.domain.repository.GrupoRepository;
+import com.ejs.algaworksCurso.domain.repository.UsuarioRepository;
 import com.ejs.algaworksCurso.helper.grupo.GrupoAssembler;
 import com.ejs.algaworksCurso.helper.grupo.GrupoDisAssembler;
+import com.ejs.algaworksCurso.helper.usuario.UsuarioDisAssembler;
 
 @Service
 public class GrupoService {
@@ -29,6 +34,12 @@ public class GrupoService {
 	
 	@Autowired
 	private GrupoDisAssembler grupoDisAssembler;
+	
+	@Autowired
+	private UsuarioRepository usuarioRepository;
+	
+	@Autowired
+	private UsuarioDisAssembler usuarioDisAssembler;
 	
 	@Transactional
 	public GrupoOut atualizar( GrupoIn grupoIn, Long grupoId) {
@@ -51,6 +62,17 @@ public class GrupoService {
 		List<Grupo> grupos = this.grupoRepository.findAll();
 		CollectionModel<GrupoOut> grupoOuts = this.grupoDisAssembler.toCollectionModel(grupos);
 		return grupoOuts;
+	}
+
+	public CollectionModel<UsuarioOut> listarUsuariosPorGrupo(Long grupoId) {
+		try {
+			Grupo grupo = this.buscarOuFalhar(grupoId);
+			List<Usuario> usuarios = this.usuarioRepository.findUsuariosPorGrupoId(grupo.getId());
+			return this.usuarioDisAssembler.toCollectionModel(usuarios);
+		} catch (UsuarioNaoEncontradoException e) {
+			throw new UsuarioNaoEncontradoException(String.format(
+					"Não foram encontrados usuários pertencentes ao grupo de id: ", grupoId));
+		}
 	}
 	
 	@Transactional

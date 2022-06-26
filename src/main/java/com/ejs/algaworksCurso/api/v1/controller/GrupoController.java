@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ejs.algaworksCurso.api.helper.ResourceUriHelper;
 import com.ejs.algaworksCurso.api.v1.model.in.grupo.GrupoIn;
 import com.ejs.algaworksCurso.api.v1.model.out.group.GrupoOut;
+import com.ejs.algaworksCurso.api.v1.model.out.usuario.UsuarioOut;
 import com.ejs.algaworksCurso.api.v1.openApi.controller.GrupoControllerOpenApi;
 import com.ejs.algaworksCurso.core.security.CheckSecurity;
 import com.ejs.algaworksCurso.domain.services.GrupoService;
@@ -55,6 +56,14 @@ public class GrupoController implements GrupoControllerOpenApi {
 	public ResponseEntity<CollectionModel<GrupoOut>> listar(){
 		CollectionModel<GrupoOut> gruposOut = this.grupoService.listar();
 		return ResponseEntity.ok(gruposOut);
+	}
+	
+	@CheckSecurity.GruposPermissoesUsuarios.PodeConsultar
+	@Override
+	@GetMapping("usuarios-por-grupo/{grupoId}")
+	public ResponseEntity<CollectionModel<UsuarioOut>> listarUsuariosPorGrupo(@PathVariable Long grupoId) {
+		CollectionModel<UsuarioOut> out = this.grupoService.listarUsuariosPorGrupo(grupoId);
+		return ResponseEntity.ok(out);
 	}
 	
 	@CheckSecurity.GruposPermissoesUsuarios.PodeEditar

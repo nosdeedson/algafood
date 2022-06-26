@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 
 import com.ejs.algaworksCurso.api.v1.model.in.grupo.GrupoIn;
 import com.ejs.algaworksCurso.api.v1.model.out.group.GrupoOut;
+import com.ejs.algaworksCurso.api.v1.model.out.usuario.UsuarioOut;
 import com.ejs.algaworksCurso.api.v1.openApi.model.GruposModelOpenApi;
 
 import io.swagger.annotations.Api;
@@ -19,6 +20,9 @@ public interface GrupoControllerOpenApi {
 
 	@ApiOperation(value = "Lista os grupos ",response = GruposModelOpenApi.class)
 	ResponseEntity<CollectionModel<GrupoOut>> listar();
+	
+	@ApiOperation(value = "Lista os usuários do grupo pelo Id")
+	public ResponseEntity<CollectionModel<UsuarioOut>> listarUsuariosPorGrupo(Long grupoId);
 
 	void remover(Long grupoId);
 

@@ -7,7 +7,7 @@ import org.springframework.hateoas.server.core.Relation;
 
 import com.ejs.algaworksCurso.api.v1.model.out.group.GrupoOut;
 
-@Relation(collectionRelation = "usuários")
+@Relation(collectionRelation = "usuarios")
 public class UsuarioOut extends RepresentationModel<UsuarioOut>{
 
 	private Long id;
