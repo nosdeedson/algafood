@@ -28,10 +28,9 @@ public interface CidadeControllerOpenApi {
 
 	CollectionModel<CidadeOut> listar();
 
-	void remover(@ApiParam(value = "ID de uma cidade") // anotation for documentation
-	Long id);
+	void remover(@ApiParam(value = "ID de uma cidade") Long id);
 
 	ResponseEntity<CidadeOut> salvar(@ApiParam(name = "corpo", value = "Representação de uma nova cidade")
-	CidadeIn cidadeIn);
+		CidadeIn cidadeIn);
 
 }

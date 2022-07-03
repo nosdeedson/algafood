@@ -8,6 +8,7 @@ import com.ejs.algaworksCurso.api.v1.openApi.model.PermissoesModelOpenApi;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 
 @Api(tags = "Grupo Permissão")
 public interface GrupoPermissaoControllerOpenApi {
@@ -20,5 +21,9 @@ public interface GrupoPermissaoControllerOpenApi {
 
 	@ApiOperation(value = "Lista as permissões por grupo", response = PermissoesModelOpenApi.class)
 	ResponseEntity<CollectionModel<PermissaoOut>> listar(Long grupoId);
+	
+	@ApiOperation(value = "Lista as permissões não vinculadas a um grupo", response = PermissoesModelOpenApi.class)
+	ResponseEntity<CollectionModel<PermissaoOut>> listarPermissoesNaoVinculadaGrupo(
+			@ApiParam(value = "Através do id do grupo devolve as permissões não vinculadas ao grupo") Long grupoId);
 
 }

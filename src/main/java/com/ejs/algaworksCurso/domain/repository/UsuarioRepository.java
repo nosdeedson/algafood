@@ -21,4 +21,13 @@ public interface UsuarioRepository extends CustomJpaRepository<Usuario, Long> {
 
 	@Query("SELECT u FROM Usuario u INNER JOIN u.grupos g WHERE g.id= :grupoId")
 	List<Usuario> findUsuariosPorGrupoId(@Param("grupoId") Long grupoId);
+	
+	@Query( value = "SELECT DISTINCT u.* FROM usuario u "
+			+ " LEFT OUTER JOIN usuario_grupo ug "
+			+ " ON u.id = ug.usuario_id "
+			+ " LEFT OUTER JOIN grupo g"
+			+ " ON g.id = ug.grupo_id"
+			+ " WHERE g.id <> :grupoId OR g.id IS NULL "
+			+ " ORDER BY u.nome ASC", nativeQuery = true)
+	List<Usuario> findUsuariosNãoVinculadosAoGrupo(@Param("grupoId") Long grupoId);
 }

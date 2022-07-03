@@ -11,6 +11,7 @@ import com.ejs.algaworksCurso.api.v1.openApi.model.UsuariosModelOpenApi;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 
 @Api(tags = "Usuário")
 public interface UsuarioControllerOpenApi {
@@ -24,6 +25,10 @@ public interface UsuarioControllerOpenApi {
 
 	@ApiOperation(value = "Lista os usuários", response = UsuariosModelOpenApi.class)
 	ResponseEntity<CollectionModel<UsuarioOut>> listar();
+	
+	@ApiOperation(value = "Lista os usuários que não estão vinculados ao grupo", response = UsuarioControllerOpenApi.class)
+	ResponseEntity<CollectionModel<UsuarioOut>> listarUsuariosNãoVinculadosAoGrupo(
+			@ApiParam(value = "O id do grupo sem vínculo com o usuário")Long grupoId);
 
 	void remover(Long usuarioId);
 

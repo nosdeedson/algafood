@@ -67,6 +67,15 @@ public class UsuarioController implements UsuarioControllerOpenApi {
 		return ResponseEntity.ok(usuarios);
 	}
 	
+	@CheckSecurity.GruposPermissoesUsuarios.PodeConsultar
+	@Override
+	@GetMapping("usuarios-sem-vinculo-grupo/{grupoId}")
+	public ResponseEntity<CollectionModel<UsuarioOut>> listarUsuariosNãoVinculadosAoGrupo(
+			@PathVariable("grupoId") Long grupoId) {
+		CollectionModel<UsuarioOut> usuarios = this.usuarioService.listarUsuariosNãoVinculadosAoGrupo(grupoId);
+		return ResponseEntity.ok(usuarios);
+	}
+	
 	@CheckSecurity.GruposPermissoesUsuarios.PodeEditar
 	@Override
 	@DeleteMapping("{usuarioId}")

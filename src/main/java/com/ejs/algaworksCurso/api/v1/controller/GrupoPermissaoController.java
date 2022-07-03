@@ -58,5 +58,12 @@ public class GrupoPermissaoController implements GrupoPermissaoControllerOpenApi
 		permissoes.add(WebMvcLinkBuilder.linkTo(PermissaoController.class).withRel("permissoes"));
 		return ResponseEntity.ok(permissoes);
 	}
+
+	@Override
+	@GetMapping("permissoes-sem-vinculo-grupo")
+	public ResponseEntity<CollectionModel<PermissaoOut>> listarPermissoesNaoVinculadaGrupo(@PathVariable("grupoId") Long grupoId) {
+		CollectionModel<PermissaoOut> permissoes = this.grupoPermissaoService.listarPermissoesSemVinculoGrupo(grupoId);
+		return ResponseEntity.ok(permissoes);
+	}
 	
 }

@@ -1,5 +1,7 @@
 package com.ejs.algaworksCurso.domain.services;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.stereotype.Service;
@@ -11,6 +13,7 @@ import com.ejs.algaworksCurso.domain.exception.NegocioException;
 import com.ejs.algaworksCurso.domain.exception.PermissaoNaoEncontradaException;
 import com.ejs.algaworksCurso.domain.model.Grupo;
 import com.ejs.algaworksCurso.domain.model.Permissao;
+import com.ejs.algaworksCurso.domain.repository.PermissaoRepository;
 import com.ejs.algaworksCurso.helper.permissao.PermissaoDisAssembler;
 
 @Service
@@ -25,6 +28,9 @@ public class GrupoPermissaoService {
 	
 	@Autowired
 	private PermissaoService permissaoService;
+	
+	@Autowired
+	private PermissaoRepository permissaoRepository;
 	
 	
 	@Transactional
@@ -58,5 +64,11 @@ public class GrupoPermissaoService {
 	public CollectionModel<PermissaoOut> listar(Long grupoId){
 		Grupo grupo = this.grupoService.buscarOuFalhar(grupoId);
 		return this.permissaoDisAssembler.toCollectionModel(grupo.getPermissoes());
+	}
+
+	public CollectionModel<PermissaoOut> listarPermissoesSemVinculoGrupo(Long grupoId) {
+		Grupo grupo = this.grupoService.buscarOuFalhar(grupoId);
+		List<Permissao> permissoes = this.permissaoRepository.findPermissaoSemVinculoGrupo(grupo.getId());
+		return this.permissaoDisAssembler.toCollectionModel(permissoes);
 	}
 }

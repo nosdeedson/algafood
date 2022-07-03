@@ -77,6 +77,11 @@ public class UsuarioService {
 		List<Usuario> users = this.usuarioRepository.findAll();
 		return this.usuarioDisAssembler.toCollectionModel(users);
 	}
+
+	public CollectionModel<UsuarioOut> listarUsuariosNãoVinculadosAoGrupo(Long grupoId) {
+		List<Usuario> users = this.usuarioRepository.findUsuariosNãoVinculadosAoGrupo(grupoId);
+		return this.usuarioDisAssembler.toCollectionModel(users);
+	}
 	
 	@Transactional
 	public void remover( Long usuarioId) {
