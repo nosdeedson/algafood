@@ -66,7 +66,7 @@ public class PermissaoService {
 	@Transactional(rollbackFor = Exception.class)
 	public PermissaoOut salvar(PermissaoIn in) {
 		Permissao nova = this.permissaoAssembler.permissaoInToPermissao(in);
-		this.permissaoRepository.save(nova);
+		nova = this.permissaoRepository.save(nova);
 		return this.permissaoDisAssembler.toModel(nova);
 	}
 }

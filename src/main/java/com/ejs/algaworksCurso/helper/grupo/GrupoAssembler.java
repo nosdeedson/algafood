@@ -20,4 +20,10 @@ public class GrupoAssembler {
 	public void grupoIntoGrupo( GrupoIn grupoIn, Grupo grupo) {
 		this.mapper.map(grupoIn, grupo);
 	}
+	
+	public Grupo novoGrupo(String nome) {
+		Grupo grupo = new Grupo();
+		grupo.setNome(nome);
+		return grupo;
+	}
 }

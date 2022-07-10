@@ -4,6 +4,7 @@ import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.ResponseEntity;
 
 import com.ejs.algaworksCurso.api.v1.model.in.grupo.GrupoIn;
+import com.ejs.algaworksCurso.api.v1.model.in.grupo.GrupoPermissoesIn;
 import com.ejs.algaworksCurso.api.v1.model.out.group.GrupoOut;
 import com.ejs.algaworksCurso.api.v1.model.out.usuario.UsuarioOut;
 import com.ejs.algaworksCurso.api.v1.openApi.model.GruposModelOpenApi;
@@ -27,5 +28,8 @@ public interface GrupoControllerOpenApi {
 	void remover(Long grupoId);
 
 	ResponseEntity<GrupoOut> salvar(GrupoIn grupoIn);
+	
+	@ApiOperation(value = "Cria um novo Grupo e associa a uma lista de Permissões")
+	ResponseEntity<GrupoOut> salvarGrupoAssociarPermissoes(GrupoPermissoesIn in);
 
 }

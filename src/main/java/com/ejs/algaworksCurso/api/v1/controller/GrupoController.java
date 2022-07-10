@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ejs.algaworksCurso.api.helper.ResourceUriHelper;
 import com.ejs.algaworksCurso.api.v1.model.in.grupo.GrupoIn;
+import com.ejs.algaworksCurso.api.v1.model.in.grupo.GrupoPermissoesIn;
 import com.ejs.algaworksCurso.api.v1.model.out.group.GrupoOut;
 import com.ejs.algaworksCurso.api.v1.model.out.usuario.UsuarioOut;
 import com.ejs.algaworksCurso.api.v1.openApi.controller.GrupoControllerOpenApi;
@@ -81,6 +82,16 @@ public class GrupoController implements GrupoControllerOpenApi {
 		GrupoOut grupoOut = this.grupoService.salvar(grupoIn);
 		ResourceUriHelper.addUriHeaderSave(grupoOut.getId());
 		return ResponseEntity.status(HttpStatus.CREATED).body(grupoOut);
+	}
+	
+	@CheckSecurity.GruposPermissoesUsuarios.PodeEditar
+	@Override
+	@PostMapping("salvar-grupo-associar-permissoes")
+	public ResponseEntity<GrupoOut> salvarGrupoAssociarPermissoes(
+			@RequestBody GrupoPermissoesIn in) {
+		GrupoOut out = this.grupoService.salvarGrupoAssociarPermissoes(in);
+		ResourceUriHelper.addUriHeaderSave(out.getId());
+		return ResponseEntity.status(HttpStatus.CREATED).body(out);
 	}
 	
 }

@@ -1,0 +1,1 @@
+alter table usuario add genero varchar(10);

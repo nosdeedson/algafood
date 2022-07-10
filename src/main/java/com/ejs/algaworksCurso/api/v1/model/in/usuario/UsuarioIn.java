@@ -3,6 +3,8 @@ package com.ejs.algaworksCurso.api.v1.model.in.usuario;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
+import com.ejs.algaworksCurso.domain.model.Genero;
+
 public class UsuarioIn {
 
 	@Email
@@ -14,41 +16,38 @@ public class UsuarioIn {
 	
 	@NotBlank
 	private String senha;
-	/**
-	 * @return the email
-	 */
+	
+	private Genero genero;
+
 	public String getEmail() {
 		return email;
 	}
-	/**
-	 * @param email the email to set
-	 */
+
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	/**
-	 * @return the nome
-	 */
+
 	public String getNome() {
 		return nome;
 	}
-	/**
-	 * @param nome the nome to set
-	 */
+
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
-	/**
-	 * @return the senha
-	 */
+
 	public String getSenha() {
 		return senha;
 	}
-	/**
-	 * @param senha the senha to set
-	 */
+
 	public void setSenha(String senha) {
 		this.senha = senha;
 	}
-	
+
+	public Genero getGenero() {
+		return genero;
+	}
+
+	public void setGenero(Genero genero) {
+		this.genero = genero;
+	}	
 }

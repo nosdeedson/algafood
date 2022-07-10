@@ -13,7 +13,10 @@ import com.ejs.algaworksCurso.domain.exception.NegocioException;
 import com.ejs.algaworksCurso.domain.exception.PermissaoNaoEncontradaException;
 import com.ejs.algaworksCurso.domain.model.Grupo;
 import com.ejs.algaworksCurso.domain.model.Permissao;
+import com.ejs.algaworksCurso.domain.repository.GrupoRepository;
 import com.ejs.algaworksCurso.domain.repository.PermissaoRepository;
+import com.ejs.algaworksCurso.helper.grupo.GrupoAssembler;
+import com.ejs.algaworksCurso.helper.grupo.GrupoDisAssembler;
 import com.ejs.algaworksCurso.helper.permissao.PermissaoDisAssembler;
 
 @Service
@@ -31,7 +34,6 @@ public class GrupoPermissaoService {
 	
 	@Autowired
 	private PermissaoRepository permissaoRepository;
-	
 	
 	@Transactional
 	public void associar(Long grupoId, Long permissaoId) {

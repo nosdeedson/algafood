@@ -10,10 +10,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ejs.algaworksCurso.api.v1.model.in.grupo.GrupoIn;
+import com.ejs.algaworksCurso.api.v1.model.in.grupo.GrupoPermissoesIn;
 import com.ejs.algaworksCurso.api.v1.model.out.group.GrupoOut;
 import com.ejs.algaworksCurso.api.v1.model.out.usuario.UsuarioOut;
 import com.ejs.algaworksCurso.domain.exception.EntidadeEmUsoException;
 import com.ejs.algaworksCurso.domain.exception.GrupoNaoEncontradoException;
+import com.ejs.algaworksCurso.domain.exception.NegocioException;
 import com.ejs.algaworksCurso.domain.exception.UsuarioNaoEncontradoException;
 import com.ejs.algaworksCurso.domain.model.Grupo;
 import com.ejs.algaworksCurso.domain.model.Usuario;
@@ -40,6 +42,9 @@ public class GrupoService {
 	
 	@Autowired
 	private UsuarioDisAssembler usuarioDisAssembler;
+	
+	@Autowired
+	private GrupoPermissaoService grupoPermissaoService;
 	
 	@Transactional
 	public GrupoOut atualizar( GrupoIn grupoIn, Long grupoId) {
@@ -94,6 +99,27 @@ public class GrupoService {
 		
 		grupo = this.grupoRepository.save(grupo);
 		
+		return this.grupoDisAssembler.toModel(grupo);
+	}
+	
+	@Transactional
+	public GrupoOut salvarGrupoAssociarPermissoes(GrupoPermissoesIn in) {
+		Grupo grupo = new Grupo();
+		try {
+			grupo = this.grupoAssembler.novoGrupo(in.getNome());
+			grupo = this.grupoRepository.saveAndFlush(grupo);
+			if( in.getPermissoes().size() > 0) {
+				for ( Long idPermissao: in.getPermissoes()) {
+					try {
+						this.grupoPermissaoService.associar(grupo.getId(), idPermissao);
+					} catch (Exception e) {
+						continue;
+					}
+				}
+			}
+		} catch (Exception e) {
+			throw new NegocioException("Falha ao salvar o novo grupo.");
+		}
 		return this.grupoDisAssembler.toModel(grupo);
 	}
 	

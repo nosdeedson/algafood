@@ -6,6 +6,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
@@ -33,6 +35,9 @@ public class Usuario implements Serializable {
 	private String nome;
 	private String senha;
 	
+	@Enumerated(EnumType.STRING)
+	private Genero genero;
+	
 	@ManyToMany(targetEntity = Grupo.class, fetch = FetchType.EAGER)
 	@JoinTable(name = "usuario_grupo",
 			joinColumns = @JoinColumn(name = "usuario_id"), foreignKey = @ForeignKey(name = "fk_usuario_id"),
@@ -41,12 +46,13 @@ public class Usuario implements Serializable {
 	
 	public Usuario() {}
 	
-	public Usuario(Long id, OffsetDateTime dataCadastro, String email, String nome, String senha) {
+	public Usuario(Long id, OffsetDateTime dataCadastro, String email, String nome, String senha, Genero genero) {
 		this.id = id;
 		this.dataCadastro = dataCadastro;
 		this.email = email;
 		this.nome = nome;
 		this.senha = senha;
+		this.genero = genero;
 	}
 	
 	public void associarGrupo(Grupo grupo) {
@@ -99,6 +105,14 @@ public class Usuario implements Serializable {
 
 	public void setSenha(String senha) {
 		this.senha = senha;
+	}
+
+	public Genero getGenero() {
+		return genero;
+	}
+
+	public void setGenero(Genero genero) {
+		this.genero = genero;
 	}
 
 	public Set<Grupo> getGrupos() {
