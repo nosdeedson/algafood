@@ -71,10 +71,12 @@ public class RestauranteDisAssembler extends RepresentationModelAssemblerSupport
 					.abrir(out.getId())).withRel("abrir/fechar"));
 		}
 		
-		entity.getFormasPagamento().stream().forEach(formaPagamento ->{
-			out.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(RestauranteFormasPagamentoController.class)
-					.buscar(out.getId(), formaPagamento.getId())).withRel("formasPagamento"));
-		});
+		if(Optional.ofNullable(entity.getFormasPagamento()).isPresent()) {
+			entity.getFormasPagamento().stream().forEach(formaPagamento ->{
+				out.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(RestauranteFormasPagamentoController.class)
+						.buscar(out.getId(), formaPagamento.getId())).withRel("formasPagamento"));
+			});
+		}
 		
 		if ( Optional.ofNullable(out.getEndereco()).isPresent()) {
 			out.getEndereco().getCidade().add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(CidadeController.class)
