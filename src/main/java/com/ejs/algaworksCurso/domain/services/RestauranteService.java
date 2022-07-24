@@ -5,6 +5,7 @@ import static com.ejs.algaworksCurso.infrastructure.repository.spec.RestauranteS
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -73,9 +74,13 @@ public class RestauranteService {
 		Cozinha cozinha = this.cozinhaService.buscarOuFalhar(cozinhaId);
 		Cidade cidade = this.cidadeService.buscarOuFalhar(cidadeId);
 		restauranteAtual.setCozinha(cozinha);
-		restauranteAtual.getEndereco().setCidade(cidade);
+		if( Optional.ofNullable(restauranteAtual.getEndereco()).isPresent()) {			
+			restauranteAtual.getEndereco().setCidade(cidade);
+		}else {
+			restauranteAssembler.restauranteInToRestaurante(restauranteIn, restauranteAtual);
+			restauranteAtual.getEndereco().setCidade(cidade);
+		}
 //		restauranteAtual.setFormasPagamento(Arrays.asList(new FormaPagamento()));
-		restauranteAssembler.restauranteInToRestaurante(restauranteIn, restauranteAtual);
 		
 		restauranteAtual = this.restauranteRepository.save(restauranteAtual);
 		
