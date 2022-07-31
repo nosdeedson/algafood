@@ -16,7 +16,7 @@ public interface RestauranteRepository extends CustomJpaRepository<Restaurante, 
 	JpaSpecificationExecutor<Restaurante>{
 	
 	
-	@Query("select distinct r from Restaurante r join r.cozinha LEFT JOIN FETCH r.formasPagamento")
+	@Query("select distinct r from Restaurante r join r.cozinha LEFT JOIN FETCH r.formasPagamento WHERE r.ativo = true")
 	List<Restaurante> todas(Sort sort);
 	
 	@Query("SELECT f FROM Restaurante r join r.formasPagamento f WHERE r.id = :id AND f = :formaPagamento")

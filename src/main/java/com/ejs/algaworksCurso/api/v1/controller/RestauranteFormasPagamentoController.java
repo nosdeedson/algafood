@@ -57,4 +57,13 @@ public class RestauranteFormasPagamentoController implements RestauranteFormaspa
 		return ResponseEntity.ok(formasPagamento);		
 	}
 
+	@CheckSecurity.Restaurantes.PodeConsultar
+	@Override
+	@GetMapping("disassociados")
+	public ResponseEntity<CollectionModel<FormaPagamentoOut>> listarFormasPagamentosNaoAssociadasRestaurante(
+			@PathVariable Long restauranteId) {
+		CollectionModel<FormaPagamentoOut> formasPagamento = this.restauranteFormasPagamentoService.listarFormasPagamentosNaoAssociadasRestaurante(restauranteId);
+		return ResponseEntity.ok(formasPagamento);
+	}
+
 }
