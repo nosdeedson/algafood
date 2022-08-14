@@ -75,6 +75,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
  		res.put("Authorities", user.getAuthorities());
  		res.put("nome", usuario.get().getNome()); 	
  		res.put("genero", usuario.get().getGenero());
+ 		res.put("id", usuario.get().getId());
  		new ObjectMapper().writeValue(response.getOutputStream(), res);
  	}
 	

@@ -30,6 +30,23 @@ public class PedidoIn {
 	@NotNull
 	@Size(min = 1)
 	private List<ItensPedidoIn> itens = new ArrayList<>();
+	
+	@NotNull
+	private Long usuarioId;
+
+	/**
+	 * @return the usuarioId
+	 */
+	public Long getUsuarioId() {
+		return usuarioId;
+	}
+
+	/**
+	 * @param usuarioId the usuarioId to set
+	 */
+	public void setUsuarioId(Long usuarioId) {
+		this.usuarioId = usuarioId;
+	}
 
 	/**
 	 * @return the restaurante

@@ -134,7 +134,7 @@ public class PedidoService {
 			
 			Pedido pedido = this.pedidoAssembler.pedidoInToPedido(pedidoIn);
 			this.subTotalPedido(pedidoIn, pedido);
-			Usuario cliente = this.usuarioService.buscarOuFalhar(1L);
+			Usuario cliente = this.usuarioService.buscarOuFalhar(pedidoIn.getUsuarioId());
 			pedido.setValorTotal(restaurante.getTaxaFrete().add(pedido.getSubTotal()));
 			pedido.setCliente(cliente);
 			pedido.setTaxaFrete(restaurante.getTaxaFrete());
