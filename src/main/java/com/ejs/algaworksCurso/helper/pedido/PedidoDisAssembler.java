@@ -1,5 +1,7 @@
 package com.ejs.algaworksCurso.helper.pedido;
 
+import java.util.Optional;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.Link;
@@ -70,8 +72,10 @@ public class PedidoDisAssembler extends RepresentationModelAssemblerSupport<Pedi
 		out.getRestaurante().add(WebMvcLinkBuilder.linkTo(
 				WebMvcLinkBuilder.methodOn(RestauranteController.class).buscar(out.getRestaurante().getId())).withSelfRel());
 		
-		out.getRestaurante().getCozinha().add(WebMvcLinkBuilder.linkTo(
-				WebMvcLinkBuilder.methodOn(CozinhaController.class).buscar(out.getRestaurante().getCozinha().getId())).withSelfRel());
+		if(Optional.ofNullable(out.getRestaurante().getCozinha()).isPresent()) {			
+			out.getRestaurante().getCozinha().add(WebMvcLinkBuilder.linkTo(
+					WebMvcLinkBuilder.methodOn(CozinhaController.class).buscar(out.getRestaurante().getCozinha().getId())).withSelfRel());
+		}
 		
 		out.getCliente().add(WebMvcLinkBuilder.linkTo(
 				WebMvcLinkBuilder.methodOn(UsuarioController.class).buscar(out.getCliente().getId())).withSelfRel());
@@ -89,9 +93,11 @@ public class PedidoDisAssembler extends RepresentationModelAssemblerSupport<Pedi
 				WebMvcLinkBuilder.methodOn(CidadeController.class).buscar(out.getEnderecoEntrega().getCidade().getId()
 						)).withSelfRel());
 		
-		out.getEnderecoEntrega().getCidade().getEstado().add(
-				WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(EstadoController.class)
-						.buscar(out.getEnderecoEntrega().getCidade().getEstado().getId())).withSelfRel());
+		if ( Optional.ofNullable(out.getEnderecoEntrega().getCidade().getEstado()).isPresent()) {			
+			out.getEnderecoEntrega().getCidade().getEstado().add(
+					WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(EstadoController.class)
+							.buscar(out.getEnderecoEntrega().getCidade().getEstado().getId())).withSelfRel());
+		}
 		
 		out.getItens().stream().forEach(item -> {
 			Long produtoId = item.getProdutoId();

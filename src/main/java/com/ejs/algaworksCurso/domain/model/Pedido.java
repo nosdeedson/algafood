@@ -218,7 +218,7 @@ public class Pedido extends AbstractAggregateRoot<Pedido> implements Serializabl
 	private void setStatus(StatusPedido novoStatus) {
 		if( this.getStatus().naoPodeMudarStatusPara(novoStatus)) {
 			throw new NegocioException(String.format(
-					"Pedido de código %d não poder ser alterado do status %s para o status %s", this.getCodigo(), 
+					"Pedido de código %s não poder ser alterado do status %s para o status %s", this.getCodigo(), 
 					this.getStatus().getDescricao(), novoStatus.getDescricao()));
 		}
 		this.status = novoStatus;

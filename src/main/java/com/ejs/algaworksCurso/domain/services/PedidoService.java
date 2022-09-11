@@ -103,8 +103,12 @@ public class PedidoService {
 	
 	@Transactional
 	public void entregarPedido(String codigoPedido) {
-		Pedido pedido = this.buscarOuFalhar(codigoPedido);
-		pedido.entregar();
+		try {
+			Pedido pedido = this.buscarOuFalhar(codigoPedido);
+			pedido.entregar();
+		} catch (Exception e) {
+			throw new NegocioException(e.getMessage());
+		}
 	}
 	
 	public PagedModel<PedidoResumidoDTO> listar(Pageable pageable, PedidoFilter filtro){
@@ -133,6 +137,7 @@ public class PedidoService {
 			}
 			
 			Pedido pedido = this.pedidoAssembler.pedidoInToPedido(pedidoIn);
+			pedido.setId(null);
 			this.subTotalPedido(pedidoIn, pedido);
 			Usuario cliente = this.usuarioService.buscarOuFalhar(pedidoIn.getUsuarioId());
 			pedido.setValorTotal(restaurante.getTaxaFrete().add(pedido.getSubTotal()));
