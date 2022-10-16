@@ -3,15 +3,12 @@ package com.ejs.algaworksCurso.api.v2.model.out.cidade;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.server.core.Relation;
 
-import io.swagger.annotations.ApiModelProperty;
-
 @Relation(collectionRelation = "cidades")
 public class CidadeOutV2 extends RepresentationModel<CidadeOutV2>  {
 
 	private Long idCidade;
 	private String nomeCidade;
 	
-	@ApiModelProperty(value = "estadoId")
 	private Long estadoId;
 
 	/**

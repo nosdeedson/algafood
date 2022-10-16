@@ -13,11 +13,8 @@ import com.ejs.algaworksCurso.core.validation.FileContentType;
 import com.ejs.algaworksCurso.core.validation.FileSize;
 import com.ejs.algaworksCurso.domain.model.FotoProduto;
 
-import io.swagger.annotations.ApiModelProperty;
-
 public class FotoProdutoIn {
 	
-	@ApiModelProperty(hidden = true)
 	@NotNull
 	@FileSize(max = "500KB")
 	@FileContentType(allowed = {MediaType.IMAGE_PNG_VALUE, MediaType.IMAGE_JPEG_VALUE})

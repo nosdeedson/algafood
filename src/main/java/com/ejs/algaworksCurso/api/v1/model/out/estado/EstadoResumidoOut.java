@@ -4,9 +4,6 @@ import org.springframework.hateoas.RepresentationModel;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import io.swagger.annotations.ApiModel;
-
-@ApiModel(value = "estado")
 public class EstadoResumidoOut extends RepresentationModel<EstadoResumidoOut> {
 	
 	

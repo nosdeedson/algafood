@@ -7,29 +7,21 @@ import com.ejs.algaworksCurso.api.v1.model.in.grupo.GrupoIn;
 import com.ejs.algaworksCurso.api.v1.model.in.grupo.GrupoPermissoesIn;
 import com.ejs.algaworksCurso.api.v1.model.out.group.GrupoOut;
 import com.ejs.algaworksCurso.api.v1.model.out.usuario.UsuarioOut;
-import com.ejs.algaworksCurso.api.v1.openApi.model.GruposModelOpenApi;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-
-@Api(tags = "Grupos")
 public interface GrupoControllerOpenApi {
 
 	ResponseEntity<GrupoOut> atualizar(GrupoIn grupoIn, Long grupoId);
 
 	ResponseEntity<GrupoOut> buscar(Long grupoId);
 
-	@ApiOperation(value = "Lista os grupos ",response = GruposModelOpenApi.class)
 	ResponseEntity<CollectionModel<GrupoOut>> listar();
 	
-	@ApiOperation(value = "Lista os usuários do grupo pelo Id")
 	public ResponseEntity<CollectionModel<UsuarioOut>> listarUsuariosPorGrupo(Long grupoId);
 
 	void remover(Long grupoId);
 
 	ResponseEntity<GrupoOut> salvar(GrupoIn grupoIn);
 	
-	@ApiOperation(value = "Cria um novo Grupo e associa a uma lista de Permissões")
 	ResponseEntity<GrupoOut> salvarGrupoAssociarPermissoes(GrupoPermissoesIn in);
 
 }

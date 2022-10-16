@@ -48,7 +48,6 @@ public class PermissaoController implements PermissaoControllerOpenApi {
 	}
 
 	@CheckSecurity.GruposPermissoesUsuarios.PodeEditar
-	@Override
 	@DeleteMapping("{permissaoId}")
 	@ResponseStatus(code = HttpStatus.NO_CONTENT)
 	public void remover(@PathVariable("permissaoId") Long permissaoId) {

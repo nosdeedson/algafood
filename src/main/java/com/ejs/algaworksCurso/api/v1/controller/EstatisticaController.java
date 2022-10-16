@@ -14,10 +14,6 @@ import com.ejs.algaworksCurso.core.security.CheckSecurity;
 import com.ejs.algaworksCurso.domain.model.filter.VendaDiariaFilter;
 import com.ejs.algaworksCurso.domain.services.VendaQueryService;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-
-@Api(tags = "Estatisticas")
 @RestController
 @RequestMapping("estatisticas")
 public class EstatisticaController {
@@ -26,7 +22,6 @@ public class EstatisticaController {
 	private VendaQueryService vendaQueryService;
 
 	@CheckSecurity.Estatisticas.PodeConsular
-	@ApiOperation(value = "Vendas diárias")
 	@GetMapping("venda-diaria")
 	@ResponseStatus(code = HttpStatus.OK)
 	public List<VendaDiariaDTO> buscarVendasDiarias(VendaDiariaFilter filtro ){

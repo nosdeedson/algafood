@@ -5,15 +5,12 @@ import org.springframework.hateoas.server.core.Relation;
 
 import com.ejs.algaworksCurso.api.v1.model.out.estado.EstadoResumidoOut;
 
-import io.swagger.annotations.ApiModelProperty;
-
 @Relation(collectionRelation = "cidades")
 public class CidadeOut extends RepresentationModel<CidadeOut> {
 
 	private Long id;
 	private String nome;
 	
-	@ApiModelProperty(value = "estado")
 	private EstadoResumidoOut estado;
 	
 	/**

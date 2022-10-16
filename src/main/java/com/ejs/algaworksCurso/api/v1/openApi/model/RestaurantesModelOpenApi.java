@@ -6,9 +6,6 @@ import org.springframework.hateoas.Links;
 
 import com.ejs.algaworksCurso.api.v1.model.out.restautante.RestauranteOut;
 
-import io.swagger.annotations.ApiModel;
-
-@ApiModel("RestaurantesModel")
 public class RestaurantesModelOpenApi {
 
 	private RestauranteEmbeddeOpenApi _embedded;

@@ -6,9 +6,6 @@ import org.springframework.hateoas.Links;
 
 import com.ejs.algaworksCurso.api.v1.model.out.formaPagamento.FormaPagamentoOut;
 
-import io.swagger.annotations.ApiModel;
-
-@ApiModel("formaspagamentoModel")
 public class FormasPagamentoModelOpenApi {
 	
 	private FormasPagamentoEmbeddedOpenApin _embedded;
@@ -46,7 +43,6 @@ public class FormasPagamentoModelOpenApi {
 		this._links = _links;
 	}
 
-	@ApiModel("FormasPagamentoEmbeddedModel")
 	public class FormasPagamentoEmbeddedOpenApin{
 		private List<FormaPagamentoOut> formasPagamento;
 

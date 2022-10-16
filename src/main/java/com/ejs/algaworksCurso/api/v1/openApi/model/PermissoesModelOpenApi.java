@@ -6,9 +6,6 @@ import org.springframework.hateoas.Links;
 
 import com.ejs.algaworksCurso.api.v1.model.out.permissao.PermissaoOut;
 
-import io.swagger.annotations.ApiModel;
-
-@ApiModel("permissões")
 public class PermissoesModelOpenApi {
 	
 	private PermissaoEmbeddedOpenApi _embedded;

@@ -24,6 +24,7 @@ import com.ejs.algaworksCurso.domain.repository.UsuarioRepository;
 import com.ejs.algaworksCurso.helper.grupo.GrupoAssembler;
 import com.ejs.algaworksCurso.helper.grupo.GrupoDisAssembler;
 import com.ejs.algaworksCurso.helper.usuario.UsuarioDisAssembler;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Service
 public class GrupoService {

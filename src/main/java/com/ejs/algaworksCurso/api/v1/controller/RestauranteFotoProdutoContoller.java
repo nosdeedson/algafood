@@ -39,7 +39,6 @@ public class RestauranteFotoProdutoContoller implements RestauranteFotoProdutoCo
 	FotoProdutoService fotoProdutoService;
 	
 	@CheckSecurity.Restaurantes.PodeEditar
-	@Override
 	@PutMapping(consumes = MediaType.ALL_VALUE)
 	public ResponseEntity<FotoProdutoOut> atualizarFoto(@PathVariable("restauranteId") Long restauranteId,
 		@PathVariable("produtoId") Long produtoId, @Valid FotoProdutoIn fotoProdutoIn, MultipartFile arquivo ) throws IOException{
@@ -93,6 +92,13 @@ public class RestauranteFotoProdutoContoller implements RestauranteFotoProdutoCo
 	public void deletarFotoProduto(@PathVariable("restauranteId") Long restauranteId,
 			@PathVariable("produtoId") Long produtoId){
 		this.fotoProdutoService.deletarFotoProduto(restauranteId, produtoId);		
+	}
+
+	@Override
+	public ResponseEntity<FotoProdutoOut> atualizarFoto(Long restauranteId, Long produtoId, MultipartFile arquivo)
+			throws IOException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 }

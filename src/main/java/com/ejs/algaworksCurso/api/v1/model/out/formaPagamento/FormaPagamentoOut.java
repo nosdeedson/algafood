@@ -3,9 +3,6 @@ package com.ejs.algaworksCurso.api.v1.model.out.formaPagamento;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.server.core.Relation;
 
-import io.swagger.annotations.ApiModel;
-
-@ApiModel("formasPagamento")
 @Relation(collectionRelation = "formasPagamento")
 public class FormaPagamentoOut extends RepresentationModel<FormaPagamentoOut> {
 	

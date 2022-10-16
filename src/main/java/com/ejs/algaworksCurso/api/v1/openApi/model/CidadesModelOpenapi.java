@@ -6,9 +6,6 @@ import org.springframework.hateoas.Links;
 
 import com.ejs.algaworksCurso.api.v1.model.out.cidade.CidadeOut;
 
-import io.swagger.annotations.ApiModel;
-
-@ApiModel("CidadesModel")
 public class CidadesModelOpenapi {
 
 	private CidadeEmbeddedOpenApi _embedded;
@@ -46,7 +43,6 @@ public class CidadesModelOpenapi {
 		this._links = _links;
 	}
 
-	@ApiModel("CidadesEmbeddedModel")
 	public class CidadeEmbeddedOpenApi{
 		private List<CidadeOut> cidades;
 

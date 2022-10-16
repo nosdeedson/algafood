@@ -6,9 +6,6 @@ import org.springframework.hateoas.Links;
 
 import com.ejs.algaworksCurso.api.v1.model.out.usuario.UsuarioOut;
 
-import io.swagger.annotations.ApiModel;
-
-@ApiModel("UsuariosModel")
 public class UsuariosModelOpenApi {
 	
 	private UsuarioEmbeddedOpenApi _embedded;
@@ -46,7 +43,6 @@ public class UsuariosModelOpenApi {
 	}
 
 
-	@ApiModel("UsuarioEmbeddedModel")
 	public class UsuarioEmbeddedOpenApi{
 		private List<UsuarioOut> usuarios;
 

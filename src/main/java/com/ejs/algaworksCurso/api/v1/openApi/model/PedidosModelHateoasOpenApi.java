@@ -6,9 +6,6 @@ import org.springframework.hateoas.Links;
 
 import com.ejs.algaworksCurso.api.v1.model.out.pedido.PedidoOut;
 
-import io.swagger.annotations.ApiModel;
-
-@ApiModel("PedidosModel")
 public class PedidosModelHateoasOpenApi {
 	
 	private PedidosEmbeddedOpenApi _embedded;
@@ -64,7 +61,6 @@ public class PedidosModelHateoasOpenApi {
 	}
 
 
-	@ApiModel("PedidosEmbeddedModel")
 	public class PedidosEmbeddedOpenApi{
 		private List<PedidoOut> pedidos;
 

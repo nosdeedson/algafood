@@ -2,22 +2,16 @@ package com.ejs.algaworksCurso.api.v1.openApi.model;
 
 import java.util.List;
 
-import io.swagger.annotations.ApiModelProperty;
-
 public class PagedModelOpenApi<T> {
 	
 	private List<T> content;
 	
-	@ApiModelProperty(value = "Quantidade de elementos da página", example = "10")
 	private Long size;
 	
-	@ApiModelProperty(value = "Total de elementos no Banco de Dados", example = "50")
 	private Long totalElements;
 	
-	@ApiModelProperty(value = "Total de páginas geradas", example = "10")
 	private Long totalPages;
 	
-	@ApiModelProperty(value = "Página atual", example = "0")
 	private Long number;
 
 	public List<T> getContent() {

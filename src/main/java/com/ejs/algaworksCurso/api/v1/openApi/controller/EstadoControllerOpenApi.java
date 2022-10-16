@@ -6,9 +6,6 @@ import org.springframework.http.ResponseEntity;
 import com.ejs.algaworksCurso.api.v1.model.in.estado.EstadoIn;
 import com.ejs.algaworksCurso.api.v1.model.out.estado.EstadoOut;
 
-import io.swagger.annotations.Api;
-
-@Api(tags = "Estados")
 public interface EstadoControllerOpenApi {
 
 	ResponseEntity<EstadoOut> atualizar(Long id, EstadoIn estadoIn);

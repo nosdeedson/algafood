@@ -1,8 +1,5 @@
 package com.ejs.algaworksCurso.api.v1.openApi.model;
 
-import io.swagger.annotations.ApiModel;
-
-@ApiModel(value = "links")
 public class LinksModelOpenApi {
 	
 	private LinkModel rel;
@@ -21,7 +18,6 @@ public class LinksModelOpenApi {
 		this.rel = rel;
 	}
 
-	@ApiModel(value = "link")
 	public class LinkModel{
 		private String href;
 		private boolean template;

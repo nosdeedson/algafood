@@ -5,15 +5,11 @@ import java.util.List;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 
-import io.swagger.annotations.ApiModelProperty;
-
 public class GrupoPermissoesIn {
 
-	@ApiModelProperty(example = "Gerencia", value = "Nome de Grupo para acesso a aplicação")
 	@NotBlank
 	private String nome;
 	
-	@ApiModelProperty(example = " 1, 2, 3", value = "Ids de permissões já cadastradas")
 	@NotEmpty
 	private List<Long> permissoes;
 

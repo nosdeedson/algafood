@@ -1,13 +1,9 @@
 package com.ejs.algaworksCurso.api.exceptionHandler;
 
-import io.swagger.annotations.ApiModelProperty;
-
 public class CampoComErro {
 	
-	@ApiModelProperty(value = "Nome do atributo que tem valores incorretos")
 	private String nome;
 	
-	@ApiModelProperty(value = "Informa o erro", example = "não deve estar vazio")
 	private String menssagem;
 	
 	/**

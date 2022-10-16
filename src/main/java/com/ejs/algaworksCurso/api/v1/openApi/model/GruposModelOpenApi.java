@@ -6,9 +6,6 @@ import org.springframework.hateoas.Links;
 
 import com.ejs.algaworksCurso.api.v1.model.out.group.GrupoOut;
 
-import io.swagger.annotations.ApiModel;
-
-@ApiModel("grupos")
 public class GruposModelOpenApi {
 	
 	private GrupoEmbeddedOpenApi _embedded;

@@ -2,11 +2,8 @@ package com.ejs.algaworksCurso.api.v1.model.in.cozinha;
 
 import javax.validation.constraints.NotEmpty;
 
-import io.swagger.annotations.ApiModelProperty;
-
 public class CozinhaIn {
 
-	@ApiModelProperty(required = true)
 	@NotEmpty
 	private String nome;
 

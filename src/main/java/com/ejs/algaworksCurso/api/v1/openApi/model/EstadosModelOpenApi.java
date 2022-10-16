@@ -6,9 +6,6 @@ import org.springframework.hateoas.Links;
 
 import com.ejs.algaworksCurso.api.v1.model.out.estado.EstadoOut;
 
-import io.swagger.annotations.ApiModel;
-
-@ApiModel("EstadosModel")
 public class EstadosModelOpenApi {
 	
 	private EstadoEmbeddedOpenApi _embedded;
