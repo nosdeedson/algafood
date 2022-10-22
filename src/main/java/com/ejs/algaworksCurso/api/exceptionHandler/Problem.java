@@ -1,28 +1,37 @@
 package com.ejs.algaworksCurso.api.exceptionHandler;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
-
+@Schema(name = "Problem")
 @JsonInclude(Include.NON_NULL)
 public class Problem {
-	
+
+	@Schema(example = "400")
 	private Integer status;
-	
+
+	@Schema(example = "http://localhost")
 	private String type;
-	
+
+	@Schema(example = "Dados inválidos")
 	private String title;
-	
+
+	@Schema(example = "Um ou mais campos está inválidos")
 	private String detail;
-	
+
+	@Schema(description = "Verifique os dados informados na requisião")
 	private String userMessage;
-	
+
+	@Schema(example = "2022-10-19T10:04:36.902245498Z")
 	private String timeStamp;
-	
+
+	@Schema(description = "Lista de objetos que mostra campo e valor do erro")
 	private List<CampoComErro> camposComErro = new ArrayList<>();
 	
 	public static class Builder{

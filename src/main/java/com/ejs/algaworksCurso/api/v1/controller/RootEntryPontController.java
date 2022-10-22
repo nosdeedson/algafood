@@ -1,5 +1,6 @@
 package com.ejs.algaworksCurso.api.v1.controller;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.ResponseEntity;
@@ -7,9 +8,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+@Tag(name = "Root Endpoints")
 @RestController
 @RequestMapping("root")
-public class RootEntryPontController {
+public class RootEntryPontController  {
 
 	@GetMapping
 	public ResponseEntity<RootEntryPointModel> root() {

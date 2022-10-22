@@ -2,6 +2,7 @@ package com.ejs.algaworksCurso.api.v1.controller;
 
 import java.util.List;
 
+import com.ejs.algaworksCurso.api.v1.openApi.controller.EstatisticasControllerOpenApi;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,7 +17,7 @@ import com.ejs.algaworksCurso.domain.services.VendaQueryService;
 
 @RestController
 @RequestMapping("estatisticas")
-public class EstatisticaController {
+public class EstatisticaController implements EstatisticasControllerOpenApi {
 	
 	@Autowired
 	private VendaQueryService vendaQueryService;

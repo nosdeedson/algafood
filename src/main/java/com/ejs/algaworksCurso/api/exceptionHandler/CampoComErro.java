@@ -1,9 +1,14 @@
 package com.ejs.algaworksCurso.api.exceptionHandler;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
+@Schema(name = "CampoComErro")
 public class CampoComErro {
-	
+
+	@Schema(example = "preco")
 	private String nome;
-	
+
+	@Schema(example = "Preço inválido")
 	private String menssagem;
 	
 	/**

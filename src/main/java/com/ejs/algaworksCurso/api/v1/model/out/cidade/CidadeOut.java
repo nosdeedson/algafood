@@ -1,5 +1,6 @@
 package com.ejs.algaworksCurso.api.v1.model.out.cidade;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.server.core.Relation;
 
@@ -8,7 +9,10 @@ import com.ejs.algaworksCurso.api.v1.model.out.estado.EstadoResumidoOut;
 @Relation(collectionRelation = "cidades")
 public class CidadeOut extends RepresentationModel<CidadeOut> {
 
+	@Schema(example = "1")
 	private Long id;
+
+	@Schema(example = "itajubá")
 	private String nome;
 	
 	private EstadoResumidoOut estado;

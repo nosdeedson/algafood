@@ -3,6 +3,8 @@ package com.ejs.algaworksCurso.api.v1.openApi.controller;
 import java.math.BigDecimal;
 import java.util.List;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.ResponseEntity;
 
@@ -10,7 +12,8 @@ import com.ejs.algaworksCurso.api.v1.model.in.restaurante.RestauranteIn;
 import com.ejs.algaworksCurso.api.v1.model.out.restautante.RestauranteOut;
 import com.ejs.algaworksCurso.api.v1.openApi.model.RestaurantesModelOpenApi;
 
-
+@Tag(name = "Restaurantes")
+@SecurityRequirement(name = "bearer-token")
 public interface RestauranteControllerOpenApin {
 
 	ResponseEntity<Void> abrir(Long restauranteId);

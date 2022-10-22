@@ -1,5 +1,6 @@
 package com.ejs.algaworksCurso.api.v1.openApi.controller;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.http.ResponseEntity;
@@ -7,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import com.ejs.algaworksCurso.api.v1.model.in.cozinha.CozinhaIn;
 import com.ejs.algaworksCurso.api.v1.model.out.cozinha.CozinhaOut;
 
+@Tag(name = "Cozinhas")
 public interface CozinhaControllerOpenApi {
 
 	ResponseEntity<CozinhaOut> atualizar(CozinhaIn cozinhaIn, Long cozinhaId);

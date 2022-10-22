@@ -5,9 +5,11 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 import com.ejs.algaworksCurso.api.v1.model.in.estado.EstadoResumidoDTO;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 public class CidadeIn {
 
+	@Schema(example = "Itajubá")
 	@NotEmpty
 	private String nome;
 	

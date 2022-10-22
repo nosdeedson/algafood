@@ -1,14 +1,16 @@
 package com.ejs.algaworksCurso.api.v1.model.out.estado;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.hateoas.RepresentationModel;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class EstadoResumidoOut extends RepresentationModel<EstadoResumidoOut> {
 	
-	
+	@Schema(example = "1")
 	private Long id;
-	
+
+	@Schema(example = "Minas Gerais")
 	@JsonIgnore
 	private String nome;
 	

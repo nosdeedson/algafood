@@ -1,5 +1,7 @@
 package com.ejs.algaworksCurso.api.v1.openApi.controller;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.ResponseEntity;
 
@@ -8,6 +10,8 @@ import com.ejs.algaworksCurso.api.v1.model.in.grupo.GrupoPermissoesIn;
 import com.ejs.algaworksCurso.api.v1.model.out.group.GrupoOut;
 import com.ejs.algaworksCurso.api.v1.model.out.usuario.UsuarioOut;
 
+@Tag(name = "Grupos")
+@SecurityRequirement(name = "bearer-token")
 public interface GrupoControllerOpenApi {
 
 	ResponseEntity<GrupoOut> atualizar(GrupoIn grupoIn, Long grupoId);

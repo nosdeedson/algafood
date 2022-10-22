@@ -1,5 +1,7 @@
 package com.ejs.algaworksCurso.api.v1.openApi.controller;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.http.ResponseEntity;
@@ -10,6 +12,8 @@ import com.ejs.algaworksCurso.api.v1.model.out.pedido.PedidoOut;
 import com.ejs.algaworksCurso.api.v1.model.out.pedido.PedidoResumidoDTO;
 import com.ejs.algaworksCurso.domain.model.filter.PedidoFilter;
 
+@Tag(name = "Pedidos")
+@SecurityRequirement(name = "bearer-token")
 public interface PedidoControllerOpenApi {
 
 	ResponseEntity<Void> cancelarPedido(String codigoPedido);
