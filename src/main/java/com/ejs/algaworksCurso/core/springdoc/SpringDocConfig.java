@@ -83,48 +83,51 @@ public class SpringDocConfig {
                 );
     }
 
-    @Bean
-    public OpenApiCustomiser openApiCustomiser() {
-        return openApi -> {
-            openApi.getPaths()
-                    .values()
-                    .forEach(pathItem -> pathItem.readOperationsMap()
-                            .forEach(((httpMethod, operation) -> {
-                                ApiResponses responses = operation.getResponses();
-                                switch (httpMethod) {
-                                    case POST:
-                                    case PUT:
-                                        responses.addApiResponse("400", new ApiResponse().description("Bad Request."));
-                                        responses.addApiResponse("404", new ApiResponse().description("Não encontrado."));
-                                        responses.addApiResponse("406", new ApiResponse().description("Não existe representação"));
-                                        responses.addApiResponse("409", new ApiResponse().description("Existe conflito na requisião com os dados do banco de dados"));
-                                        responses.addApiResponse("500", new ApiResponse().description("Erro interno no servidor"));
-                                        break;
-                                    case GET:
-                                        responses.addApiResponse("400", new ApiResponse().description("Bad Request."));
-                                        responses.addApiResponse("404", new ApiResponse().description("Não encontrado."));
-                                        responses.addApiResponse("500", new ApiResponse().description("Erro interno no servidor"));
-                                        break;
-                                    case DELETE:
-                                        responses.addApiResponse("400", new ApiResponse().description("Bad Request."));
-                                        responses.addApiResponse("404", new ApiResponse().description("Não encontrado."));
-                                        responses.addApiResponse("409", new ApiResponse().description("Existe conflito na requisião com os dados do banco de dados"));
-                                        responses.addApiResponse("500", new ApiResponse().description("Erro interno no servidor"));
-                                        break;
-                                }
-                            }))
-                    );
-        };
-    }
+// code bellow adds generic apiresponses to all endpoints
+//    @Bean
+//    public OpenApiCustomiser openApiCustomiser() {
+//        return openApi -> {
+//            openApi.getPaths()
+//                    .values()
+//                    .forEach(pathItem -> pathItem.readOperationsMap()
+//                            .forEach(((httpMethod, operation) -> {
+//                                ApiResponses responses = operation.getResponses();
+//                                switch (httpMethod) {
+//                                    case POST:
+//                                    case PUT:
+//                                     responses.addApiResponse("400", new ApiResponse().description("Bad Request."));
+//                                        responses.addApiResponse("404", new ApiResponse().description("Não encontrado."));
+//                                        responses.addApiResponse("406", new ApiResponse().description("Não existe representação"));
+//                                        responses.addApiResponse("409", new ApiResponse().description("Existe conflito na requisião com os dados do banco de dados"));
+//                                        responses.addApiResponse("500", new ApiResponse().description("Erro interno no servidor"));
+//                                        break;
+//                                    case GET:
+//                                      responses.addApiResponse("400", new ApiResponse().description("Bad Request."));
+//                                        responses.addApiResponse("404", new ApiResponse().description("Não encontrado."));
+//                                        responses.addApiResponse("500", new ApiResponse().description("Erro interno no servidor"));
+//                                        break;
+//                                    case DELETE:
+//                                        responses.addApiResponse("400", new ApiResponse().description("Bad Request."));
+//                                        responses.addApiResponse("404", new ApiResponse().description("Não encontrado."));
+//                                        responses.addApiResponse("409", new ApiResponse().description("Existe conflito na requisião com os dados do banco de dados"));
+//                                        responses.addApiResponse("500", new ApiResponse().description("Erro interno no servidor"));
+//                                        break;
+//								default:
+//									break;
+//                                }
+//                            }))
+//                    );
+//        };
+//    }
 
     private Map<String, Schema> gerarSchemas() {
         Map<String, Schema> schemaMap = new HashMap<>();
 
         Map<String, Schema> problemSchema = ModelConverters.getInstance().read(Problem.class);
-//        Map<String, Schema> campoComErroSchema = ModelConverters.getInstance().read(CampoComErro.class);
+        Map<String, Schema> campoComErroSchema = ModelConverters.getInstance().read(CampoComErro.class);
 
         schemaMap.putAll(problemSchema);
-//        schemaMap.putAll(campoComErroSchema);
+        schemaMap.putAll(campoComErroSchema);
         return schemaMap;
     }
 
