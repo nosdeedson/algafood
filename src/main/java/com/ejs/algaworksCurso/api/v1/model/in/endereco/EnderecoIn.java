@@ -5,24 +5,31 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 import com.ejs.algaworksCurso.api.v1.model.in.cidade.CidadeResumidaIdDTO;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 public class EnderecoIn {
-	
+
+	@Schema(example = "Varginha")
 	@NotBlank
 	private String bairro;
-	
+
+	@Schema(example = "37514-000")
 	@NotBlank
 	private String cep;
-	
+
+	@Schema(example = "Itajubá")
 	@Valid
 	@NotNull
 	private CidadeResumidaIdDTO cidade;
-	
+
+	@Schema(example = "Fundos")
 	private String complemento;
-	
+
+	@Schema(example = "108")
 	@NotBlank
 	private String numero;
-	
+
+	@Schema(example = "Rua Zequinha Luiz")
 	@NotBlank
 	private String logradouro;
 	

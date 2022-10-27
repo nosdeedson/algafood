@@ -1,9 +1,12 @@
 package com.ejs.algaworksCurso.api.v1.model.in.formaPagamento;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import javax.validation.constraints.NotEmpty;
 
 public class FormaPagamentoIn {
-	
+
+	@Schema(example = "Boleto")
 	@NotEmpty
 	private String descricao;
 

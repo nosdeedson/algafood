@@ -1,17 +1,22 @@
 package com.ejs.algaworksCurso.api.v1.model.in.itensPedido;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
 
 public class ItensPedidoIn {
 
+	@Schema(example = "1")
 	@NotNull
 	private Long produtoId;
-	
+
+	@Schema(example = "3")
 	@NotNull
 	@PositiveOrZero
 	private Integer quantidade;
-	
+
+	@Schema(example = "Bem Passado")
 	private String Observacao;
 
 	/**

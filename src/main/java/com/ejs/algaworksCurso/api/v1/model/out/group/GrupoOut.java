@@ -1,12 +1,16 @@
 package com.ejs.algaworksCurso.api.v1.model.out.group;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.server.core.Relation;
 
 @Relation(collectionRelation = "grupos")
 public class GrupoOut extends RepresentationModel<GrupoOut>{
-	
+
+	@Schema(example = "1")
 	private Long id;
+
+	@Schema(example = "Gerência")
 	private String nome;
 	/**
 	 * @return the id

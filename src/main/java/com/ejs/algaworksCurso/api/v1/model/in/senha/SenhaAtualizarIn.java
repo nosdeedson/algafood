@@ -1,12 +1,16 @@
 package com.ejs.algaworksCurso.api.v1.model.in.senha;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import javax.validation.constraints.NotBlank;
 
 public class SenhaAtualizarIn {
-	
+
+	@Schema(example = "1234", description = "senha sendo usada atualmente")
 	@NotBlank(message = "Senha atual deve ser informada.")
 	private String senhaAtual;
-	
+
+	@Schema(example = "123456", description = "senha a ser usada após a edição")
 	@NotBlank(message = "Nova senha deve ser informada.")
 	private String novaSenha;
 	/**

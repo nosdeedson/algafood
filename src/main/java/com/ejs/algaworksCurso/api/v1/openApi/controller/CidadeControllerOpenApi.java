@@ -26,6 +26,8 @@ public interface CidadeControllerOpenApi {
                     @ApiResponse(responseCode = "200"),
                     @ApiResponse(responseCode = "400", description = "Id da ciade inválido",
                             content = @Content(schema = @Schema(ref = "Problem"))),
+					@ApiResponse(responseCode = "403", description = "Usuário não tem acesso ao recurso solicitado",
+							content = @Content(schema = @Schema(ref = "Problem"))),
                     @ApiResponse(responseCode = "404", description = "Não existe o serviço solicitado",
                     		content = @Content(schema = @Schema(ref = "Problem"))),
                     @ApiResponse(responseCode = "409", description = "Existe divergência na requisição",

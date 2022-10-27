@@ -1,5 +1,6 @@
 package com.ejs.algaworksCurso.api.v1.model.out.endereco;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.server.core.Relation;
 
@@ -8,11 +9,22 @@ import com.ejs.algaworksCurso.api.v1.model.out.cidade.CidadeOut;
 @Relation(collectionRelation = "endereco entrega")
 public class EnderecoOut extends RepresentationModel<EnderecoOut> {
 
-	private String bairro;	
-	private String cep;	
+	@Schema(example = "Varginha")
+	private String bairro;
+
+	@Schema(example = "37514-000")
+	private String cep;
+
+	@Schema(example = "Delfim Moreira")
 	private CidadeOut cidade;
+
+	@Schema(example = "Fundos")
 	private String complemento;
+
+	@Schema(example = "108")
 	private String numero;
+
+	@Schema(example = "Rua Zequinha Luiz")
 	private String logradouro;
 	/**
 	 * @return the bairro

@@ -5,11 +5,11 @@ import io.swagger.v3.oas.annotations.media.Schema;
 @Schema(name = "CampoComErro")
 public class CampoComErro {
 
-	@Schema(example = "preco")
+	@Schema(example = "nome atributo")
 	private String nome;
 
-	@Schema(example = "Preço inválido")
-	private String menssagem;
+	@Schema(example = "motivo erro")
+	private String mensagem;
 	
 	/**
 	 * @return the nome
@@ -26,19 +26,19 @@ public class CampoComErro {
 	/**
 	 * @return the menssagem
 	 */
-	public String getMenssagem() {
-		return menssagem;
+	public String getMensagem() {
+		return mensagem;
 	}
 	/**
 	 * @param menssagem the menssagem to set
 	 */
-	public void setMenssagem(String menssagem) {
-		this.menssagem = menssagem;
+	public void setMensagem(String mensagem) {
+		this.mensagem = mensagem;
 	}
 	
 	public static class Builder{
 		private String nome;
-		private String menssagem;
+		private String mensagem;
 		
 		public Builder() {}
 		
@@ -46,15 +46,15 @@ public class CampoComErro {
 			this.nome =  nome;
 			return this;
 		}
-		public Builder menssagem(String menssagem) {
-			this.menssagem = menssagem;
+		public Builder mensagem(String mensagem) {
+			this.mensagem = mensagem;
 			return this;
 		}
 		
 		public CampoComErro build() {
 			CampoComErro campo = new CampoComErro();
 			campo.nome = this.nome;
-			campo.menssagem = this.menssagem;
+			campo.mensagem = this.mensagem;
 			return campo;
 		}
 	}

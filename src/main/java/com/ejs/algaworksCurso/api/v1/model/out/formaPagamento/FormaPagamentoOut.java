@@ -1,12 +1,16 @@
 package com.ejs.algaworksCurso.api.v1.model.out.formaPagamento;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.server.core.Relation;
 
 @Relation(collectionRelation = "formasPagamento")
 public class FormaPagamentoOut extends RepresentationModel<FormaPagamentoOut> {
-	
+
+	@Schema(example = "Boleto")
 	private Long id;
+
+	@Schema(example = "Boleto")
 	private String descricao;
 	/**
 	 * @return the id

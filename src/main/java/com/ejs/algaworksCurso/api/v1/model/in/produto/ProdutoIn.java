@@ -1,5 +1,7 @@
 package com.ejs.algaworksCurso.api.v1.model.in.produto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import java.math.BigDecimal;
 
 import javax.validation.constraints.NotBlank;
@@ -8,15 +10,19 @@ import javax.validation.constraints.PositiveOrZero;
 
 public class ProdutoIn {
 
+	@Schema(example = "true", description = "indica se o restaurante serve o produto")
 	@NotNull
 	private Boolean ativo;
-	
+
+	@Schema(example = "Arroz com queizo e tomate")
 	@NotBlank
 	private String descricao;
-	
+
+	@Schema(example = "Arroz ao Forno")
 	@NotBlank
 	private String nome;
-	
+
+	@Schema(example = "10")
 	@PositiveOrZero
 	@NotNull
 	private BigDecimal preco;

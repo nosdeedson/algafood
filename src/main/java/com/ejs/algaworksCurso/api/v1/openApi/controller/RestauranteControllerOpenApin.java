@@ -102,7 +102,7 @@ public interface RestauranteControllerOpenApin {
 			})
 	ResponseEntity<RestauranteOut> encontrarPrimeiro();
 
-	@Operation(summary = "Fecha restaurante", description = "permite ao responsável informar que o restaurante estpa fechado", 
+	@Operation(summary = "Fecha restaurante", description = "permite ao responsável informar que o restaurante está fechado",
 			responses = {
 					@ApiResponse(responseCode = "204"),
                     @ApiResponse(responseCode = "400", description = "Id inválido",

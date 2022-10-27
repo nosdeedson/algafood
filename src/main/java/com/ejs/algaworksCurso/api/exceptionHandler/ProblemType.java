@@ -9,7 +9,7 @@ public enum ProblemType {
 	RECURSO_NAO_ENCONTRADO("Recurso não encontrado", "/recurso-nao-encontrado"),
 	ENTIDADE_EM_USO("Entidade em uso", "/entidade-em-uso"),
 	ERRO_NEGOCIO("violação de regra de negócio", "/erro-negocio"),
-	ACESSO_NEGADO_AO_RECURSO("Usuário não tem acesso ao recurdo solicitado", "/acesso-negado-recurso"),
+	ACESSO_NEGADO_AO_RECURSO("Acesso negado", "/acesso-negado-recurso"),
 	TOKEN_EXPIRADO("Token inválido, pois está expirado", "/acesso-negado-recurso");
 	
 	private String title;

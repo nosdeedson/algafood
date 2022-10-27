@@ -12,17 +12,20 @@ import com.ejs.algaworksCurso.api.v1.model.in.endereco.EnderecoIn;
 import com.ejs.algaworksCurso.api.v1.model.in.formaPagamento.FormaPagamentoIdIn;
 import com.ejs.algaworksCurso.api.v1.model.in.itensPedido.ItensPedidoIn;
 import com.ejs.algaworksCurso.api.v1.model.in.restaurante.RestauranteIdIn;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 public class PedidoIn {
-	
+
+	@Schema(example = "1", description = "restaurante di")
 	@Valid
 	@NotBlank
 	private RestauranteIdIn restaurante;
-	
+
+	@Schema(example = "1", description = "forma de pagamento id")
 	@Valid
 	@NotBlank
 	private FormaPagamentoIdIn formaPagamento;
-	
+
 	@Valid
 	@NotNull
 	private EnderecoIn enderecoEntrega;
@@ -30,7 +33,8 @@ public class PedidoIn {
 	@NotNull
 	@Size(min = 1)
 	private List<ItensPedidoIn> itens = new ArrayList<>();
-	
+
+	@Schema(example = "1")
 	@NotNull
 	private Long usuarioId;
 

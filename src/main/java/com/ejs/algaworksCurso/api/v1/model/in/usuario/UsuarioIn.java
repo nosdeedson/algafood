@@ -4,19 +4,23 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
 import com.ejs.algaworksCurso.domain.model.Genero;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 public class UsuarioIn {
 
+	@Schema(example = "edson@gmail.com")
 	@Email
 	@NotBlank
 	private String email;
-	
+
+	@Schema(example = "Edson Jose de Souza")
 	@NotBlank
 	private String nome;
-	
+
+	@Schema(example = "123456")
 	@NotBlank
 	private String senha;
-	
+
 	private Genero genero;
 
 	public String getEmail() {

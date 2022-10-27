@@ -1,14 +1,20 @@
 package com.ejs.algaworksCurso.api.v1.model.out.permissao;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.server.core.Relation;
 
 @Relation(collectionRelation = "permissoes")
 public class PermissaoOut extends RepresentationModel<PermissaoOut> {
 
+	@Schema(example = "1")
 	private Long id;
-    private String nome;
-    private String descricao;
+
+	@Schema(example = "Editar Pedido")
+	private String nome;
+
+	@Schema(example = "Usuário pode editar pedido")
+	private String descricao;
     
 	/**
 	 * @return the id

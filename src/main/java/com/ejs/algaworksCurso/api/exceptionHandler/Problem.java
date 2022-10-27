@@ -13,7 +13,7 @@ import java.util.List;
 @JsonInclude(Include.NON_NULL)
 public class Problem {
 
-	@Schema(example = "400")
+	@Schema(example = "400", description = "O status do erro vai variar de acordo com os status HTTP condizente com o erro")
 	private Integer status;
 
 	@Schema(example = "http://localhost")

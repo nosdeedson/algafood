@@ -2,15 +2,27 @@ package com.ejs.algaworksCurso.api.v1.model.out.itemPedido;
 
 import java.math.BigDecimal;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.hateoas.RepresentationModel;
 
 public class ItemPedidoOut extends RepresentationModel<ItemPedidoOut> {
 
+	@Schema(example = "1")
 	private Long produtoId;
+
+	@Schema(example = "Bife")
     private String produtoNome;
+
+	@Schema(example = "10")
     private Integer quantidade;
+
+	@Schema(example = "5")
     private BigDecimal precoUnitario;
+
+	@Schema(example = "50")
     private BigDecimal precoTotal;
+
+	@Schema(example = "Bife bem passado")
     private String observacao;
     
 	/**

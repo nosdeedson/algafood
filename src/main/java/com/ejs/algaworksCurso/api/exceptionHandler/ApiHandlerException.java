@@ -54,11 +54,12 @@ public class ApiHandlerException extends ResponseEntityExceptionHandler {
 	@ExceptionHandler(AccessDeniedException .class)
 	public ResponseEntity<?> trataAcessoNegado(AccessDeniedException ex, WebRequest request) {
 		HttpStatus status = HttpStatus.FORBIDDEN;
-		CampoComErro erro = new CampoComErro();
+		CampoComErro erro = null;
 		ProblemType type =  ProblemType.ACESSO_NEGADO_AO_RECURSO;
 		String motivo = "";
 		String header = request.getHeader("Authorization");
 	 	if ( header != null && header.startsWith("Bearer ")) {
+			 erro = new CampoComErro();
 	 		if(!this.jwtUtil.tokenIsValid(header.substring(7))) {
 	 			status = HttpStatus.UNAUTHORIZED;
 	 			erro.setNome("Token Expirado");
@@ -71,8 +72,6 @@ public class ApiHandlerException extends ResponseEntityExceptionHandler {
 		 		motivo = "Usuário não tem acesso ao método solicitado";
 		 	}
 	 	}
-	 	erro.setMenssagem(ex.getMessage());
-		
 		
 		Problem problem = this.createProblem(status, motivo,
 							type)
@@ -88,7 +87,7 @@ public class ApiHandlerException extends ResponseEntityExceptionHandler {
 	public ResponseEntity<?> tokenExpiradoException(Exception ex, WebRequest request){
 		HttpStatus status = HttpStatus.CONFLICT;
 		CampoComErro erro = new CampoComErro();
-		erro.setMenssagem(ex.getMessage());
+		erro.setMensagem(ex.getMessage());
 		erro.setNome("Token inválido.");
 		Problem problem = this.createProblem(status, "Token Expirado", ProblemType.TOKEN_EXPIRADO)
 							.timeStamp()
@@ -102,7 +101,7 @@ public class ApiHandlerException extends ResponseEntityExceptionHandler {
 	public ResponseEntity<?> badCredentialsException(Exception ex, WebRequest request){
 		HttpStatus status = HttpStatus.CONFLICT;
 		CampoComErro erro = new CampoComErro();
-		erro.setMenssagem(ex.getMessage());
+		erro.setMensagem(ex.getMessage());
 		erro.setNome("Credenciais inválidas.");
 		Problem problem = this.createProblem(status, "Credenciais inválidas", ProblemType.DADOS_INVALIDOS)
 							.timeStamp()
@@ -271,7 +270,7 @@ public class ApiHandlerException extends ResponseEntityExceptionHandler {
 	private List<CampoComErro> adicionaErros(BindingResult bindingResult) {
 		List<CampoComErro> erros = bindingResult.getFieldErrors().stream().map(erro -> {
 			String message = messageSource.getMessage(erro, LocaleContextHolder.getLocale());
-			return new CampoComErro.Builder().nome(erro.getField()).menssagem(message).build();
+			return new CampoComErro.Builder().nome(erro.getField()).mensagem(erro.getDefaultMessage()).build();
 		}).collect(Collectors.toList());
 		return erros;
 	}

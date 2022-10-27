@@ -1,12 +1,16 @@
 package com.ejs.algaworksCurso.api.v1.model.in.permissao;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import javax.validation.constraints.NotBlank;
 
 public class PermissaoIn {
 
+	@Schema(example = "Pode editar pedido")
 	@NotBlank
 	private String descricao;
-	
+
+	@Schema(example = "Editar Pedido")
 	@NotBlank
 	private String nome;
 	

@@ -2,6 +2,7 @@ package com.ejs.algaworksCurso.api.v1.controller;
 
 import java.io.IOException;
 
+import javax.persistence.OneToMany;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,9 +40,10 @@ public class RestauranteFotoProdutoContoller implements RestauranteFotoProdutoCo
 	FotoProdutoService fotoProdutoService;
 	
 	@CheckSecurity.Restaurantes.PodeEditar
-	@PutMapping(consumes = MediaType.ALL_VALUE)
+	@Override
+	@PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public ResponseEntity<FotoProdutoOut> atualizarFoto(@PathVariable("restauranteId") Long restauranteId,
-		@PathVariable("produtoId") Long produtoId, @Valid FotoProdutoIn fotoProdutoIn, MultipartFile arquivo ) throws IOException{
+		@PathVariable("produtoId") Long produtoId, @Valid FotoProdutoIn fotoProdutoIn) throws IOException{
 	
 		try {
 			FotoProdutoOut out = this.fotoProdutoService.salvar(fotoProdutoIn, restauranteId, produtoId);		
@@ -94,11 +96,5 @@ public class RestauranteFotoProdutoContoller implements RestauranteFotoProdutoCo
 		this.fotoProdutoService.deletarFotoProduto(restauranteId, produtoId);		
 	}
 
-	@Override
-	public ResponseEntity<FotoProdutoOut> atualizarFoto(Long restauranteId, Long produtoId, MultipartFile arquivo)
-			throws IOException {
-		// TODO Auto-generated method stub
-		return null;
-	}
 	
 }

@@ -10,20 +10,25 @@ import javax.validation.constraints.PositiveOrZero;
 
 import com.ejs.algaworksCurso.api.v1.model.in.cozinha.CozinhaResumidaIdDTO;
 import com.ejs.algaworksCurso.api.v1.model.in.endereco.EnderecoIn;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 public class RestauranteIn implements Serializable{
 	
 	private static final long serialVersionUID = 1L;
 
+	@Schema(example = "true", description = "Indica se o restaurante está ativo no sistema")
 	@NotNull
 	private boolean ativo;
-	
+
+	@Schema(example = "true", description = "indica que o restaurante está aceitando pedidos onlie")
 	@NotNull
 	private boolean aberto;
-	
+
+	@Schema(example = "Fogão a Lenha")
 	@NotEmpty
 	private String nome;
-	
+
+	@Schema(example = "10")
 	@NotNull
 	@PositiveOrZero
 	private BigDecimal taxaFrete;

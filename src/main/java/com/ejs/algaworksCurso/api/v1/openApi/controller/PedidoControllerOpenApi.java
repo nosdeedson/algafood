@@ -1,6 +1,9 @@
 package com.ejs.algaworksCurso.api.v1.openApi.controller;
 
+import com.ejs.algaworksCurso.core.springdoc.PageableParameter;
+import com.ejs.algaworksCurso.core.springdoc.PedidoFilterParameter;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -70,13 +73,15 @@ public interface PedidoControllerOpenApi {
 			})
 	ResponseEntity<?> entregarPedido(String codigoPedido);
 
+	@PageableParameter
+	@PedidoFilterParameter
 	@Operation(summary = "Lista pedidos", description = "Lista de pedidos de acordo com o filtro informado", 
 			responses = {
 					@ApiResponse(responseCode = "200"),
 					@ApiResponse(responseCode = "500", description = "erro interno servidor",
 							content = @Content(schema = @Schema(ref = "Problem")))
 			})
-	ResponseEntity<PagedModel<PedidoResumidoDTO>> listar(Pageable pageable, PedidoFilter filtro);
+	ResponseEntity<PagedModel<PedidoResumidoDTO>> listar(@Parameter(hidden = true) Pageable pageable, @Parameter(hidden = true) PedidoFilter filtro);
 
 	@Operation(summary = "Salva pedido", 
 			responses = {

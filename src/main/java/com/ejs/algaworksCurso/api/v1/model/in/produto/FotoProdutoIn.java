@@ -6,6 +6,7 @@ import java.io.InputStream;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.http.MediaType;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -14,12 +15,14 @@ import com.ejs.algaworksCurso.core.validation.FileSize;
 import com.ejs.algaworksCurso.domain.model.FotoProduto;
 
 public class FotoProdutoIn {
-	
+
+	@Schema(description = "Imagem do produto")
 	@NotNull
 	@FileSize(max = "500KB")
 	@FileContentType(allowed = {MediaType.IMAGE_PNG_VALUE, MediaType.IMAGE_JPEG_VALUE})
 	private MultipartFile arquivo;
-	
+
+	@Schema(example = "Frando assado")
 	@NotBlank
 	private String descricao;
 	

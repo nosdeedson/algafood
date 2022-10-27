@@ -1,12 +1,16 @@
 package com.ejs.algaworksCurso.api.v1.model.out.restautante;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.server.core.Relation;
 
 @Relation(collectionRelation = "restaurantes")
 public class RestauranteResumidoDTO extends RepresentationModel<RestauranteResumidoDTO>{
-	
+
+	@Schema(example = "1")
 	private Long id;
+
+	@Schema(example = "Fogão a Lenha")
 	private String nome;
 	
 	/**

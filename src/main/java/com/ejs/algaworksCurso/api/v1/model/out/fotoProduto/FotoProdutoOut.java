@@ -1,17 +1,22 @@
 package com.ejs.algaworksCurso.api.v1.model.out.fotoProduto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.server.core.Relation;
 
 @Relation(collectionRelation = "fotoProduto")
 public class FotoProdutoOut extends RepresentationModel<FotoProdutoOut>{
-	
+
+	@Schema(example = "bife.png")
 	private String nomeArquivo;
-	
+
+	@Schema(example = "bife a cavalo")
 	private String descricao;
-	
+
+	@Schema(example = "png")
 	private String contentType;
-	
+
+	@Schema(example = "50 kb")
 	private Long tamanho;
 	
 	/**

@@ -2,6 +2,7 @@ package com.ejs.algaworksCurso.api.v1.model.out.restautante;
 
 import java.math.BigDecimal;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.server.core.Relation;
 
@@ -11,12 +12,24 @@ import com.ejs.algaworksCurso.api.v1.model.out.endereco.EnderecoOut;
 @Relation(collectionRelation = "restaurantes")
 public class RestauranteOut extends RepresentationModel<RestauranteOut> {
 
+	@Schema(example = "1")
 	private Long id;
+
+	@Schema(example = "Fogão a Lenha")
 	private String nome;
+
+	@Schema(example = "true")
 	private boolean aberto;
+
+	@Schema(example = "true")
 	private boolean ativo;
+
+
 	private CozinhaOut cozinha;
+
+	@Schema(example = "10")
 	private BigDecimal taxaFrete;
+
 	private EnderecoOut endereco;
 	
 	public Long getId() {

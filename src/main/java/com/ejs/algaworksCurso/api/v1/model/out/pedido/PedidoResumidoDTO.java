@@ -3,6 +3,7 @@ package com.ejs.algaworksCurso.api.v1.model.out.pedido;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.server.core.Relation;
 
@@ -13,13 +14,26 @@ import com.ejs.algaworksCurso.api.v1.model.out.usuario.UsuarioOut;
 @Relation(collectionRelation = "pedidos")
 public class PedidoResumidoDTO extends RepresentationModel<PedidoResumidoDTO> {
 
+	@Schema(example = "cbc73cc8-d568-4ac2-9f5c-33fcaf864d5c")
 	private String codigo;
+
+	@Schema(example = "50")
 	private BigDecimal subTotal;
+
+	@Schema(example = "5")
 	private BigDecimal taxaFrete;
+
+	@Schema(example = "55")
 	private BigDecimal valorTotal;
+
+	@Schema(example = "Confirmado")
 	private String status;
+
+	@Schema(example = "2022-10-24T21:34:34.987654321")
 	private OffsetDateTime dataCriacao;
+
 	private RestauranteResumidoDTO restaurante;
+
 	private UsuarioOut cliente;
 	
 	/**

@@ -1,6 +1,8 @@
 package com.ejs.algaworksCurso.api.v1.openApi.controller;
 
+import com.ejs.algaworksCurso.core.springdoc.PageableParameter;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -49,13 +51,14 @@ public interface CozinhaControllerOpenApi {
 			})
 	ResponseEntity<CozinhaOut> buscarPrimeira();
 
+	@PageableParameter
 	@Operation(summary = "Lista todas", description = "Lista todas as cozinhas",
 			responses = {
 					@ApiResponse(responseCode = "200"),
 					@ApiResponse(responseCode = "500", description = "erro interno servidor",
 							content = @Content(schema = @Schema(ref = "Problem")))
 			})
-	PagedModel<CozinhaOut> listar(Pageable pageable);
+	PagedModel<CozinhaOut> listar(@Parameter(hidden = true) Pageable pageable);
 
 	@Operation(summary = "Remove cozinha", description = "Remove cozinha de acordo com o id informado",
 			responses = {

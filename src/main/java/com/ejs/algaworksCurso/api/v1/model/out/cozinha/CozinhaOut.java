@@ -1,12 +1,16 @@
 package com.ejs.algaworksCurso.api.v1.model.out.cozinha;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.server.core.Relation;
 
 @Relation(collectionRelation = "cozinhas")
 public class CozinhaOut extends RepresentationModel<CozinhaOut> {
 
+	@Schema(example = "1")
 	private Long id;
+
+	@Schema(example = "Mineira")
 	private String nome;
 	/**
 	 * @return the id

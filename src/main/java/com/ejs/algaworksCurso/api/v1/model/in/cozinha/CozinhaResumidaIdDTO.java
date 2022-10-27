@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import javax.validation.constraints.NotNull;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.server.core.Relation;
 
@@ -11,6 +12,8 @@ import org.springframework.hateoas.server.core.Relation;
 public class CozinhaResumidaIdDTO extends RepresentationModel<CozinhaResumidaIdDTO> implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
+
+	@Schema(example = "1")
 	@NotNull
 	private Long id;
 	
